@@ -112,18 +112,18 @@ struct srSLMGObject
 	 * ambigious and is (hopefully) more portable.
 	 */
 	srSLMGTimStampType iTimStampType;
-	short iTimStampYear;
-	short iTimStampMonth;
-	short iTimStampDay;
-	short iTimStampHour;
-	short iTimStampMinute;
-	short iTimStampSecond;
-	int   iTimStampSecFrac;
-	int bTimStampHasSecFrac;		/**< TRUE -> timestamp includes SecFrac, FALSE otherwise */
-	short iTimStampOffsetHour;
-	short iTimStampOffsetMinute;
-	char  cTimStampOffsetMode;		/* '+'/'-' */
-	int	  bTimStampIncludesTZ;		/**< indicates if the message timestamp included timezone information (TRUE=yes) */
+	int iTimStampYear;
+	int iTimStampMonth;
+	int iTimStampDay;
+	int iTimStampHour;
+	int iTimStampMinute;
+	int iTimStampSecond;
+	int iTimStampSecFrac;
+	int iTimStampSecFracPrecision;	/**< the precision of timefrac in nmbr of digits (e.g. to differentiate ".1" from ".001" ;)) */
+	int iTimStampOffsetHour;
+	int iTimStampOffsetMinute;
+	char cTimStampOffsetMode;		/* '+'/'-' */
+	int	bTimStampIncludesTZ;		/**< indicates if the message timestamp included timezone information (TRUE=yes) */
 
 #	endif
 };

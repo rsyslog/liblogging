@@ -42,4 +42,19 @@
 
 #include "config.h"
 
+/**
+ * Get the current date/time in the best resolution the operating
+ * system has to offer (well, actually at most down to the milli-
+ * second level.
+ *
+ * The date and time is returned in separate fields as this is
+ * most portable and removes the need for additional structures
+ * (but I have to admit it is somewhat "bulky";)).
+ *
+ * Obviously, all caller-provided pointers must not be NULL...
+ */
+srRetVal getCurrTime(int* year, int* month, int* day, int *hour, int* minute, int *second,
+					 int* millisec, int *bHasMS, char* pcOffsetMode, int* pOffsetHour, 
+					 int* pOffsetMinute);
+
 #endif

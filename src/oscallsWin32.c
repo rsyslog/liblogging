@@ -38,6 +38,8 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <windows.h>
+
 
 /* ################################################################# *
  * private members                                                   *
@@ -50,3 +52,47 @@
 /* ################################################################# *
  * public members                                                    *
  * ################################################################# */
+
+/**
+ * Get the current date/time in the best resolution the operating
+ * system has to offer (well, actually at most down to the milli-
+ * second level.
+ *
+ * The date and time is returned in separate fields as this is
+ * most portable and removes the need for additional structures
+ * (but I have to admit it is somewhat "bulky";)).
+ *
+ * Obviously, all caller-provided pointers must not be NULL...
+ */
+srRetVal getCurrTime(int* year, int* month, int* day, int *hour, int* minute, int *second,
+					 int* secfrac, int *secfracPrecison, char* pcOffsetMode, int* pOffsetHour, 
+					 int* pOffsetMinute)
+{
+	SYSTEMTIME stTime;
+	TIME_ZONE_INFORMATION tzInfo;
+	long lBias;
+
+	GetLocalTime(&stTime);
+	*year = stTime.wYear;
+	*month = stTime.wMonth;
+	*day = stTime.wDay;
+	*hour = stTime.wHour;
+	*minute = stTime.wMinute;
+	*second = stTime.wSecond;
+	*secfrac = stTime.wMilliseconds;
+	*secfracPrecison = 3;
+
+	GetTimeZoneInformation(&tzInfo);
+	lBias = tzInfo.Bias;
+	if(lBias < 0)
+	{
+		*pcOffsetMode = '-';
+		lBias *= -1;
+	}
+	else
+		*pcOffsetMode = '+';
+	*pOffsetHour = lBias / 60;
+	*pOffsetMinute = lBias % 60;
+
+	return SR_RET_OK;
+}

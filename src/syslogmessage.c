@@ -46,6 +46,7 @@
 #include "syslogmessage.h"
 #include "namevaluetree.h"
 #include "stringbuf.h"
+#include "oscalls.h"
 
 /* ################################################################# *
  * private members                                                   *
@@ -245,13 +246,13 @@ static int srSLMGParseTIMESTAMP3339(srSLMGObj* pThis, unsigned char* pszTS)
 	/* Now let's see if we have secfrac */
 	if(*pszTS == '.')
 	{
-		++pszTS;
-		pThis->bTimStampHasSecFrac = TRUE;
+		unsigned char *pszStart = ++pszTS;
 		pThis->iTimStampSecFrac = srSLMGParseInt32(&pszTS);
+		pThis->iTimStampSecFracPrecision = (int) (pszTS - pszStart);
 	}
 	else
 	{
-		pThis->bTimStampHasSecFrac = FALSE;
+		pThis->iTimStampSecFracPrecision= 0;
 		pThis->iTimStampSecFrac = 0;
 	}
 
@@ -789,7 +790,7 @@ srRetVal srSLMGGetRawMSG(srSLMGObj *pThis, unsigned char**ppsz)
  *             receive the return string.
  */
 srRetVal srSLMGGetTIMESTAMP(srSLMGObj *pThis, int *piYear, int *piMonth, int *piDay, int *piHour, int *piMinute, int *piSecond, int *piSecFrac,
-							int *pbHasSecFrac, int *piOffsetHour, int *piOffsetMinute, char *pcOffsetMode, int *pbHasTZ)
+							int *piSecFracPrecision, int *piOffsetHour, int *piOffsetMinute, char *pcOffsetMode, int *pbHasTZ)
 {
 	srSLMGCHECKVALIDOBJECT_API(pThis);
 	if(piYear == NULL) return SR_RET_NULL_POINTER_PROVIDED;
@@ -799,7 +800,7 @@ srRetVal srSLMGGetTIMESTAMP(srSLMGObj *pThis, int *piYear, int *piMonth, int *pi
 	if(piMinute == NULL) return SR_RET_NULL_POINTER_PROVIDED;
 	if(piSecond == NULL) return SR_RET_NULL_POINTER_PROVIDED;
 	if(piSecFrac == NULL) return SR_RET_NULL_POINTER_PROVIDED;
-	if(pbHasSecFrac== NULL) return SR_RET_NULL_POINTER_PROVIDED;
+	if(piSecFracPrecision == NULL) return SR_RET_NULL_POINTER_PROVIDED;
 	if(piOffsetHour == NULL) return SR_RET_NULL_POINTER_PROVIDED;
 	if(piOffsetMinute == NULL) return SR_RET_NULL_POINTER_PROVIDED;
 	if(pbHasTZ == NULL) return SR_RET_NULL_POINTER_PROVIDED;
@@ -815,7 +816,7 @@ srRetVal srSLMGGetTIMESTAMP(srSLMGObj *pThis, int *piYear, int *piMonth, int *pi
 	*piMinute = pThis->iTimStampMinute;
 	*piSecond = pThis->iTimStampSecond;
 	*piSecFrac = pThis->iTimStampSecFrac;
-	*pbHasSecFrac = pThis->bTimStampHasSecFrac;
+	*piSecFracPrecision = pThis->iTimStampSecFracPrecision;
 	*piOffsetHour = pThis->iTimStampOffsetHour;
 	*piOffsetMinute = pThis->iTimStampOffsetMinute;
 	*pbHasTZ = pThis->bTimStampIncludesTZ;
@@ -868,6 +869,24 @@ srRetVal srSLMGSetRawMsg(srSLMGObj *pThis, char *pszRawMsg, int bCopyRawMsg)
 }
 
 
+/** 
+ * Set the TIMESTAMP to the current system time.
+ */
+srRetVal srSLMGSetTIMESTAMPtoCurrent(srSLMGObj *pThis)
+{
+	srRetVal iRet;
+	srSLMGCHECKVALIDOBJECT_API(pThis);
+
+	iRet = getCurrTime(&pThis->iTimStampYear, &pThis->iTimStampMonth, &pThis->iTimStampDay,
+					   &pThis->iTimStampHour, &pThis->iTimStampMinute, &pThis->iTimStampSecond,
+					   &pThis->iTimStampSecFrac, &pThis->iTimStampSecFracPrecision, &pThis->cTimStampOffsetMode,
+					   &pThis->iTimStampOffsetHour, &pThis->iTimStampOffsetMinute);
+
+	return iRet;
+}
+
+
+
 /* The following table is a helper to srSLMGFormatRawMsg:
  */
 static char* srSLMGMonthNames[13] = {"ERR", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
@@ -914,10 +933,15 @@ srRetVal srSLMGFormatRawMsg(srSLMGObj *pThis, srSLMGFormat iFmtToUse)
 	SNPRINTF(szBuf, sizeof(szBuf), "<%d>", i);
 	if((iRet = sbStrBAppendStr(pStr, szBuf)) != SR_RET_OK) { sbStrBDestruct(pStr); return iRet; }
 
-	/* TIMESTAMP */
+	/* TIMESTAMP
+	 * Please note: all SNPRINTFs allow 34 Bytes, because of
+	 * a) the '\0' byte
+	 * b) the extra space at the end of the TIMESTAMP
+	 * So the TIMESTAMP itself will by 32 bytes at most.
+	 */
 	if(iFmtToUse == srSLMGFmt_3164WELLFORMED)
 	{
-		SNPRINTF(szBuf, 33, "%s %2d %2.2d:%2.2d:%2.2d ",
+		SNPRINTF(szBuf, 34, "%s %2d %2.2d:%2.2d:%2.2d ",
 							srSLMGMonthNames[pThis->iTimStampMonth], pThis->iTimStampDay,
 							pThis->iTimStampHour, pThis->iTimStampMinute, pThis->iTimStampSecond);
 	}
@@ -926,13 +950,26 @@ srRetVal srSLMGFormatRawMsg(srSLMGObj *pThis, srSLMGFormat iFmtToUse)
 		/** \todo This formatting must be modified so that we detect if we do NOT have suffcient
 		 ** clock resolution and such... 
 		 **/
-		if(pThis->bTimStampHasSecFrac)
-			SNPRINTF(szBuf, 33, "%4.4d-%2.2d-%2.2dT%2.2d:%2.2d:%2.2d.%d%c%2.2d:%2.2d ",
+		if(pThis->iTimStampSecFracPrecision > 0)
+		{	/* we now need to include fractional seconds. While doing so, we must look at
+			 * the precision specified. For example, if we have millisec precision (3 digits), a
+			 * secFrac value of 12 is not equivalent to ".12" but ".012". Obviously, this
+			 * is a huge difference ;). To avoid this, we first create a format string with
+			 * the specific precision and *then* use that format string to do the actual
+			 * formating (mmmmhhh... kind of self-modifying code... ;)).
+			 */
+			char szFmtStr[64];
+			/* be careful: there is ONE actual %d in the format string below ;) */
+			SNPRINTF(szFmtStr, sizeof(szFmtStr), "%%04d-%%02d-%%02dT%%02d:%%02d:%%02d.%%0%dd%%c%%02d:%%02d ",
+								pThis->iTimStampSecFracPrecision);
+
+			SNPRINTF(szBuf, 34, szFmtStr,
 								pThis->iTimStampYear, pThis->iTimStampMonth, pThis->iTimStampDay,
 								pThis->iTimStampHour, pThis->iTimStampMinute, pThis->iTimStampSecond, pThis->iTimStampSecFrac,
 								pThis->cTimStampOffsetMode, pThis->iTimStampOffsetHour, pThis->iTimStampOffsetMinute);
+		}
 		else
-			SNPRINTF(szBuf, 33, "%4.4d-%2.2d-%2.2dT%2.2d:%2.2d:%2.2d%c%2.2d:%2.2d ",
+			SNPRINTF(szBuf, 34, "%4.4d-%2.2d-%2.2dT%2.2d:%2.2d:%2.2d%c%2.2d:%2.2d ",
 								pThis->iTimStampYear, pThis->iTimStampMonth, pThis->iTimStampDay,
 								pThis->iTimStampHour, pThis->iTimStampMinute, pThis->iTimStampSecond,
 								pThis->cTimStampOffsetMode, pThis->iTimStampOffsetHour, pThis->iTimStampOffsetMinute);

@@ -1,3 +1,4 @@
+#include <windows.h>
 /** 
  * TestDrvr.cpp : This is a small sample C++ application
  * using liblogging. It just demonstrates how things can be 
@@ -51,6 +52,7 @@
 #ifdef WIN32
 #include <crtdbg.h>
 #endif
+#include <time.h>
 
 int main(int argc, char* argv[])
 {
@@ -85,25 +87,17 @@ int main(int argc, char* argv[])
 		exit(2);
 	}
 
-	for(i = 0 ; i < 5 ; ++i)
+	for(i = 0 ; i < 15 ; ++i)
 	{
 		/* First of all, create message object */
 		pMsg->iFacility = 7;
 		pMsg->iPriority = 0;
-		pMsg->iTimStampHour = 1;
-		pMsg->iTimStampMinute = 2;
-		pMsg->iTimStampSecond = 0;
-		pMsg->bTimStampHasSecFrac = FALSE;
-		pMsg->bTimStampIncludesTZ = TRUE;
-		pMsg->cTimStampOffsetMode = '-';
-		pMsg->iTimStampDay = 3;
-		pMsg->iTimStampMonth = 4;
-		pMsg->iTimStampYear = 2003;
 		pMsg->pszHostname = "host";
 		pMsg->pszTag = "tag";
 
 		sprintf(szMsg, "Message %d", i);
 		pMsg->pszMsg = szMsg;
+		srSLMGSetTIMESTAMPtoCurrent(pMsg);
 		if((iRet = srSLMGFormatRawMsg(pMsg, srSLMGFmt_SIGN_12)) != SR_RET_OK)
 //		if((iRet = srSLMGFormatRawMsg(pMsg, srSLMGFmt_3164WELLFORMED)) != SR_RET_OK)
 		{
@@ -121,6 +115,7 @@ int main(int argc, char* argv[])
 			printf("Error while sending!\n");
 			exit(3);
 		}
+		Sleep(68);
 	}
 	
 	if((iRet = srAPICloseLog(pAPI)) != SR_RET_OK)

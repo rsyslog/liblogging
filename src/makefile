@@ -1,12 +1,12 @@
 LIBLOGGING_SRC = beepchannel.c beepframe.c beepmessage.c beepprofile.c \
 	beepsession.c sockets.c srAPI.c namevaluetree.c stringbuf.c \
 	beepsession-lstn.c lstnprof-3195raw.c beeplisten.c srAPI-lstn.c \
-	syslogmessage.c
+	syslogmessage.c oscalls.c
 LIBLOGGING_OBJ = $(LIBLOGGING_SRC:.c=.o)
 LIBLOGGING_H = beepchannel.h beepframe.h  beepmessage.h beepprofile.h  beepsession.h \
 	config.h liblogging.h namevaluetree.h sockets.h srAPI.h \
 	namevaluetree.h stringbuf.h beeplisten.h lstnprof-3195raw.h \
-	syslogmessage.h
+	syslogmessage.h oscalls.h
 
 TESTSRVR_SRC = testsrvr.c
 TESTSRVR_OBJ = $(TESTSRVR_SRC:.c=.o)
@@ -44,5 +44,6 @@ clean:
 	$(RM) *.o
 	$(RM) core
 
-# Special dependency.
+# Special dependencies.
 socket.o: sockets.c socketsUnix.c sockets.h
+oscalls.o: oscalls.c oscallsUnix.c oscalls.h
