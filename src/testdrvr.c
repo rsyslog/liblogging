@@ -52,6 +52,7 @@
 #include <crtdbg.h>
 #endif
 #include <time.h>
+#include "beepsession.h"
 
 int main(int argc, char* argv[])
 {
@@ -128,7 +129,21 @@ int main(int argc, char* argv[])
 			exit(3);
 		}
 	}
-	
+
+
+	{	/* This is just some quick hack test coding for the next tasks to be done ;) */
+		char *pBuf;
+		if((iRet = sbSockGetIPusedForSending(pAPI->pSess->pSock, &pBuf)) != SR_RET_OK)
+		{
+			printf("Error %d getting my sending IP!\n", iRet);
+			exit(2);
+		}
+/*		printf("Local IP for sending: %s\n", pBuf); */
+		free(pBuf);
+	}
+
+
+
 	if((iRet = srAPICloseLog(pAPI)) != SR_RET_OK)
 	{
 		printf("Error %d while closing session!\n", iRet);

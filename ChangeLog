@@ -1,8 +1,11 @@
-0.4.0		  - fixed a hang condition on server shutdown (the listening
+0.4.0	      - fixed a hang condition on server shutdown (the listening
                 sockets was accidently not in nonblocking state)
               - added support for parsing the syslog message
               - modified the directory structure, each OS will now have its
                 own subdirectory (including Windows)
+	      - included a syslog message API, which can also be used
+                to create syslog messages
+              - added support for syslog-sign-12 in the message object
 0.3.1
    2003-08-29 - a good number of fixes
               - server (listener) API included

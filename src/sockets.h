@@ -299,6 +299,27 @@ srRetVal sbSockGetRemoteHostIP(sbSockObj *pThis, char **ppszHost);
  */
 srRetVal sbSock_gethostname(char **psz);
 
+/**
+ * Provide the (local) IP address this session is sending to the
+ * remote peer on as a string.
+ *
+ * OK, the short description is probably not very well ;) What it
+ * does is, it looks up the local IP address that is used to
+ * talk to the remote Peer. This is especially important on 
+ * multihomed machines, as different interfaces can be used
+ * to forward data (depending on which one is closest to the
+ * recipient). Then, it formats this as an IP Address string that
+ * then is handed back to the caller. 
+ *
+ * Please note: the socket MUST be connected before you can use
+ * this method! It should NOT be used on UDP sockets.
+ *
+ * \param ppsz Pointer to a char* that will receive the IP string.
+ *             The caller must free the returned pointer when he
+ *             is done. The provided pointer must not be NULL.
+ */
+srRetVal sbSockGetIPusedForSending(sbSockObj* pThis, char**ppsz);
+
 
 #ifdef SROS_WIN32
 #	define SBSOCK_EWOULDBLOCK WSAEWOULDBLOCK

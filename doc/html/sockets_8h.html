@@ -123,13 +123,23 @@ typedef fd_set&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" hr
 <tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="structsbSockObject.html">sbSockObj</a> *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="sockets_8h.html#a28">sbSockInitListenSock</a> (<a class="el" href="liblogging_8h.html#a6">srRetVal</a> *iRet, char *szBindToAddress, unsigned uBindToPort)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Initialize a listen socket. </em> <a href="#a28"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="liblogging_8h.html#a6">srRetVal</a>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="sockets_8h.html#a29">sbSockAcceptConnection</a> (<a class="el" href="structsbSockObject.html">sbSockObj</a> *pThis, <a class="el" href="structsbSockObject.html">sbSockObj</a> **pNew)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a name="a29" doxytag="sockets.h::sbSockAcceptConnection"></a>
+<a class="el" href="liblogging_8h.html#a6">srRetVal</a>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="sockets_8h.html#a29">sbSockAcceptConnection</a> (<a class="el" href="structsbSockObject.html">sbSockObj</a> *pThis, <a class="el" href="structsbSockObject.html">sbSockObj</a> **pNew)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">This method accepts an incoming connection and creates a new socket object out of it. </em> <a href="#a29"></a><em><br><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">This method accepts an incoming connection and creates a new socket object out of it. <br><br></td></tr>
 <tr><td class="memItemLeft" nowrap align=right valign=top><a name="a30" doxytag="sockets.h::sbSockSetNonblocking"></a>
 <a class="el" href="liblogging_8h.html#a6">srRetVal</a>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="sockets_8h.html#a30">sbSockSetNonblocking</a> (<a class="el" href="structsbSockObject.html">sbSockObj</a> *pThis)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Set the socket to nonblocking state. <br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="liblogging_8h.html#a6">srRetVal</a>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="sockets_8h.html#a31">sbSockGetRemoteHostIP</a> (<a class="el" href="structsbSockObject.html">sbSockObj</a> *pThis, char **ppszHost)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Return the IP Address of the remote host as a string. </em> <a href="#a31"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="liblogging_8h.html#a6">srRetVal</a>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="sockets_8h.html#a32">sbSock_gethostname</a> (char **psz)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Wrapper for gethostname(). </em> <a href="#a32"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="liblogging_8h.html#a6">srRetVal</a>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="sockets_8h.html#a33">sbSockGetIPusedForSending</a> (<a class="el" href="structsbSockObject.html">sbSockObj</a> *pThis, char **ppsz)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Provide the (local) IP address this session is sending to the remote peer on as a string. </em> <a href="#a33"></a><em><br><br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 socket layer for slim beep 
@@ -239,27 +249,18 @@ This may not work on every exotic OS, but it gives at least a small hook to port
   </tr>
 </table>
 <hr><h2>Function Documentation</h2>
-<a name="a29" doxytag="sockets.h::sbSockAcceptConnection"></a><p>
+<a name="a32" doxytag="sockets.h::sbSock_gethostname"></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top"> <a class="el" href="liblogging_8h.html#a6">srRetVal</a> sbSockAcceptConnection </td>
+          <td class="md" nowrap valign="top"> <a class="el" href="liblogging_8h.html#a6">srRetVal</a> sbSock_gethostname </td>
           <td class="md" valign="top">(&nbsp;</td>
-          <td class="md" nowrap valign="top"><a class="el" href="structsbSockObject.html">sbSockObj</a> *&nbsp;</td>
-          <td class="mdname" nowrap> <em>pThis</em>, </td>
-        </tr>
-        <tr>
-          <td></td>
-          <td></td>
-          <td class="md" nowrap><a class="el" href="structsbSockObject.html">sbSockObj</a> **&nbsp;</td>
-          <td class="mdname" nowrap> <em>pNew</em></td>
-        </tr>
-        <tr>
-          <td></td>
-          <td class="md">)&nbsp;</td>
-          <td class="md" colspan="2"></td>
+          <td class="md" nowrap valign="top">char **&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap> <em>psz</em>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap></td>
         </tr>
 
       </table>
@@ -274,9 +275,16 @@ This may not work on every exotic OS, but it gives at least a small hook to port
     <td>
 
 <p>
-This method accepts an incoming connection and creates a new socket object out of it. 
+Wrapper for gethostname(). 
 <p>
-<dl compact><dt><b><a class="el" href="todo.html#_todo000014">Todo:</a></b></dt><dd>implement clean &amp; with optional reverse lookup</dd></dl>
+<dl compact><dt><b>Note:</b></dt><dd>The Windows sockets API seems to be broken. We often have seen that only the computer name part (not the domain name) is returned by gethostname, even if the full identity is configured. A way to work around this may be to call gethostbyname() on the returned name and then call gethostbyaddr() on what is returned there. </dd></dl>
+<p>
+<dl compact><dt><b><a class="el" href="todo.html#_todo000016">Todo:</a></b></dt><dd>implement that workaround or check how to make windows behave correctly. </dd></dl>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign=top><em>psz</em>&nbsp;</td><td>Pointer to Pointer to hostname. Must not be NULL. On return, this pointer will refer to a newly allocated buffer containing the hostname. This buffer must be free()ed by the caller! </td></tr>
+  </table>
+</dl>
     </td>
   </tr>
 </table>
@@ -327,6 +335,53 @@ Connect a socket to a remote host.
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign=top><em>pszHost</em>&nbsp;</td><td>Name or IP address of host to connect to </td></tr>
     <tr><td valign=top><em>iPort</em>&nbsp;</td><td>Port to connect to </td></tr>
+  </table>
+</dl>
+    </td>
+  </tr>
+</table>
+<a name="a33" doxytag="sockets.h::sbSockGetIPusedForSending"></a><p>
+<table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> <a class="el" href="liblogging_8h.html#a6">srRetVal</a> sbSockGetIPusedForSending </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top"><a class="el" href="structsbSockObject.html">sbSockObj</a> *&nbsp;</td>
+          <td class="mdname" nowrap> <em>pThis</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>char **&nbsp;</td>
+          <td class="mdname" nowrap> <em>ppsz</em></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td class="md">)&nbsp;</td>
+          <td class="md" colspan="2"></td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Provide the (local) IP address this session is sending to the remote peer on as a string. 
+<p>
+OK, the short description is probably not very well ;) What it does is, it looks up the local IP address that is used to talk to the remote Peer. This is especially important on multihomed machines, as different interfaces can be used to forward data (depending on which one is closest to the recipient). Then, it formats this as an IP Address string that then is handed back to the caller.<p>
+Please note: the socket MUST be connected before you can use this method! It should NOT be used on UDP sockets.<p>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign=top><em>ppsz</em>&nbsp;</td><td>Pointer to a char* that will receive the IP string. The caller must free the returned pointer when he is done. The provided pointer must not be NULL. </td></tr>
   </table>
 </dl>
     </td>
@@ -403,6 +458,46 @@ The character is removed from the stream. If no data is ready on the stream, a b
   </table>
 </dl>
     </td>
+  </tr>
+</table>
+<a name="a31" doxytag="sockets.h::sbSockGetRemoteHostIP"></a><p>
+<table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> <a class="el" href="liblogging_8h.html#a6">srRetVal</a> sbSockGetRemoteHostIP </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top"><a class="el" href="structsbSockObject.html">sbSockObj</a> *&nbsp;</td>
+          <td class="mdname" nowrap> <em>pThis</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>char **&nbsp;</td>
+          <td class="mdname" nowrap> <em>ppszHost</em></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td class="md">)&nbsp;</td>
+          <td class="md" colspan="2"></td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Return the IP Address of the remote host as a string. 
+<p>
+The caller must free the returned string.     </td>
   </tr>
 </table>
 <a name="a19" doxytag="sockets.h::sbSockHasReceiveData"></a><p>
@@ -863,7 +958,7 @@ Wait until the socket has some receive data.
 This is a blocking call.     </td>
   </tr>
 </table>
-<hr size="1"><address style="align: right;"><small>Generated on Mon Sep 1 10:15:06 2003 for liblogging by
+<hr size="1"><address style="align: right;"><small>Generated on Thu Sep 4 12:10:31 2003 for liblogging by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 > 
 </a>1.3.2 </small></address>

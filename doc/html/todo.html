@@ -82,26 +82,26 @@ think if we need to shut down anything else inside the BEEP session. </dd>
 <dd>verify this value is indeed invalid under *nix</dd>
 </dl>
 <p>
-<a name="_todo000014"/></a> <dl>
-<dt>Member <a class="el" href="sockets_8c.html#a9">sbSockAcceptConnection</a> (sbSockObj *pThis, sbSockObj **pNew) </dt>
-<dd>implement clean &amp; with optional reverse lookup</dd>
+<a name="_todo000016"/></a> <dl>
+<dt>Member <a class="el" href="sockets_8h.html#a32">sbSock_gethostname</a> (char **psz) </dt>
+<dd>implement that workaround or check how to make windows behave correctly. </dd>
 </dl>
 <p>
-<a name="_todo000015"/></a> <dl>
+<a name="_todo000014"/></a> <dl>
 <dt>Member <a class="el" href="socketsUnix_8c.html#a13">sbSockBind</a> (sbSockObj *pThis, char *pszHost, int iPort) </dt>
 <dd>implement!</dd>
 </dl>
 <p>
-<a name="_todo000016"/></a> <dl>
+<a name="_todo000015"/></a> <dl>
 <dt>Member <a class="el" href="socketsWin32_8c.html#a13">sbSockBind</a> (sbSockObj *pThis, char *pszHost, int iPort) </dt>
 <dd>implement!</dd>
 </dl>
 <p>
 <a name="_todo000017"/></a> <dl>
-<dt>Member <a class="el" href="syslogmessage_8c.html#a1">srSLMGDestroy</a> (srSLMGObj *pThis) </dt>
+<dt>Member <a class="el" href="syslogmessage_8c.html#a2">srSLMGDestroy</a> (srSLMGObj *pThis) </dt>
 <dd>free memory (if needed in later releases). Currently, all memory is caller-provided, so it is also the callers job to free it. This may change, however, as the class evolves. </dd>
 </dl>
-<hr size="1"><address style="align: right;"><small>Generated on Mon Sep 1 10:15:07 2003 for liblogging by
+<hr size="1"><address style="align: right;"><small>Generated on Thu Sep 4 12:10:32 2003 for liblogging by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 > 
 </a>1.3.2 </small></address>

@@ -278,7 +278,7 @@ srRetVal sbSockGetRemoteHostIP(sbSockObj *pThis, char **ppszHost)
 
 	if(pThis->pRemoteHostIP == NULL)
 	{	/* need to obtain the string */
-		if((iRet = sbSock_inet_ntoa(pThis, &pBufRTL)) != SR_RET_OK)
+		if((iRet = sbSock_inet_ntoa(&(pThis->RemoteHostAddr), &pBufRTL)) != SR_RET_OK)
 			return iRet;
 		
 		/* we must now copy the returned buffer, as it is owned by the run time library (see man) */
@@ -292,6 +292,36 @@ srRetVal sbSockGetRemoteHostIP(sbSockObj *pThis, char **ppszHost)
 		return SR_RET_OUT_OF_MEMORY;
 	memcpy(pBuf, pThis->pRemoteHostIP, pThis->iRemHostIPBufLen);
 	*ppszHost = pBuf;
+
+	return SR_RET_OK;
+}
+
+
+srRetVal sbSockGetIPusedForSending(sbSockObj* pThis, char**ppsz)
+{
+	srRetVal iRet;
+	struct sockaddr_in sa;
+	int iLenSA;
+	char *pBufRTL;
+	int iLenBuf;
+
+	sbSockCHECKVALIDOBJECT(pThis);
+	assert(ppsz != NULL);
+	assert(pThis->sock != INVALID_SOCKET);
+
+	iLenSA = sizeof(sa);
+	if((iRet = sbSock_getsockname(pThis, &sa, &iLenSA)) != SR_RET_OK)
+		return iRet;
+
+	/* got the address, let's format a string */
+	if((iRet = sbSock_inet_ntoa(&sa, &pBufRTL)) != SR_RET_OK)
+		return iRet;
+		
+	/* we must now copy the returned buffer, as it is owned by the run time library (see man) */
+	iLenBuf = (int) strlen(pBufRTL) + 1;
+	if((*ppsz = (char*) malloc(iLenBuf * sizeof(char))) == NULL)
+		return SR_RET_OUT_OF_MEMORY;
+	memcpy(*ppsz, pBufRTL, iLenBuf);
 
 	return SR_RET_OK;
 }

@@ -348,16 +348,21 @@ srRetVal sbSockBind(sbSockObj* pThis, char* pszHost, int iPort)
 /** 
  * Wrapper for inet_ntoa().
  *
+ * \param psa Poiner to a struct sockaddr for which the representation
+ *            is to obtain. Must not be NULL.
+ *
  * \param psz Pointer to buffer that should receive the IP address
- * string. Must not be NULL.
+ * string pointer. Must not be NULL. NOTE WELL: This pointer is
+ * only valid until the next socket call. So the caller should 
+ * immediately copy it to its own buffer once control returns.
+ * The returned buffer MUST NOT be free()ed.
  */
-static srRetVal sbSock_inet_ntoa(sbSockObj *pThis, char **psz)
+static srRetVal sbSock_inet_ntoa(struct sockaddr_in *psa, char **psz)
 {
-	sbSockCHECKVALIDOBJECT(pThis);
 	assert(psz != NULL);
 
-	if(((char*) inet_ntoa(pThis->RemoteHostAddr.sin_addr)) == NULL)
-		return sbSockSetLastSockError(pThis);
+	if((*psz = (char*) inet_ntoa(psa->sin_addr)) == NULL)
+		return SR_RET_ERR;
 
 	return SR_RET_OK;
 }
@@ -381,6 +386,32 @@ srRetVal sbSock_gethostname(char **psz)
 
 	if(gethostname(*psz, 256) != 0)
 		return SR_RET_ERR;
+
+	return SR_RET_OK;
+}
+
+
+/**
+ * Wrapper for getsockname().
+ *
+ * Please note: the socket MUST be connected before you can use
+ * this method! It should NOT be used on UDP sockets.
+ *
+ * \param pName Pointer to a struct sockaddr_in that will
+ *              receive the remote address. Must not be NULL.
+ *
+ * \param iNameLen Length of the pName buffer. Updated on return.
+ *                 Must not be NULL.
+ */
+static srRetVal sbSock_getsockname(sbSockObj* pThis, struct sockaddr_in *pName, int* piNameLen)
+{
+	sbSockCHECKVALIDOBJECT(pThis);
+	assert(pName != NULL);
+	assert(piNameLen != NULL);
+	assert(pThis->sock != INVALID_SOCKET);
+
+	if(getsockname(pThis->sock, (struct sockaddr*) pName, piNameLen) != 0)
+		return sbSockSetLastSockError(pThis);
 
 	return SR_RET_OK;
 }
