@@ -1,0 +1,43 @@
+See doc/index.html for the full documentation.
+
+IMPORTANT: if you intend to just USE the library
+           (and NOT modify or port it), YOU NEED
+           TO READ ONLY THE API DOCUMENTATION.
+           There is a link to it directly from the
+           documentation home page. If you don't find
+           it, go to the file srAPI.h for a description.
+
+File testdrvr.c is a working sample program. You must edit
+it because it contains a hardcoded IP address.
+
+Thanks to Devin Kowatch, the library now compiles not
+only under Win32, but also Linux, Solaris and AIX. I will 
+move some more details on setting those things up.
+
+There are two ways to build liblogging under linux/solaris.  
+Method 1:
+    Edit the 'makefile' to uncomment the needed bits to make it compile
+    under your desired platform.
+    run 'make'
+
+Method 2:
+    % cd <platform>
+    % make
+    Where <platform> is either linux or solaris
+    
+    
+For AIX and FreeBSD, use the linux platform.
+
+The directory structure will change in further
+versions, but I am currently too busy implementing
+new code to do this.
+
+Updates are always posted at the project web
+site at
+
+   http://www.monitorware.com/liblogging/
+   
+I hope you will find the library useful,
+Rainer Gerhards
+
+

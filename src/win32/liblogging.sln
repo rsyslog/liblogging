@@ -1,0 +1,30 @@
+Microsoft Visual Studio Solution File, Format Version 7.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "liblogging", "liblogging.vcproj", "{FEF17E17-E510-448A-8E4C-E9DC58DFED85}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestDrvr", "TestDrvr.vcproj", "{C929E5A5-AAFA-4702-877D-37A4A608595E}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "testsrvr", "testsrvr.vcproj", "{C929E5A5-AAFA-4702-877D-37A4A608595E}"
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		ConfigName.0 = Debug
+		ConfigName.1 = Release
+	EndGlobalSection
+	GlobalSection(ProjectDependencies) = postSolution
+		{C929E5A5-AAFA-4702-877D-37A4A608595E}.0 = {FEF17E17-E510-448A-8E4C-E9DC58DFED85}
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{FEF17E17-E510-448A-8E4C-E9DC58DFED85}.Debug.ActiveCfg = Debug|Win32
+		{FEF17E17-E510-448A-8E4C-E9DC58DFED85}.Debug.Build.0 = Debug|Win32
+		{FEF17E17-E510-448A-8E4C-E9DC58DFED85}.Release.ActiveCfg = Release|Win32
+		{FEF17E17-E510-448A-8E4C-E9DC58DFED85}.Release.Build.0 = Release|Win32
+		{C929E5A5-AAFA-4702-877D-37A4A608595E}.Debug.ActiveCfg = Debug|Win32
+		{C929E5A5-AAFA-4702-877D-37A4A608595E}.Debug.Build.0 = Debug|Win32
+		{C929E5A5-AAFA-4702-877D-37A4A608595E}.Release.ActiveCfg = Release|Win32
+		{C929E5A5-AAFA-4702-877D-37A4A608595E}.Release.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,2 @@
+VPATH = ..
+include ../makefile
