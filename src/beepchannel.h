@@ -4,6 +4,9 @@
  * \author  Rainer Gerhards <rgerhards@adiscon.com>
  * \date    2003-08-04
  *
+ * \date    2003-09-04
+ *          Updated to support multiple client profiles.
+ *
  * Copyright 2002-2003 
  *     Rainer Gerhards and Adiscon GmbH. All Rights Reserved.
  * 
@@ -19,7 +22,7 @@
  *       the documentation and/or other materials provided with the
  *       distribution.
  * 
- *     * Neither the name of Adiscon GmbH or Rainer Gerhards
+ *     * Neither the names of Adiscon GmbH, Rainer Gerhards
  *       nor the names of its contributors may be used to
  *       endorse or promote products derived from this software without
  *       specific prior written permission.
@@ -77,11 +80,10 @@ struct sbChanObject
 	unsigned uTXWinLeft;	/**< remaining bytes left in current tx window */
 	unsigned uRXWin;		/**< maximum receive window */
 	sbSockObj* pSock;		/**< associated socket object */
-	struct sbSessObject* pSess;		/**< associated session */
+	struct sbSessObject* pSess;/**< associated session */
 	sbChannelState iState;	/**< channel status */
-#if FEATURE_LISTENER == 1
+	void *pProfInstance;	/**< pointer to associated profile instance data (to be used by the profile, if needed) */
 	struct sbProfObject *pProf;	/**< associated profile */
-#endif
 };
 typedef struct sbChanObject sbChanObj;
 

@@ -12,6 +12,8 @@
  *          checking if the remote peer supports the profile 
  *          (and, if not, provide an error message and not
  *          try to connect).
+ * \date	2003-09-04
+ *          Added support for multiple initiator (client) profiles.
  *
  * Copyright 2002-2003 
  *     Rainer Gerhards and Adiscon GmbH. All Rights Reserved.
@@ -28,7 +30,7 @@
  *       the documentation and/or other materials provided with the
  *       distribution.
  * 
- *     * Neither the name of Adiscon GmbH or Rainer Gerhards
+ *     * Neither the names of Adiscon GmbH nor Rainer Gerhards
  *       nor the names of its contributors may be used to
  *       endorse or promote products derived from this software without
  *       specific prior written permission.
@@ -54,7 +56,7 @@
 #include "beepchannel.h"
 #include "beepframe.h"
 #include "namevaluetree.h"
-
+#include "stringbuf.h"
 
 /* ################################################################# *
  * private members                                                   *
@@ -160,16 +162,7 @@ srRetVal sbSessProcessGreeting(sbSessObj *pThis, sbMesgObj *pMesg)
 }
 
 
-/** Open a BEEP session.
- *  The initial greeting is sent and the remote peers initial greeting
- *  is accepted. Channel 0 is initialized and brought into operation.
- *  
- * \param pszRemotePeer name or IP address of the peer to connect to
- * \param iPort TCP port the remote peer is listening to
- * \retval pointer to the new session object or NULL, if an error
- *         occured.
- */
-sbSessObj* sbSessOpenSession(char* pszRemotePeer, int iPort)
+sbSessObj* sbSessOpenSession(char* pszRemotePeer, int iPort, sbNVTRObj *pProfSupported)
 {
 	sbSockObj *pSock;
 	sbSessObj* pThis;
@@ -187,8 +180,7 @@ sbSessObj* sbSessOpenSession(char* pszRemotePeer, int iPort)
 
 	/* Now build the list of channels.
 	 */
-	pThis->pChannels = sbNVTRConstruct();
-	if(pThis->pChannels == NULL)
+	if((pThis->pChannels = sbNVTRConstruct()) == NULL)
 	{
 		SRFREEOBJ(pThis);
 		return NULL;
@@ -210,6 +202,7 @@ sbSessObj* sbSessOpenSession(char* pszRemotePeer, int iPort)
 	}
 
 	/* finish up */
+	pThis->pProfilesSupported = pProfSupported;
 	pThis->pSock = pSock;
 	pThis->OID = OIDsbSess;
 	pThis->SendFramMethod = sbSessSendFram;
@@ -294,7 +287,8 @@ void sbSessDestroy(sbSessObj *pThis)
 #	if FEATURE_LISTENER == 1
 	/* NOTE WELL: we do NOT destroy the pProfilesSupported
 	 * NameValueTree because this is a read-only copy provided
-	 * by the sbLstnObj. It is responsible for destroying it.
+	 * by either the sbLstnObj or the srAPI object. These are
+	 * responsible for destroying it.
 	 */
 	if(pThis->pSendQue != NULL)
 		sbNVTRDestroy(pThis->pSendQue);
@@ -332,7 +326,8 @@ srRetVal sbSessDoReceive(sbSessObj *pThis)
 				return iRet;
 		}
 	}
-	while(sbSockHasReceiveData(pThis->pSock));	/* WARNING: do...while */
+	while(pThis->pRXQue->pFirst == NULL);	/* WARNING: do...while */
+//	while(sbSockHasReceiveData(pThis->pSock));	/* WARNING: do...while */
 
 	return SR_RET_OK;
 }
@@ -399,26 +394,27 @@ srRetVal sbSessSendFram(sbSessObj *pThis, sbFramObj *pFram, sbChanObj *pChan)
 }
 
 
-sbChanObj* sbSessOpenChan(sbSessObj* pThis, sbProfObj* pProf)
+sbChanObj* sbSessOpenChan(sbSessObj* pThis)
 {
 	sbChanObj* pChan;
-	sbMesgObj* pMesgStart;
 	sbNVTRObj *pReplyXML;
 	sbNVTEObj *pEntryURI;
 	sbNVTEObj *pEntryProfile;
-	char szGreeting[1024];
+	sbMesgObj *pMesgStart;
 	sbMesgObj* pReply; /* the reply to the start command */
 	srRetVal iRet;
+	sbProfObj * pProf;
+	char szGreeting[512];
 
 	sbSessCHECKVALIDOBJECT(pThis);
-	sbProfCHECKVALIDOBJECT(pProf);
 
 	sbSessResetLastError(pThis);
 
 	/* before we do anything, let's first check if the remote peer
-	 * supports the requested profile.
+	 * supports at least one of the profiles we do support. If there
+	 * is no match, there is no point in trying it...
 	 */
-	if((pEntryProfile = sbNVTSearchKeySZ(pThis->pRemoteProfiles, NULL, sbProfGetURI(pProf))) == NULL)
+	if((pProf = sbProfFindProfileMatch(pThis->pRemoteProfiles, pThis->pProfilesSupported)) == NULL)
 	{
 		sbSessSetLastError(pThis, SR_RET_PEER_DOESNT_SUPPORT_PROFILE);
 		return NULL;
@@ -441,11 +437,13 @@ sbChanObj* sbSessOpenChan(sbSessObj* pThis, sbProfObj* pProf)
 	sbMesgSendMesg(pMesgStart, pThis->pChan0, "MSG", 0);
 	sbMesgDestroy(pMesgStart);
 
+
 	if((pReply = sbMesgRecvMesg(pChan)) == NULL)
 	{
 		/** \todo think if we need to shut down anything
 		 *  else inside the BEEP session.
 		 */
+		sbChanDestroy(pChan);
 		return NULL;
 	}
 	/* debug: printf("HDR: %s, Payload: %s\n", pReply->szMIMEHdr, pReply->szActualPayload); */
@@ -455,11 +453,14 @@ sbChanObj* sbSessOpenChan(sbSessObj* pThis, sbProfObj* pProf)
 		/** \todo think if we need to shut down anything
 		 *  else inside the BEEP session.
 		 */
+		sbChanDestroy(pChan);
 		sbMesgDestroy(pReply);
 		return NULL;
 	}
 
-	/* Now check if we received the correct reply */
+	/* Now check if we received the correct reply and extract the
+	 * agreed-upon profile.
+	 */
 	pReplyXML = sbNVTRConstruct();
 
 	if((iRet = sbNVTRParseXML(pReplyXML, pReply->szActualPayload)) == SR_RET_OK)
@@ -471,7 +472,7 @@ sbChanObj* sbSessOpenChan(sbSessObj* pThis, sbProfObj* pProf)
 
 	if(iRet == SR_RET_OK)
 	{
-		if(strcmp(pEntryURI->pszValue, sbProfGetURI(pProf)))
+		if((pChan->pProf = sbProfFindProfile(pThis->pProfilesSupported, pEntryURI->pszValue)) == NULL)
 			iRet = SR_RET_PEER_INVALID_PROFILE;
 	}
 
@@ -556,4 +557,47 @@ srRetVal sbSessCloseSession(sbSessObj *pThis)
 	sbSessDestroy(pThis);
 
 	return iRet;
+}
+
+
+
+srRetVal sbSessSendGreeting(sbSessObj* pSess, sbNVTRObj *pProfsSupported)
+{
+	srRetVal iRet;
+	sbMesgObj *pMesgStart;
+	sbStrBObj *pStr;
+	sbNVTEObj *pEntry;
+	char* pBuf;
+	char szURIBuf[1025];
+
+	sbSessCHECKVALIDOBJECT(pSess);
+	sbNVTRCHECKVALIDOBJECT(pProfsSupported);
+
+	if((pStr = sbStrBConstruct()) == NULL)
+		return SR_RET_OUT_OF_MEMORY;
+
+	/* begin greeting */
+	if((iRet = sbStrBAppendStr(pStr, "<greeting>\r\n")) != SR_RET_OK)
+		return iRet;
+
+	/* walk the profiles and add them to the greeting */
+	pEntry = NULL;
+	while((pEntry = sbNVTSearchKeySZ(pSess->pProfilesSupported, pEntry, NULL)) != NULL)
+	{
+		SNPRINTF(szURIBuf, sizeof(szURIBuf), "  <profile uri='%s' />\r\n", sbProfGetURI((sbProfObj*) pEntry->pUsr));
+		if((iRet = sbStrBAppendStr(pStr, szURIBuf)) != SR_RET_OK)
+			return iRet;
+	}
+
+	/* finish greeting */
+	if((iRet = sbStrBAppendStr(pStr, "</greeting>\r\n")) != SR_RET_OK)
+		return iRet;
+	pBuf = sbStrBFinish(pStr);
+
+	pMesgStart = sbMesgConstruct(BEEP_DEFAULT_MIME_HDR, pBuf);
+	sbMesgSendMesg(pMesgStart, pSess->pChan0, "RPY", 0);
+	sbMesgDestroy(pMesgStart);
+	free(pBuf);
+
+	return SR_RET_OK;
 }

@@ -450,54 +450,6 @@ srRetVal sbSessAddActiveSession(sbLstnObj* pThis, sbSessObj *pSess)
 	return SR_RET_OK;
 }
 
-/**
- * Send a greeting message based on the currently registered
- * profiles.
- *
- * We generate the greeting via a simple stringbuf, not with
- * an XML parser. This saves execution time and is as good
- * as the XML thing...
- */
-srRetVal sbLstnSendGreeting(sbLstnObj* pThis, sbSessObj* pSess)
-{
-	srRetVal iRet;
-	sbMesgObj *pMesgStart;
-	sbStrBObj *pStr;
-	sbNVTEObj *pEntry;
-	char* pBuf;
-	char szURIBuf[1025];
-
-	sbLstnCHECKVALIDOBJECT(pThis);
-
-	if((pStr = sbStrBConstruct()) == NULL)
-		return SR_RET_OUT_OF_MEMORY;
-
-	/* begin greeting */
-	if((iRet = sbStrBAppendStr(pStr, "<greeting>\r\n")) != SR_RET_OK)
-		return iRet;
-
-	/* walk the profiles and add them to the greeting */
-	pEntry = NULL;
-	while((pEntry = sbNVTSearchKeySZ(pThis->pProfsSupported, pEntry, NULL)) != NULL)
-	{
-		SNPRINTF(szURIBuf, sizeof(szURIBuf), "  <profile uri='%s' />\r\n", sbProfGetURI((sbProfObj*) pEntry->pUsr));
-		if((iRet = sbStrBAppendStr(pStr, szURIBuf)) != SR_RET_OK)
-			return iRet;
-	}
-
-	/* finish greeting */
-	if((iRet = sbStrBAppendStr(pStr, "</greeting>\r\n")) != SR_RET_OK)
-		return iRet;
-	pBuf = sbStrBFinish(pStr);
-
-	pMesgStart = sbMesgConstruct(BEEP_DEFAULT_MIME_HDR, pBuf);
-	sbMesgSendMesg(pMesgStart, pSess->pChan0, "RPY", 0);
-	sbMesgDestroy(pMesgStart);
-	free(pBuf);
-
-	return SR_RET_OK;
-}
-
 
 /**
  * This method is called when a new session is initiated
@@ -537,7 +489,7 @@ static srRetVal sbLstnNewSess(sbLstnObj* pThis)
 		return iRet;
 	}
 
-	return sbLstnSendGreeting(pThis, pSess);
+	return sbSessSendGreeting(pSess, pThis->pProfsSupported);
 }
 
 /**

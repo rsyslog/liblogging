@@ -117,6 +117,9 @@
 				RelativePath="..\beepsession.c">
 			</File>
 			<File
+				RelativePath="..\clntprof-3195raw.c">
+			</File>
+			<File
 				RelativePath="..\lstnprof-3195raw.c">
 			</File>
 			<File
@@ -161,6 +164,9 @@
 			</File>
 			<File
 				RelativePath="..\beepsession.h">
+			</File>
+			<File
+				RelativePath="..\clntprof-3195raw.h">
 			</File>
 			<File
 				RelativePath="..\config.h">

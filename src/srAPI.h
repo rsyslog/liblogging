@@ -58,10 +58,8 @@ struct srAPIObject
 {	
 	srObjID OID;					/**< object ID */
 	struct sbChanObject *pChan;		/**< The BEEP channel associated with this API instance */
-	struct sbProfObject *pProf;		/**< the associated profile */
+	struct sbNVTRObject *pProfsSupported;/**< the supported profiles by this API (initiator only) */
 	struct sbSessObject *pSess;		/**< the associated session */
-	SBansno	uAnsno;					/**< ansno \todo this should be done by the channel object or the profile... */
-	SBmsgno uMsgno4raw;				/**< msgno to be used for rfc3195/RAW messages */
 	void *pUsr;						/**< for the user's use - not handled in any way in this lib */
 	/** \todo create the methods for pUsr */
 #	if FEATURE_LISTENER == 1

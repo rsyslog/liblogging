@@ -67,8 +67,8 @@ static void sbChanTeardown(sbChanObj *pThis)
 	 	sbSessCloseChan(pThis->pSess, pThis);
 	else if(pThis->iState == sbChan_STATE_ERR_FREE_NEEDED)
 		sbChanAbort(pThis);
-	/* Any other states currently meand the caller has already
-	 * closed the channel and also freed the object. So this is
+	/* Any other states currently mean the caller has already
+	 * closed the channel and also free()ed the object. So this is
 	 * really an artefact. This is to cover some race conditions.
 	 * We need to go back at this code over time and do a
 	 * thourough audit. Obviously, we are dealing with a
@@ -125,9 +125,8 @@ sbChanObj* sbChanConstruct(sbSessObj* pSess)
 	pThis->uMsgno = 0;
 	pThis->OID = OIDsbChan;
 	pThis->iState = sbChan_STATE_INITIALIZED;
-#	if FEATURE_LISTENER == 1
-		pThis->pProf = NULL;
-#	endif
+	pThis->pProfInstance = NULL;
+	pThis->pProf = NULL;
 
 	return(pThis);
 }
@@ -174,6 +173,16 @@ void sbChanDestroy(sbChanObj* pThis)
 	sbProfObj *pProf;
 #	endif
 	sbChanCHECKVALIDOBJECT(pThis);
+
+	/* This is a safeguard to make sure no
+	 * leak is left. Normally, the profile cleans
+	 * up this pointer. But it can't do so if e.g.
+	 * the channel is aborted. So we do it for it,
+	 * but obiously, we can't do it smartly - so we
+	 * just free() the memory.
+	 */
+	if(pThis->pProfInstance != NULL)
+		free(pThis->pProfInstance);
 
 #	if FEATURE_LISTENER == 1
 		pProf = pThis->pProf;

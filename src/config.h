@@ -150,6 +150,14 @@
 #define FEATURE_LISTENER 1
 
 /**
+ * Should the COOKED profile be provided?
+ * If set to 1, COOKED will be implemented for the
+ * client and, if FEATURE_LISTNER is set, for the
+ * listener part, too.
+ */
+#define FEATURE_COOKED 1
+
+/**
  * Should the syslog message API be provided?
  * Please note that some limited functionality of
  * the API is provided in any case if FEATURE_LISTENER

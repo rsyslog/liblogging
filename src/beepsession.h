@@ -74,6 +74,7 @@ struct sbMesgObject;
 #endif
 
 struct sbChanObject;
+struct sbChanObject;
 struct sbFramObject;
 struct sbNVTRObject;
 struct sbSessObject 
@@ -91,10 +92,10 @@ struct sbSessObject
 	struct sbNVTRObject *pRemoteProfiles; /**< linked list of profiles supported by remote peer. Constructed based on greeting. */
 	srRetVal (*SendFramMethod)(struct sbSessObject *, struct sbFramObject *, struct sbChanObject *); /**< method to be
 											used for sending the frame. Is different for client and server implementations */
+	struct sbNVTRObject *pProfilesSupported;/**< the list of profiles supported at the time of session connection. */
 #if FEATURE_LISTENER == 1
 	sbSessState iState;						/**< this session's current status */
 	sbSessTXState iTXState;					/**< session transmit status */
-	struct sbNVTRObject *pProfilesSupported;/**< the list of profiles supported at the time of session connection. */
 	struct sbNVTRObject *pSendQue;			/**< queue of data to be send */
 	struct sbFramObject *pRecvFrame;		/**< frame currently being received */
 	int	bNeedData;							/**< TRUE = can NOT send, because data (SEQ frame) needs to arrive first */
@@ -102,7 +103,16 @@ struct sbSessObject
 };
 typedef struct sbSessObject sbSessObj;
 
-sbSessObj* sbSessOpenSession(char* pszRemotePeer, int iPort);
+/** Open a BEEP session.
+ *  The initial greeting is sent and the remote peers initial greeting
+ *  is accepted. Channel 0 is initialized and brought into operation.
+ *  
+ * \param pszRemotePeer name or IP address of the peer to connect to
+ * \param iPort TCP port the remote peer is listening to
+ * \retval pointer to the new session object or NULL, if an error
+ *         occured.
+ */
+sbSessObj* sbSessOpenSession(char* pszRemotePeer, int iPort, struct sbNVTRObject *pProfSupported);
 srRetVal sbSessCloseSession(sbSessObj *pThis);
 
 
@@ -155,11 +165,9 @@ struct sbFramObject* sbSessRecvFram(sbSessObj* pThis, struct sbChanObject  *pCha
  * frame as part of the channel creation, this frame is probably 
  * available for retrieval.
  *
- * \param pProf [in] pointer to the profile to be used
- * \retval pointer to the new channel object or NULL, if an
- *         error occured.
+ * \param pProfsSupported [in] pointer to the profile supporeted for this session.
  */
-struct sbChanObject* sbSessOpenChan(sbSessObj* pThis, sbProfObj* pProf);
+struct sbChanObject* sbSessOpenChan(sbSessObj* pThis);
 
 /**
  * Close a channel.
@@ -250,5 +258,19 @@ void sbSessAbort(sbSessObj *pThis);
  * \param pMesg The message containing the Greeting. Must not be NULL.
  */
 srRetVal sbSessProcessGreeting(struct sbSessObject *pThis, struct sbMesgObject *pMesg);
+
+/**
+ * Send a greeting message based on the currently registered
+ * profiles.
+ *
+ * We generate the greeting via a simple stringbuf, not with
+ * an XML parser. This saves execution time and is as good
+ * as the XML thing...
+ *
+ * \param pProfsSupported Pointer to a linked list of supported
+ *        profiles (which should be specified in the greeting.
+ */
+srRetVal sbSessSendGreeting(struct sbSessObject* pSess, struct sbNVTRObject *pProfsSupported);
+
 
 #endif

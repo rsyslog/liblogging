@@ -4,6 +4,10 @@
  * \author  Rainer Gerhards <rgerhards@adiscon.com>
  * \date    2003-08-04
  *
+ * \date    2003-09-04
+ *          Updated so that a client can have multiple
+ *          profiles.
+ *
  * Copyright 2002-2003 
  *     Rainer Gerhards and Adiscon GmbH. All Rights Reserved.
  * 
@@ -42,6 +46,7 @@
 
 struct sbMesgObject;
 struct srAPIObject;
+struct sbNVTRObject;
 
 #if FEATURE_LISTENER == 1
 	/** event handlers */
@@ -74,8 +79,14 @@ struct sbProfObject
 	 ** profile spec.
 	 **/
 	srRetVal (*OnMesgRecv)(struct sbProfObject *pThis, int* pAbort, struct sbSessObject* pSess, struct sbChanObject* pChan, struct sbMesgObject *pMesg);
-
 #endif
+	/* now come client-side event handlers (always present) */
+	/** method to call if client-side API needs to open a log channel */ 
+	srRetVal (*OnClntOpenLogChan)(struct sbChanObject *pChan, struct sbMesgObject *pMesgGreeting);
+	/** method to call if client-side API needs to send a a log message */ 
+	srRetVal (*OnClntSendLogMsg)(struct sbChanObject* pChan, char* szLogmsg);
+	/** method to call if client-side API needs to close a log channel */
+	srRetVal (*OnClntCloseLogChan)(struct sbChanObject* pChan);
 };
 typedef struct sbProfObject sbProfObj;
 
@@ -118,5 +129,46 @@ srRetVal sbProfSetEventHandler(struct sbProfObject* pThis, sbProfEvent iEvent, s
  * \param pAPI - API object to be set.
  */
 srRetVal sbProfSetAPIObj(sbProfObj *pThis, srAPIObj *pAPI);
+
+/**
+ * Find a matching profile in two lists of profiles.
+ * The matching is done based on the URI.
+ * If a match is found, we return the pointer to it. If it is
+ * not found, we return NULL. The FIRST matching profile
+ * will be returned. It is not tried to find the best match.
+ *
+ * \param pProfListRemote List of remote profiles, created from the
+ *                        greeting. This are NOT profile objects but
+ *                        rather URI strings in pszKey.
+ * \param pProfList2 list (sbNVTRObj) of profiles. MAY BE NULL! (which indicates
+ *                  an empty list of profiles. 
+ * \retval Pointer to the first matching entry or NULL, if none
+ *                 found.
+ */
+sbProfObj*  sbProfFindProfileMatch(struct sbNVTRObject *pProfListRemote, struct sbNVTRObject *pProfList2);
+
+/**
+ * Find a profile based on an URI in a list of profiles.
+ *
+ * \param pProfileList Pointer to list of Profiles. May be NULL.
+ * \param pszSearch string to be compared to. Must not be NULL.
+ * \retval Pointer to the profile found or NULL, if none found.
+ */
+sbProfObj*  sbProfFindProfile(struct sbNVTRObject *pProfList, char* pszSearch);
+
+/**
+ * Set the 3 mandatory event handlers for client profiles.
+ * As all of them need to be set for the profile to work,
+ * we provide a single call to set them all at once.
+ *
+ * The param names reflect the names of the event handlers. 
+ * All event handlers MUST point to actual handlers, none
+ * if them is allowed to be NULL.
+ */
+srRetVal sbProfSetClntEventHandlers(sbProfObj *pProf,
+									srRetVal (*OnClntOpenLogChan)(struct sbChanObject *pChan, struct sbMesgObject *pMesgGreeting),
+									srRetVal (*OnClntSendLogMsg)(struct sbChanObject* pChan, char* szLogmsg),
+									srRetVal (*OnClntCloseLogChan)(struct sbChanObject* pChan));
+
 
 #endif

@@ -5,6 +5,10 @@
  * \date    2003-08-04
  *          Initial version (0.1) released.
  *
+ * \date    2003-09-04
+ *          begin major redesign so that multiple client profiles
+ *          can be supported (the initial design just allowed one).
+ *
  * Copyright 2002-2003 
  *     Rainer Gerhards and Adiscon GmbH. All Rights Reserved.
  * 
@@ -44,6 +48,9 @@
 #include "beepsession.h"
 #include "beepprofile.h"
 #include "beeplisten.h"
+#include "namevaluetree.h"
+#include "beepprofile.h"
+#include "clntprof-3195raw.h"
 #include "srAPI.h"
 
 /* ################################################################# *
@@ -71,8 +78,8 @@ static void srAPIDestroy(srAPIObj* pThis)
 	if(pThis->pChan != NULL)
 		sbSessCloseChan(pThis->pSess, pThis->pChan);
 
-	if(pThis->pProf != NULL)
-		sbProfDestroy(pThis->pProf);
+	if(pThis->pProfsSupported != NULL)
+		sbNVTRDestroy(pThis->pProfsSupported);
 
 	if(pThis->pSess != NULL)
 		sbSessCloseSession(pThis->pSess);
@@ -83,6 +90,28 @@ static void srAPIDestroy(srAPIObj* pThis)
 	SRFREEOBJ(pThis);
 }
 
+
+/**
+ * Add a profile object to the list of supported profiles.
+ * \todo This method (and its helper FreeProf) is the same
+ * as in the beeplisten object. We may want to merge these 
+ * two into a single utility method...
+ */
+static srRetVal srAPIAddProfile(srAPIObj *pThis, sbProfObj *pProf)
+{
+	sbNVTEObj *pEntry;
+
+	srAPICHECKVALIDOBJECT(pThis);
+	sbProfCHECKVALIDOBJECT(pProf);
+	sbNVTRCHECKVALIDOBJECT(pThis->pProfsSupported);
+
+	if((pEntry = sbNVTAddEntry(pThis->pProfsSupported)) == NULL)
+		return SR_RET_OUT_OF_MEMORY;
+	sbNVTESetKeySZ(pEntry, pProf->pszProfileURI, TRUE);
+	sbNVTESetUsrPtr(pEntry, pProf, sbProfDestroy);
+	
+	return SR_RET_OK;
+}
 
 
 /* ################################################################# *
@@ -98,7 +127,7 @@ srAPIObj* srAPIInitLib(void)
 
 	pThis->OID = OIDsrAPI;
 	pThis->pSess = NULL;
-	pThis->pProf = NULL;
+	pThis->pProfsSupported = NULL;
 	pThis->pChan = NULL;
 #	if FEATURE_LISTENER == 1
 	pThis->OnSyslogMessageRcvd = NULL;
@@ -158,23 +187,54 @@ srRetVal srAPIOpenlog(srAPIObj *pThis, char* pszRemotePeer, int iPort)
 {
 	srRetVal iRet;
 	sbMesgObj *pProfileGreeting;
+	sbProfObj *pProf;
 
 	if((pThis == NULL) || (pThis->OID != OIDsrAPI))
 		return SR_RET_INVALID_HANDLE;
 
-	if((pThis->pSess = sbSessOpenSession(pszRemotePeer, iPort)) == NULL)
+	/* We need to create the list of supported profiles first.
+	 */
+	/** \todo later, make this depending on the lib option set by the user. */
+	/* create profile list */
+	if((pThis->pProfsSupported = sbNVTRConstruct()) == NULL)
+		return SR_RET_OUT_OF_MEMORY;
+
+	/* set up the rfc 3195/raw listener */
+	if((iRet = sbProfConstruct(&pProf, "http://xml.resource.org/profiles/syslog/RAW")) != SR_RET_OK)
+	{
+		sbLstnDestroy(pThis->pLstn);
+		return iRet;
+	}
+
+	if((iRet = sbProfSetAPIObj(pProf, pThis)) != SR_RET_OK)
+	{
+		srAPIDestroy(pThis);
+		sbProfDestroy(pProf);
+		return iRet;
+	}
+
+	if((iRet = sbProfSetClntEventHandlers(pProf, sbPSSRClntOpenLogChan, sbPSSRClntSendMsg, sbPSSRCOnClntCloseLogChan)) != SR_RET_OK)
+	{
+		sbProfDestroy(pProf);
+		return iRet;
+	}
+
+	if((iRet = srAPIAddProfile(pThis, pProf)) != SR_RET_OK)
+	{
+		srAPIDestroy(pThis);
+		sbProfDestroy(pProf);
+		return iRet;
+	}
+
+	/* OK, we got our housekeeping done, so let's talk to the peer )
+	 */
+	if((pThis->pSess = sbSessOpenSession(pszRemotePeer, iPort, pThis->pProfsSupported)) == NULL)
 	{
 		srAPIDestroy(pThis);
 		return SR_RET_ERR;
 	}
 
-	if((iRet = sbProfConstruct(&(pThis->pProf), "http://xml.resource.org/profiles/syslog/RAW")) != SR_RET_OK)
-	{
-		srAPIDestroy(pThis);
-		return iRet;
-	}
-
-	if((pThis->pChan = sbSessOpenChan(pThis->pSess, pThis->pProf)) == NULL)
+	if((pThis->pChan = sbSessOpenChan(pThis->pSess)) == NULL)
 	{
 		srAPIDestroy(pThis);
 		return SR_RET_ERR;
@@ -194,62 +254,47 @@ srRetVal srAPIOpenlog(srAPIObj *pThis, char* pszRemotePeer, int iPort)
 		srAPIDestroy(pThis);
 		return SR_RET_ERR;
 	}
-
-	pThis->uAnsno = 0;
-	pThis->uMsgno4raw = pProfileGreeting->uMsgno;
+	
+	/* Ok, we must now call the profile's new channel created handler */
+	iRet = pThis->pChan->pProf->OnClntOpenLogChan(pThis->pChan, pProfileGreeting);
+	
 	sbMesgDestroy(pProfileGreeting);
-
-	return(SR_RET_OK);
-}
-
-
-srRetVal srAPISendLogmsg(srAPIObj* pThis, char* szLogmsg)
-{
-	sbMesgObj *pMesg;
-	srRetVal iRet;
-
-	/* Attention: order of conditions is vitally important! */
-	if((pThis == NULL) || (pThis->OID != OIDsrAPI))
-		return SR_RET_INVALID_HANDLE;
-
-	if((pMesg = sbMesgConstruct(NULL, szLogmsg)) == NULL)
-		return SR_RET_ERR;
-
-	iRet = sbMesgSendMesg(pMesg, pThis->pChan, "ANS", pThis->uAnsno++);
-	sbMesgDestroy(pMesg);
 
 	return iRet;
 }
 
 
+srRetVal srAPISendLogmsg(srAPIObj* pThis, char* szLogmsg)
+{
+	/* Attention: order of conditions is vitally important! */
+	if((pThis == NULL) || (pThis->OID != OIDsrAPI))
+		return SR_RET_INVALID_HANDLE;
+
+	if(szLogmsg == NULL)
+		return SR_RET_NULL_MSG_PROVIDED;
+
+	assert(pThis->pChan->pProf->OnClntSendLogMsg != NULL);
+
+	return pThis->pChan->pProf->OnClntSendLogMsg(pThis->pChan, szLogmsg);
+}
+
+
 srRetVal srAPICloseLog(srAPIObj *pThis)
 {
-	sbMesgObj *pMesg;
 	int iRet = SR_RET_OK;
 
 	/* Attention: order of conditions is vitally important! */
 	if((pThis == NULL) || (pThis->OID != OIDsrAPI))
 		return SR_RET_INVALID_HANDLE;
 
-	if((pMesg = sbMesgConstruct("", "")) == NULL)
-		iRet = SR_RET_ERR;
-	else
-	{
-		iRet = sbMesgSendMesg(pMesg, pThis->pChan, "NUL", pThis->uAnsno++);
-        sbMesgDestroy(pMesg);
-	}
+	assert(pThis->pChan->pProf->OnClntCloseLogChan != NULL);
+	iRet = pThis->pChan->pProf->OnClntCloseLogChan(pThis->pChan);
 
 	/* now destroy all but the API object itself */
 	if(pThis->pChan != NULL)
 	{
 		sbSessCloseChan(pThis->pSess, pThis->pChan);
 		pThis->pChan = NULL;
-	}
-
-	if(pThis->pProf != NULL)
-	{
-		sbProfDestroy(pThis->pProf);
-		pThis->pProf = NULL;
 	}
 
 	if(pThis->pSess != NULL)

@@ -4,6 +4,10 @@
  * \author  Rainer Gerhards <rgerhards@adiscon.com>
  * \date    2003-08-04
  *
+ * \date    2003-09-04
+ *          begin coding support for multiple client profiles
+ *          (the initial design just allowed one).
+ *
  * Copyright 2002-2003 
  *     Rainer Gerhards and Adiscon GmbH. All Rights Reserved.
  * 
@@ -41,6 +45,7 @@
 #include "config.h"
 #include "liblogging.h"
 #include "beepprofile.h"
+#include "namevaluetree.h"
 
 /* ################################################################# *
  * private members                                                   *
@@ -108,8 +113,85 @@ void sbProfDestroy(sbProfObj* pThis)
 }
 
 
-#if FEATURE_LISTENER == 1
+sbProfObj*  sbProfFindProfileMatch(sbNVTRObj *pProfListRemote, sbNVTRObj *pProfList2)
+{
+	sbNVTEObj *pEntry;
+	sbProfObj *pThis;
 
+	pThis = NULL;
+
+	if((pProfListRemote == NULL) || (pProfList2 == NULL))
+		return NULL; /* done, there can't be any match ;) */
+
+	pEntry = sbNVTSearchKeySZ(pProfListRemote, NULL, NULL);
+	while(pEntry != NULL)
+	{
+		if((pThis = sbProfFindProfile(pProfList2, pEntry->pszKey)) != NULL)
+			break;
+		pEntry = sbNVTSearchKeySZ(pProfListRemote, pEntry, NULL);
+	}
+
+	return pThis;
+}
+
+
+sbProfObj*  sbProfFindProfile(sbNVTRObj *pProfList, char* pszSearch)
+{
+	sbNVTEObj *pEntry;
+	sbProfObj *pThis;
+	sbProfObj *pProf;
+
+	assert(pszSearch != NULL);
+
+	if(pProfList == NULL)
+		return NULL; /* we already know we can't find it ;) */
+
+	pThis = NULL;
+	pEntry = sbNVTSearchKeySZ(pProfList, NULL, NULL);
+	while(pEntry != NULL)
+	{
+		pProf = (sbProfObj*) pEntry->pUsr;
+		assert(pProf != NULL);
+		if(!strcmp(pszSearch, pProf->pszProfileURI))
+		{
+			pThis = pProf;
+			break;
+		}
+		pEntry = sbNVTSearchKeySZ(pProfList, pEntry, NULL);
+	}
+
+	return pThis;
+}
+
+
+/**
+ * Set the 3 mandatory event handlers for client profiles.
+ * As all of them need to be set for the profile to work,
+ * we provide a single call to set them all at once.
+ *
+ * The param names reflect the names of the event handlers. 
+ * All event handlers MUST point to actual handlers, none
+ * if them is allowed to be NULL.
+ */
+srRetVal sbProfSetClntEventHandlers(sbProfObj *pProf,
+									srRetVal (*OnClntOpenLogChan)(struct sbChanObject *pChan, struct sbMesgObject *pMesgGreeting),
+									srRetVal (*OnClntSendLogMsg)(struct sbChanObject* pChan, char* szLogmsg),
+									srRetVal (*OnClntCloseLogChan)(struct sbChanObject* pChan))
+{
+	sbProfCHECKVALIDOBJECT(pProf);
+	assert(OnClntOpenLogChan != NULL);
+	assert(OnClntSendLogMsg != NULL);
+	assert(OnClntCloseLogChan != NULL);
+
+	pProf->OnClntOpenLogChan  = OnClntOpenLogChan;
+	pProf->OnClntSendLogMsg   = OnClntSendLogMsg;
+	pProf->OnClntCloseLogChan = OnClntCloseLogChan;
+
+	return SR_RET_OK;
+}
+
+
+#if FEATURE_LISTENER == 1
 srRetVal sbProfSetAPIObj(sbProfObj *pThis, srAPIObj *pAPI)
 {
 	sbProfCHECKVALIDOBJECT(pThis);
@@ -137,6 +219,5 @@ srRetVal sbProfSetEventHandler(sbProfObj* pThis, sbProfEvent iEvent, srRetVal (*
 	}
 	return SR_RET_OK;
 }
-
 
 #endif /* #if FEATURE_LISTENER == 1 */
