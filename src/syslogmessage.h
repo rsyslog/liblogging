@@ -102,10 +102,11 @@ struct srSLMGObject
 	srSLMGFormat iFormat;			/**< the format this message (most probably) is in */
 #	if FEATURE_MSGAPI == 1
 	int iFacility;					/**< the facility of the syslog message */
-	int iPriority;					/**< the priority of the syslog message */
+	int iSeverity;					/**< the priority of the syslog message */
 	unsigned char* pszHostname;		/**< name of the remote host (from the syslog message itself) */
 	unsigned char* pszTag;			/**< pointer to the tag value of the syslog message */
 	unsigned char* pszMsg;			/**< the MSG part of the syslog message */
+	int bOwnMsg;					/**< TRUE pszMsg owned by us & must be freed on destroy */
 	unsigned char* pszLanguage;		/**< language used inside the message (NULL, if unknown) */
 	
 	/* The timestamp is split through several fields, because this makes it less
@@ -277,6 +278,65 @@ srRetVal srSLMGSetRemoteHostIP(srSLMGObj *pThis, char *pszRemHostIP, int bCopyRe
  */
 srRetVal srSLMGSetRawMsg(srSLMGObj *pThis, char *pszRawMsg, int bCopyRawMsg);
 
+/**
+ * Set the MSG text. Any previously set value is replaced.
+ *
+ * \param pszMsg String with the MSG text.
+ * \param bCopyMSG     TRUE = copy the string, will own the copy
+ *                     (and need to free it), FALSE, do not copy
+ *                     caller owns & frees string. Must keep srSLMGObj
+ *                     alive long enough so that all methods can access
+ *                     it without danger.
+ */
+srRetVal srSLMGSetMSG(srSLMGObj *pThis, char *pszMSG, int bCopyMSG);
+
+/** 
+ * Set the TIMESTAMP to the current system time.
+ */
+srRetVal srSLMGSetTIMESTAMPtoCurrent(srSLMGObj *pThis);
+
+/**
+ * Set the HOSTNAME to the current hostname.
+ */
+srRetVal srSLMGSetHOSTNAMEtoCurrent(srSLMGObj* pThis);
+
+/**
+ * Format a raw syslog message. This object's properties are
+ * used to format the message. It will be placed in the raw
+ * message buffer and after that is ready for transmittal.
+ *
+ * If a raw message is already stored, the new raw message
+ * overwrites the previous one. If the previous message resides
+ * in user-allocated memory, it can not be replaced and an
+ * error condition is returned. In this case, remove the link
+ * to the user-supplied buffer first and then retry the operation.
+ *
+ * \param IFmtToUse The format to be used for this message. It
+ *        must be one of the well-known formats.
+ */
+srRetVal srSLMGFormatRawMsg(srSLMGObj *pThis, srSLMGFormat iFmtToUse);
+
+/**
+ * Set the priority for the current message. Any
+ * previously stored priority code is overwritten.
+ */
+srRetVal srSLMGSetSeverity(srSLMGObj* pThis, int iNewVal);
+
+/**
+ * Set the facility for the current message. Any
+ * previously stored facility code is overwritten.
+ */
+srRetVal srSLMGSetFacility(srSLMGObj* pThis, int iNewVal);
+
+/**
+ * Set the TAG string in the syslog message. The
+ * caller provided string buffer is copied to our
+ * own local copy.
+ *
+ * \param pszNewTag New tag value (string). MUST
+ *                  not be NULL. MUST be a valid tag.
+ */
+srRetVal srSLMGSetTAG(srSLMGObj* pThis, char* pszNewTag);
 
 
 #endif /* #if (FEATURE_LISTENER == 1) || (FEATURE_MSGAPI == 1) */

@@ -81,13 +81,15 @@ srRetVal srSLMGConstruct(srSLMGObj **ppThis)
 	(*ppThis)->bTimStampIncludesTZ = FALSE;
 	(*ppThis)->cTimStampOffsetMode = srSLMG_TimStamp_INVALID;
 	(*ppThis)->iFacility = 1; /* default as of RFC 3164 */
-	(*ppThis)->iPriority = 5; /* default as of RFC 3164 */
+	(*ppThis)->iSeverity = 5; /* default as of RFC 3164 */
 	/* The timestamp fields are not initilized because calloc() 
 	 * already did this job. So DO NOT REMOVE CALLOC()! */
 	(*ppThis)->pszHostname = NULL;
 	(*ppThis)->pszLanguage = NULL;
 	(*ppThis)->pszRemoteHost = NULL;
 	(*ppThis)->pszTag = NULL;
+	(*ppThis)->pszMsg = NULL;
+	(*ppThis)->bOwnMsg = TRUE;	/* right now, we own it ;) */
 #	endif
 	return SR_RET_OK;
 }
@@ -125,7 +127,7 @@ void srSLMGDestroy(srSLMGObj *pThis)
 		free(pThis->pszLanguage );
 	if(pThis->pszTag != NULL)
 		free(pThis->pszTag);
-	if(pThis->pszMsg != NULL)
+	if((pThis->bOwnMsg == TRUE) && (pThis->pszMsg != NULL))
 		free(pThis->pszMsg);
 #	endif
 
@@ -186,7 +188,7 @@ static int srSLMGParsePRI(srSLMGObj* pThis, unsigned char** ppszBuf)
 	++(*ppszBuf);
 
 	pThis->iFacility = i >> 3;
-	pThis->iPriority = i % 8;
+	pThis->iSeverity = i % 8;
 
 	return TRUE;
 }
@@ -690,7 +692,7 @@ srRetVal srSLMGGetPriority(srSLMGObj *pThis, int *piPrio)
 	srSLMGCHECKVALIDOBJECT_API(pThis);
 	if(piPrio == NULL)
 		return SR_RET_NULL_POINTER_PROVIDED;
-	*piPrio = pThis->iPriority;
+	*piPrio = pThis->iSeverity ;
 	return SR_RET_OK;
 }
 
@@ -869,9 +871,28 @@ srRetVal srSLMGSetRawMsg(srSLMGObj *pThis, char *pszRawMsg, int bCopyRawMsg)
 }
 
 
-/** 
- * Set the TIMESTAMP to the current system time.
- */
+srRetVal srSLMGSetMSG(srSLMGObj *pThis, char *pszMSG, int bCopyMSG)
+{
+	srSLMGCHECKVALIDOBJECT_API(pThis);
+	if(pThis->pszMsg != NULL)
+		if(pThis->bOwnMsg == TRUE)
+			free(pThis->pszMsg);
+
+	if(bCopyMSG == TRUE)
+	{
+		if((pThis->pszMsg = sbNVTEUtilStrDup(pszMSG)) == NULL)
+			return SR_RET_OUT_OF_MEMORY;
+	}
+	else
+		pThis->pszMsg = pszMSG;
+
+	pThis->bOwnMsg = bCopyMSG;
+
+	return SR_RET_OK;
+}
+
+
+
 srRetVal srSLMGSetTIMESTAMPtoCurrent(srSLMGObj *pThis)
 {
 	srRetVal iRet;
@@ -886,25 +907,20 @@ srRetVal srSLMGSetTIMESTAMPtoCurrent(srSLMGObj *pThis)
 }
 
 
+/**
+ * Set the HOSTNAME to the current hostname.
+ */
+srRetVal srSLMGSetHOSTNAMEtoCurrent(srSLMGObj* pThis)
+{
+	srSLMGCHECKVALIDOBJECT_API(pThis);
+	return sbSock_gethostname(&pThis->pszHostname);
+}
+
 
 /* The following table is a helper to srSLMGFormatRawMsg:
  */
 static char* srSLMGMonthNames[13] = {"ERR", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
 
-/**
- * Format a raw syslog message. This object's properties are
- * used to format the message. It will be placed in the raw
- * message buffer and after that is ready for transmittal.
- *
- * If a raw message is already stored, the new raw message
- * overwrites the previous one. If the previous message resides
- * in user-allocated memory, it can not be replaced and an
- * error condition is returned. In this case, remove the link
- * to the user-supplied buffer first and then retry the operation.
- *
- * \param IFmtToUse The format to be used for this message. It
- *        must be one of the well-known formats.
- */
 srRetVal srSLMGFormatRawMsg(srSLMGObj *pThis, srSLMGFormat iFmtToUse)
 {
 	srRetVal iRet;
@@ -929,7 +945,7 @@ srRetVal srSLMGFormatRawMsg(srSLMGObj *pThis, srSLMGFormat iFmtToUse)
 		return SR_RET_OUT_OF_MEMORY;
 
 	/* PRI */
-	i = (pThis->iFacility << 3) + pThis->iPriority;
+	i = (pThis->iFacility << 3) + pThis->iSeverity;
 	SNPRINTF(szBuf, sizeof(szBuf), "<%d>", i);
 	if((iRet = sbStrBAppendStr(pStr, szBuf)) != SR_RET_OK) { sbStrBDestruct(pStr); return iRet; }
 
@@ -947,9 +963,6 @@ srRetVal srSLMGFormatRawMsg(srSLMGObj *pThis, srSLMGFormat iFmtToUse)
 	}
 	else
 	{ /* SIGN_12! */
-		/** \todo This formatting must be modified so that we detect if we do NOT have suffcient
-		 ** clock resolution and such... 
-		 **/
 		if(pThis->iTimStampSecFracPrecision > 0)
 		{	/* we now need to include fractional seconds. While doing so, we must look at
 			 * the precision specified. For example, if we have millisec precision (3 digits), a
@@ -996,10 +1009,71 @@ srRetVal srSLMGFormatRawMsg(srSLMGObj *pThis, srSLMGFormat iFmtToUse)
 
 	/* done, let's store the new string */
 	pThis->pszRawMsg = sbStrBFinish(pStr);
-	printf("Msg: %s\n", pThis->pszRawMsg);
 	pThis->bOwnRawMsgBuf = TRUE;
 	return SR_RET_OK;
 }
 
+
+srRetVal srSLMGSetFacility(srSLMGObj* pThis, int iNewVal)
+{
+	srSLMGCHECKVALIDOBJECT_API(pThis);
+
+	if(iNewVal < 0 || iNewVal > 23)
+		return SR_RET_FACIL_OUT_OF_RANGE;
+
+	pThis->iFacility = iNewVal;
+
+	return SR_RET_OK;
+}
+
+
+srRetVal srSLMGSetSeverity(srSLMGObj* pThis, int iNewVal)
+{
+	srSLMGCHECKVALIDOBJECT_API(pThis);
+
+	if(iNewVal < 0 || iNewVal > 7)
+		return SR_RET_PRIO_OUT_OF_RANGE;
+
+	pThis->iSeverity = iNewVal;
+
+	return SR_RET_OK;
+}
+
+
+srRetVal srSLMGSetTAG(srSLMGObj* pThis, char* pszNewTag)
+{
+	srRetVal iRet;
+	sbStrBObj *pStr;
+	int i;
+
+	srSLMGCHECKVALIDOBJECT_API(pThis);
+	if(pszNewTag == NULL)
+		return SR_RET_NULL_POINTER_PROVIDED;
+
+    if((pStr = sbStrBConstruct()) == NULL) return SR_RET_OUT_OF_MEMORY;
+
+	sbStrBSetAllocIncrement(pStr, 16);
+
+	/* copy tag value & check validity 
+	 * (we assume all chars except ':' and SP to be valid)
+	 */
+	for(i = 0 ; *(pszNewTag+i) && i < 32 ; ++i)
+		if((*(pszNewTag+i) == ':') || (*(pszNewTag+i) == ' '))
+			return SR_RET_INVALID_TAG;
+		else
+			if((iRet = sbStrBAppendChar(pStr, *(pszNewTag+i))) != SR_RET_OK)
+				return iRet;
+
+	if(*(pszNewTag+i) != '\0')
+		/* more than 32 chars */
+		return SR_RET_INVALID_TAG;
+
+	/* done, set property */
+	if(pThis->pszTag != NULL)
+		free(pThis->pszTag);
+	if((pThis->pszTag = sbStrBFinish(pStr)) == NULL) return SR_RET_OUT_OF_MEMORY;
+
+	return SR_RET_OK;
+}
 
 #endif /* #if FEATURE_MSGAPI == 1 */

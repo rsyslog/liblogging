@@ -1,4 +1,3 @@
-#include <windows.h>
 /** 
  * TestDrvr.cpp : This is a small sample C++ application
  * using liblogging. It just demonstrates how things can be 
@@ -75,11 +74,26 @@ int main(int argc, char* argv[])
 		exit(1);
 	}
 
+	/* First of all, create message object */
 	if((iRet = srSLMGConstruct(&pMsg)) != SR_RET_OK)
 	{
 		printf("Error %d creating syslog message object!\n", iRet);
 		exit(2);
 	}
+	if((iRet = srSLMGSetHOSTNAMEtoCurrent(pMsg)) != SR_RET_OK)
+	{
+		printf("Error %d setting hostname in syslog message object!\n", iRet);
+		exit(2);
+	}
+	if((iRet = srSLMGSetTAG(pMsg, "testdrvr[0]")) != SR_RET_OK)
+	{
+		printf("Error %d setting TAG in syslog message object!\n", iRet);
+		exit(2);
+	}
+	srSLMGSetFacility(pMsg, 7);
+	srSLMGSetSeverity(pMsg, 0);
+
+	/* carry on with the transport */
 
 	if(srAPIOpenlog(pAPI, "172.19.1.20", 601) != SR_RET_OK)
 	{
@@ -87,35 +101,32 @@ int main(int argc, char* argv[])
 		exit(2);
 	}
 
-	for(i = 0 ; i < 15 ; ++i)
+	for(i = 0 ; i < 5 ; ++i)
 	{
-		/* First of all, create message object */
-		pMsg->iFacility = 7;
-		pMsg->iPriority = 0;
-		pMsg->pszHostname = "host";
-		pMsg->pszTag = "tag";
-
+		/*	For a long message:	sprintf(szMsg, "Message %d. --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------", i); */
 		sprintf(szMsg, "Message %d", i);
-		pMsg->pszMsg = szMsg;
+		if((iRet = srSLMGSetMSG(pMsg, szMsg, FALSE)) != SR_RET_OK)
+		{
+			printf("Error %d setting MSG in syslog message object!\n", iRet);
+			exit(2);
+		}
 		srSLMGSetTIMESTAMPtoCurrent(pMsg);
-		if((iRet = srSLMGFormatRawMsg(pMsg, srSLMGFmt_SIGN_12)) != SR_RET_OK)
-//		if((iRet = srSLMGFormatRawMsg(pMsg, srSLMGFmt_3164WELLFORMED)) != SR_RET_OK)
+
+		/* Replace srSLMGFmt_3164WELLFORMED with srSLMGFmt_SIGN_12 if you would
+		 * like to use the new syslog-sign-12 timestamp (TIMESTAMP-3339).
+		 */
+		if((iRet = srSLMGFormatRawMsg(pMsg, srSLMGFmt_3164WELLFORMED)) != SR_RET_OK)
 		{
 			printf("Error %d formatting syslog message!\n", iRet);
 			exit(100);
 		}
 
-//		sprintf(szMsg, "<128> 2003-04-12T18:20:50.52-06:00 adiscon l %d", i);
-//		sprintf(szMsg, "<128>Oct 27 13:21:08 adiscon liblogger[141]: We are currently at message # %d. -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------", i);
-//		sprintf(szMsg, "<128>Oct 27 13:21:08 adiscon liblogger[141]: We are currently at message # %d.", i);
 		/* Send the message */
-//		if(srAPISendLogmsg(pAPI, szMsg) != SR_RET_OK)
 		if(srAPISendLogmsg(pAPI, pMsg->pszRawMsg) != SR_RET_OK)
 		{
 			printf("Error while sending!\n");
 			exit(3);
 		}
-		Sleep(68);
 	}
 	
 	if((iRet = srAPICloseLog(pAPI)) != SR_RET_OK)

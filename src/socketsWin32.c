@@ -400,7 +400,10 @@ srRetVal sbSockBind(sbSockObj* pThis, char* pszHost, int iPort)
  * Wrapper for inet_ntoa().
  *
  * \param psz Pointer to buffer that should receive the IP address
- * string. Must not be NULL.
+ * string pointer. Must not be NULL. NOTE WELL: This pointer is
+ * only valid until the next socket call. So the caller should 
+ * immediately copy it to its own buffer once control returns.
+ * The returned buffer MUST NOT be free()ed.
  */
 static srRetVal sbSock_inet_ntoa(sbSockObj *pThis, char **psz)
 {
@@ -409,6 +412,38 @@ static srRetVal sbSock_inet_ntoa(sbSockObj *pThis, char **psz)
 
 	if((*psz = (char*) inet_ntoa(pThis->RemoteHostAddr.sin_addr)) == NULL)
 		return sbSockSetLastSockError(pThis);
+
+	return SR_RET_OK;
+}
+
+
+/**
+ * Wrapper for gethostname().
+ *
+ * \note The Windows sockets API seems to be broken. We often
+ *       have seen that only the computer name part (not the domain
+ *       name) is returned by gethostname, even if the full
+ *       identity is configured. A way to work around this may be
+ *       to call gethostbyname() on the returned name and then
+ *       call gethostbyaddr() on what is returned there.
+ * \todo implement that workaround or check how to make windows
+ *       behave correctly.
+ *
+ * \param psz Pointer to Pointer to hostname. Must not be NULL.
+ *            On return, this pointer will refer to a newly allocated
+ *            buffer containing the hostname. This buffer must be free()ed
+ *            by the caller!
+ *  
+ */
+srRetVal sbSock_gethostname(char **psz)
+{
+	assert(psz != NULL);
+
+    if((*psz = (char*) malloc(256 * sizeof(char))) == NULL)
+		return SR_RET_OUT_OF_MEMORY;
+
+	if(gethostname(*psz, 256) != 0)
+		return SR_RET_ERR;
 
 	return SR_RET_OK;
 }

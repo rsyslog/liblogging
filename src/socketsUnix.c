@@ -361,3 +361,26 @@ static srRetVal sbSock_inet_ntoa(sbSockObj *pThis, char **psz)
 
 	return SR_RET_OK;
 }
+
+
+/**
+ * Wrapper for gethostname().
+ *
+ * \param psz Pointer to Pointer to hostname. Must not be NULL.
+ *            On return, this pointer will refer to a newly allocated
+ *            buffer containing the hostname. This buffer must be free()ed
+ *            by the caller!
+ *  
+ */
+srRetVal sbSock_gethostname(char **psz)
+{
+	assert(psz != NULL);
+
+    if((*psz = (char*) malloc(256 * sizeof(char))) == NULL)
+		return SR_RET_OUT_OF_MEMORY;
+
+	if(gethostname(*psz, 256) != 0)
+		return SR_RET_ERR;
+
+	return SR_RET_OK;
+}

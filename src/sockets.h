@@ -288,6 +288,17 @@ srRetVal sbSockSetNonblocking(sbSockObj*pThis);
  */
 srRetVal sbSockGetRemoteHostIP(sbSockObj *pThis, char **ppszHost);
 
+/**
+ * Wrapper for gethostname().
+ *
+ * \param psz Pointer to Pointer to hostname. Must not be NULL.
+ *            On return, this pointer will refer to a newly allocated
+ *            buffer containing the hostname. This buffer must be free()ed
+ *            by the caller!
+ *  
+ */
+srRetVal sbSock_gethostname(char **psz);
+
 
 #ifdef SROS_WIN32
 #	define SBSOCK_EWOULDBLOCK WSAEWOULDBLOCK
