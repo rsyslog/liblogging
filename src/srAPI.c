@@ -51,6 +51,7 @@
 #include "namevaluetree.h"
 #include "beepprofile.h"
 #include "clntprof-3195raw.h"
+#include "clntprof-3195cooked.h"
 #include "srAPI.h"
 
 /* ################################################################# *
@@ -186,7 +187,6 @@ srRetVal srAPIExitLib(srAPIObj *pThis)
 srRetVal srAPIOpenlog(srAPIObj *pThis, char* pszRemotePeer, int iPort)
 {
 	srRetVal iRet;
-	sbMesgObj *pProfileGreeting;
 	sbProfObj *pProf;
 
 	if((pThis == NULL) || (pThis->OID != OIDsrAPI))
@@ -199,8 +199,43 @@ srRetVal srAPIOpenlog(srAPIObj *pThis, char* pszRemotePeer, int iPort)
 	if((pThis->pProfsSupported = sbNVTRConstruct()) == NULL)
 		return SR_RET_OUT_OF_MEMORY;
 
-	/* set up the rfc 3195/raw listener */
-	if((iRet = sbProfConstruct(&pProf, "http://xml.resource.org/profiles/syslog/RAW")) != SR_RET_OK)
+	/* Now set up the profiles.
+	 * IMPORTANT: the order of profile registration is also the
+	 * profile priority. As such, preferred profiles should be 
+	 * registered first. For example, we will register COOKED before
+	 * RAW because we would like to select COOKED if both are available
+	 * at the remote peer!
+	 */
+	/* set up the rfc 3195 COOKED profile */
+	if((iRet = sbProfConstruct(&pProf, "http://xml.resource.org/profiles/syslog/COOKED")) != SR_RET_OK)
+	{
+		sbLstnDestroy(pThis->pLstn);
+		return iRet;
+	}
+
+	if((iRet = sbProfSetAPIObj(pProf, pThis)) != SR_RET_OK)
+	{
+		srAPIDestroy(pThis);
+		sbProfDestroy(pProf);
+		return iRet;
+	}
+
+	if((iRet = sbProfSetClntEventHandlers(pProf, sbPSRCClntOpenLogChan, sbPSRCClntSendMsg, sbPSRCCOnClntCloseLogChan)) != SR_RET_OK)
+	{
+		sbProfDestroy(pProf);
+		return iRet;
+	}
+
+	if((iRet = srAPIAddProfile(pThis, pProf)) != SR_RET_OK)
+	{
+		srAPIDestroy(pThis);
+		sbProfDestroy(pProf);
+		return iRet;
+	}
+
+
+	/* set up the rfc 3195/raw profile */
+	if((iRet = sbProfConstruct(&pProf, "http://xml.resource.org/profiles/syslog/RAWx")) != SR_RET_OK)
 	{
 		sbLstnDestroy(pThis->pLstn);
 		return iRet;
@@ -240,25 +275,11 @@ srRetVal srAPIOpenlog(srAPIObj *pThis, char* pszRemotePeer, int iPort)
 		return SR_RET_ERR;
 	}
 
-	/* channel created, let's wait until the remote peer sends
-	 * the profile-level greeting (intial MSG).
-	 */
-	if((pProfileGreeting = sbMesgRecvMesg(pThis->pChan)) == NULL)
-	{
-		srAPIDestroy(pThis);
-		return SR_RET_ERR;
-	}
-
-	if(pProfileGreeting->idHdr != BEEPHDR_MSG)
-	{
-		srAPIDestroy(pThis);
-		return SR_RET_ERR;
-	}
-	
 	/* Ok, we must now call the profile's new channel created handler */
-	iRet = pThis->pChan->pProf->OnClntOpenLogChan(pThis->pChan, pProfileGreeting);
+	iRet = pThis->pChan->pProf->OnClntOpenLogChan(pThis->pChan, NULL);
+	// destroy API object on failur!
 	
-	sbMesgDestroy(pProfileGreeting);
+//	sbMesgDestroy(pProfileGreeting);
 
 	return iRet;
 }

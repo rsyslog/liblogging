@@ -428,8 +428,8 @@ static srRetVal sbSock_inet_ntoa(struct sockaddr_in *psa, char **psz)
  *       identity is configured. A way to work around this may be
  *       to call gethostbyname() on the returned name and then
  *       call gethostbyaddr() on what is returned there.
- * \todo implement that workaround or check how to make windows
- *       behave correctly.
+ *	     WE HAVE NOW IMPLEMENTED THIS WORKAROUND, but leave
+ *       the text above in just in case...
  *
  * \param psz Pointer to Pointer to hostname. Must not be NULL.
  *            On return, this pointer will refer to a newly allocated

@@ -402,9 +402,9 @@ char* sbNVTXMLEscapePCDATA(char *pszToEscape)
 
 	while(*pszToEscape)
 	{
-		if(*pszToEscape = '<')
+		if(*pszToEscape == '<')
 			sbStrBAppendStr(pStrBuf, "&lt;");
-		else if(*pszToEscape = '&')
+		else if(*pszToEscape == '&')
 			sbStrBAppendStr(pStrBuf, "&quot;");
 		else
 			sbStrBAppendChar(pStrBuf, *pszToEscape);

@@ -179,8 +179,8 @@ sbFramActualRecvFramCommonBody(sbFramObj* pThis,sbChanObj *pChan)
 		int c;
 
 		c = sbSockGetRcvChar(pChan->pSock);
-		if(!c)
-			c = '?';
+		if(!c) /* this is not allowed as per spec - but what should we do... */
+			c = ' ';
 
 		*pszPayload++ = c;
 	}

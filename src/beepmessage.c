@@ -147,6 +147,7 @@ srRetVal sbMIMEExtract(char *pszInBuf, int iInBufLen, char **pszMIMEHdr, char** 
 	char* psz;
 	int iCurrCol = 0;
 	int iHdrLen;
+	int iPayloadLen;
 
 	/* detect end of MIME Header */
 	/** \todo handle empty string */
@@ -171,15 +172,26 @@ srRetVal sbMIMEExtract(char *pszInBuf, int iInBufLen, char **pszMIMEHdr, char** 
 
 	if(pPayload == NULL)	/* MIME Header missing? */
 	{
-		/* we need to allow this for SDCS for the time being... */
+		/* We need to allow this for SDCS for the time being. We also
+		 * need it to guard us against malicious traffic... So it must
+		 * stay in here even when SDSC is fixed. If we do not find any
+		 * MIME header (not even an empty one), we assume there was an
+		 * empty one.
+		 */
 		pHdr = NULL;
 		pPayload = pszInBuf;
+		iHdrLen = 0;
+		iPayloadLen = iInBufLen + 1 /* '\0' */;
+	}
+	else
+	{
+		iHdrLen = (int) (pPayload - pszInBuf - 2 /* CRLF */);
+		iPayloadLen = iInBufLen - (iHdrLen + 2 /*CRLF */) + 1 /* \0 */;
 	}
 
 	/* if we reach this, we have successfully parsed the header
 	 * and can now create the buffers.
 	 */
-	iHdrLen = (int) (pPayload - pszInBuf - 2 /* CRLF */);
 	if(iHdrLen == 0)
 	{
 		*pszMIMEHdr = NULL;
@@ -195,7 +207,7 @@ srRetVal sbMIMEExtract(char *pszInBuf, int iInBufLen, char **pszMIMEHdr, char** 
 		*(*pszMIMEHdr+iHdrLen) = '\0'; /* no additional +1 needed as +IhdrLen is already after the string */
 	}
 
-	if((*pszPayload = malloc((iInBufLen - (iHdrLen + 2 /*CRLF */) + 1 /* \0 */) * sizeof(char))) == NULL)
+	if((*pszPayload = malloc(iPayloadLen * sizeof(char))) == NULL)
 	{
 		free(*pszMIMEHdr);
 		*pszMIMEHdr = NULL;

@@ -437,7 +437,6 @@ sbChanObj* sbSessOpenChan(sbSessObj* pThis)
 	sbMesgSendMesg(pMesgStart, pThis->pChan0, "MSG", 0);
 	sbMesgDestroy(pMesgStart);
 
-
 	if((pReply = sbMesgRecvMesg(pChan)) == NULL)
 	{
 		/** \todo think if we need to shut down anything
@@ -476,10 +475,9 @@ sbChanObj* sbSessOpenChan(sbSessObj* pThis)
 			iRet = SR_RET_PEER_INVALID_PROFILE;
 	}
 
-    sbNVTRDestroy(pReplyXML); /* done with reply, no longer needed */
-
 	/* housekeeping */
 	sbMesgDestroy(pReply);
+    sbNVTRDestroy(pReplyXML); /* done with reply, no longer needed */
 
 	if(iRet != SR_RET_OK)
 	{

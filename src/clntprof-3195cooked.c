@@ -1,13 +1,13 @@
-/*! \file clntprof-3195raw.c
- *  \brief Implementation of the client profile for RFC 3195 raw.
+/*! \file clntprof-3195cooked.c
+ *  \brief Implementation of the client profile for RFC 3195 COOKED.
  *
  * The prefix for this "object" is psrr which stands for
- * *P*rofile *S*yslog *R*eliable *Raw*. This file works in
- * conjunction with \ref lstnprof-3195raw.c and shares
+ * *P*rofile *S*yslog *R*eliable *Cooked*. This file works in
+ * conjunction with \ref lstnprof-3195cooked.c and shares
  * its namespace.
  *
  * \author  Rainer Gerhards <rgerhards@adiscon.com>
- * \date    2003-09-04
+ * \date    2003-09-05
  *          coding begun.
  *
  * Copyright 2002-2003 
@@ -51,6 +51,8 @@
 #include "beepchannel.h"
 #include "beepprofile.h"
 #include "clntprof-3195raw.h"
+#include "namevaluetree.h"
+#include "stringbuf.h"
 
 /* ################################################################# *
  * private members                                                   *
@@ -59,7 +61,7 @@
 /**
  * Construct a sbPSSRObj.
  */
-static srRetVal sbPSSRConstruct(sbPSSRObj** ppThis)
+static srRetVal sbPSRCConstruct(sbPSSRObj** ppThis)
 {
 	assert(ppThis != NULL);
 
@@ -79,10 +81,52 @@ static srRetVal sbPSSRConstruct(sbPSSRObj** ppThis)
  * The handler must be called in the ChanClose handler, if instance
  * data was assigned.
  */
-static void sbPSSRDestroy(sbPSSRObj* pThis)
+static void sbPSRCDestroy(sbPSSRObj* pThis)
 {
 	sbPSSRCHECKVALIDOBJECT(pThis);
 	SRFREEOBJ(pThis);
+}
+
+
+/**
+ * Wait for an "ok" reply from the remote peer. This reply is
+ * needed for many situations, e.g. after sending the <iam> or
+ * <entry> elements. As such, we have put it up in its own 
+ * method.
+ */
+static srRetVal sbPSRCClntWaitOK(sbChanObj* pChan)
+{
+	srRetVal iRet;
+	sbMesgObj* pMesgReply;
+	sbNVTRObj *pReplyXML;
+
+	sbChanCHECKVALIDOBJECT(pChan);
+	
+	if((pMesgReply = sbMesgRecvMesg(pChan)) == NULL)
+		return SR_RET_ERR_RECEIVE;
+
+	if(pMesgReply->idHdr == BEEPHDR_RPY)
+		; /* empty be intension - this is OK! */
+	else if(pMesgReply->idHdr == BEEPHDR_ERR)
+	{
+		sbMesgDestroy(pMesgReply);
+		return SR_RET_PEER_INDICATED_ERROR;
+	}
+	else
+	{
+		sbMesgDestroy(pMesgReply);
+		return SR_RET_UNEXPECTED_HDRCMD;
+	}
+
+	pReplyXML = sbNVTRConstruct();
+	if((iRet = sbNVTRParseXML(pReplyXML, pMesgReply->szActualPayload)) == SR_RET_OK)
+		if(sbNVTRHasElement(pReplyXML, "ok", TRUE) == NULL)
+			iRet = SR_RET_PEER_NONOK_RESPONSE;
+
+	sbNVTRDestroy(pReplyXML);
+	sbMesgDestroy(pMesgReply);
+
+	return iRet;
 }
 
 
@@ -90,86 +134,105 @@ static void sbPSSRDestroy(sbPSSRObj* pThis)
  * public members                                                    *
  * ################################################################# */
 
-srRetVal sbPSSRClntSendMsg(sbChanObj* pChan, char* szLogmsg)
+srRetVal sbPSRCClntSendMsg(sbChanObj* pChan, char* szLogmsg)
 {
-	sbMesgObj *pMesg;
 	srRetVal iRet;
+	sbMesgObj *pMesg;
 	sbPSSRObj *pThis;
+	sbStrBObj *pStrBuf;
+	char *pMsg;
 
 	sbChanCHECKVALIDOBJECT(pChan);
 	assert(szLogmsg != NULL);
 
+	if((pStrBuf = sbStrBConstruct()) == NULL)	return SR_RET_OUT_OF_MEMORY;
+
+	/* build message */
+	if((iRet = sbStrBAppendStr(pStrBuf, "<entry facility='7' severity='0' hostname='wsrger' deviceFQDN='rger.adiscon' deviceIP='172.19.1.20' timestamp='Sep  8 15:05:00'>")) != SR_RET_OK) {sbStrBDestruct(pStrBuf); return iRet; }
+	if((iRet = sbStrBAppendStr(pStrBuf, sbNVTXMLEscapePCDATA(szLogmsg))) != SR_RET_OK) {sbStrBDestruct(pStrBuf); return iRet; }
+	if((iRet = sbStrBAppendStr(pStrBuf, "</entry>")) != SR_RET_OK) {sbStrBDestruct(pStrBuf); return iRet; }
+	pMsg = sbStrBFinish(pStrBuf);
+
+	/* send message */
 	pThis = pChan->pProfInstance;
 	sbPSSRCHECKVALIDOBJECT(pThis);
 
-	if((pMesg = sbMesgConstruct(NULL, szLogmsg)) == NULL)
+	if((pMesg = sbMesgConstruct(NULL, pMsg)) == NULL)
 		return SR_RET_ERR;
 
-	iRet = sbMesgSendMesg(pMesg, pChan, "ANS", pThis->uAnsno++);
+	iRet = sbMesgSendMesg(pMesg, pChan, "MSG", 0);
 	sbMesgDestroy(pMesg);
+	free(pMsg);
+
+	/* message sent, now let's wait for the reply... */
+	iRet = sbPSRCClntWaitOK(pChan);
 
 	return iRet;
 }
 
 
-srRetVal sbPSSRClntOpenLogChan(sbChanObj *pChan, sbMesgObj *xx)
+srRetVal sbPSRCClntOpenLogChan(sbChanObj *pChan, sbMesgObj *pMesgGreeting)
 {
 	srRetVal iRet;
 	sbPSSRObj *pThis;
-	sbMesgObj *pMesgGreeting;
+	sbMesgObj *pMesg;
+	char *pBuf;
+	char *pHostName;
+	char fmtBuf[1024];
 
 	sbChanCHECKVALIDOBJECT(pChan);
-	sbMesgCHECKVALIDOBJECT(pMesgGreeting);
 
-	if((iRet = sbPSSRConstruct(&pThis)) != SR_RET_OK)
+	if((iRet = sbPSRCConstruct(&pThis)) != SR_RET_OK)
 		return iRet;
 
-	/* channel created, let's wait until the remote peer sends
-	 * the profile-level greeting (intial MSG).
-	 */
-	if((pMesgGreeting = sbMesgRecvMesg(pChan)) == NULL)
+	if((iRet = sbSockGetIPusedForSending(pChan->pSess->pSock, &pBuf)) != SR_RET_OK)
 	{
-		return SR_RET_ERR;
+		sbPSRCDestroy(pThis);
+		return iRet;
 	}
 
-	if(pMesgGreeting->idHdr != BEEPHDR_MSG)
+	if((iRet = sbSock_gethostname(&pHostName)) != SR_RET_OK)
 	{
-		sbMesgDestroy(pMesgGreeting);
-		return SR_RET_ERR;
+		sbPSRCDestroy(pThis);
+		return iRet;
 	}
-	sbMesgDestroy(pMesgGreeting);
 
-	pThis->uAnsno = 0;
-	pThis->uMsgno4raw = pMesgGreeting->uMsgno;
+	SNPRINTF(fmtBuf, sizeof(fmtBuf), "<iam fqdn='%s' ip='%s' type='device'/>", pHostName, pBuf);
+	if((pMesg = sbMesgConstruct("Content-type: application/beep+xml\r\n",
+		fmtBuf)) == NULL)
+		return SR_RET_ERR;
 
-	/* now store the instance pointer */
+	iRet = sbMesgSendMesg(pMesg, pChan, "MSG", 0);
+	sbMesgDestroy(pMesg);
+	free(pBuf);
+	free(pHostName);
+
+	/* message sent, now let's wait for the reply... */
+	iRet = sbPSRCClntWaitOK(pChan);
+
+	/* ok, all gone well, now store the instance pointer */
 	pChan->pProfInstance = pThis;
     
 	return SR_RET_OK;
 }
 
-srRetVal sbPSSRCOnClntCloseLogChan(sbChanObj *pChan)
+
+srRetVal sbPSRCCOnClntCloseLogChan(sbChanObj *pChan)
 {
-	srRetVal iRet;
 	sbPSSRObj *pThis;
-	sbMesgObj *pMesg;
 
 	sbChanCHECKVALIDOBJECT(pChan);
 
 	pThis = pChan->pProfInstance;
 	sbPSSRCHECKVALIDOBJECT(pThis);
 
-	if((pMesg = sbMesgConstruct("", "")) == NULL)
-	{
-        sbMesgDestroy(pMesg);
-		return SR_RET_ERR;
-	}
+	/* In this profile, we do not need to do any
+	 * profile-specific shutdown messages. All is
+	 * done by the underlying BEEP channel management.
+	 */
 
-	iRet = sbMesgSendMesg(pMesg, pChan, "NUL", pThis->uAnsno++);
-    sbMesgDestroy(pMesg);
-
-	sbPSSRDestroy(pThis);
+	sbPSRCDestroy(pThis);
 	pChan->pProfInstance = NULL;
 
-	return iRet;
+	return SR_RET_OK;
 }

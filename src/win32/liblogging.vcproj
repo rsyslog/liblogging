@@ -117,7 +117,13 @@
 				RelativePath="..\beepsession.c">
 			</File>
 			<File
+				RelativePath="..\clntprof-3195cooked.c">
+			</File>
+			<File
 				RelativePath="..\clntprof-3195raw.c">
+			</File>
+			<File
+				RelativePath="..\lstnprof-3195cooked.c">
 			</File>
 			<File
 				RelativePath="..\lstnprof-3195raw.c">
@@ -166,6 +172,9 @@
 				RelativePath="..\beepsession.h">
 			</File>
 			<File
+				RelativePath="..\clntprof-3195cooked.h">
+			</File>
+			<File
 				RelativePath="..\clntprof-3195raw.h">
 			</File>
 			<File
@@ -173,6 +182,9 @@
 			</File>
 			<File
 				RelativePath="..\liblogging.h">
+			</File>
+			<File
+				RelativePath="..\lstnprof-3195cooked.h">
 			</File>
 			<File
 				RelativePath="..\lstnprof-3195raw.h">
