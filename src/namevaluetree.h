@@ -94,6 +94,7 @@
  * The list root object.
  */
 struct sbNVTEObject;
+struct sbStrBObject;
 struct sbNVTRObject
 {	
 	srObjID OID;					/**< object ID */

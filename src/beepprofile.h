@@ -174,4 +174,25 @@ srRetVal sbProfSetClntEventHandlers(sbProfObj *pProf,
 									srRetVal (*OnClntSendSLMG)(struct sbChanObject* pChan, struct srSLMGObject *pSLMG),
 									srRetVal (*OnClntCloseLogChan)(struct sbChanObject* pChan));
 
+/**
+ * Take a list of profile objects AND a list
+ * of (remotely supported) profile URIs and
+ * find a match in them. The matching is done
+ * so that the first local profile found in the
+ * remote URI list will be returned. If there
+ * are multiple matches, all other matches will
+ * be IGNORED.
+ *
+ * \param pProfListLocal List of locally supported profile
+ *        objects.
+ *
+ * \param pURIListRemote List of remotely supported
+ *        profile URIs.
+ *
+ * \retval The matching profile object from the
+ *         local profile object.
+ */
+sbProfObj*  sbProfFindProfileURIMatch(struct sbNVTRObject *pProfListLocal, struct sbNVTRObject *pURIListRemote);
+
+
 #endif

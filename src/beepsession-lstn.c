@@ -367,6 +367,12 @@ static srRetVal sbSessDoCloseMesg(sbSessObj* pSess, int* pbAbort, sbProfObj *pPr
 	if((pChan = sbSessRetrChanObj(pSess, uChanno)) == NULL)
 		return SR_RET_CHAN_DOESNT_EXIST;
 
+	/* Please note: we retrieve the channel just to see
+	 * if it is valid. We MUST NOT send the <ok/> reply
+	 * over this channel - all OK replies MUST travel
+	 * over channel zero!
+	 */
+
 	/* for now, we assume that we can close the channel
 	 * immediately. This is a good assumption for our
 	 * logging code, as we can not have any outstanding
@@ -379,7 +385,7 @@ static srRetVal sbSessDoCloseMesg(sbSessObj* pSess, int* pbAbort, sbProfObj *pPr
 	 * we can not yet destroy the channel - at least our OK 
 	 * message would never be send.
 	 */
-	if((iRet = sbChanSendOK(pChan, sbSessDoChanDestroy, pChan)) != SR_RET_OK)
+	if((iRet = sbChanSendOK(pSess->pChan0, sbSessDoChanDestroy, pChan)) != SR_RET_OK)
 	{
 		*pbAbort = TRUE;
 		return iRet;

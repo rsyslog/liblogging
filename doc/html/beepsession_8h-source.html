@@ -17,86 +17,90 @@
 00054 
 00055 <span class="preprocessor">#if FEATURE_LISTENER == 1</span>
 00056 <span class="preprocessor"></span>
-<a name="l00057"></a><a class="code" href="beepsession_8h.html#a26">00057</a>         <span class="keyword">enum</span> <a class="code" href="beepsession_8h.html#a26">sbSessState_</a>
+<a name="l00057"></a><a class="code" href="beepsession_8h.html#a27">00057</a>         <span class="keyword">enum</span> <a class="code" href="beepsession_8h.html#a27">sbSessState_</a>
 00058         {
 00059                 sbSESSSTATE_OPEN,
-00060                 <a class="code" href="beepsession_8h.html#a26a9">sbSESSSTATE_CLOSED</a>,                     
-00063                 <a class="code" href="beepsession_8h.html#a26a10">sbSESSSTATE_UNKNOWN</a> = 0         
+00060                 <a class="code" href="beepsession_8h.html#a27a9">sbSESSSTATE_CLOSED</a>,                     
+00063                 <a class="code" href="beepsession_8h.html#a27a10">sbSESSSTATE_UNKNOWN</a> = 0         
 00064         };
-00065         <span class="keyword">typedef</span> <span class="keyword">enum</span> <a class="code" href="beepsession_8h.html#a26">sbSessState_</a> sbSessState;
+00065         <span class="keyword">typedef</span> <span class="keyword">enum</span> <a class="code" href="beepsession_8h.html#a27">sbSessState_</a> sbSessState;
 00066 
-<a name="l00067"></a><a class="code" href="beepsession_8h.html#a27">00067</a>         <span class="keyword">enum</span> <a class="code" href="beepsession_8h.html#a27">sbSessTXState_</a>
+<a name="l00067"></a><a class="code" href="beepsession_8h.html#a28">00067</a>         <span class="keyword">enum</span> <a class="code" href="beepsession_8h.html#a28">sbSessTXState_</a>
 00068         {
-00069                 <a class="code" href="beepsession_8h.html#a27a11">sbSESSTXSTATE_NO_TX_PENDING</a>,    
-00070                 <a class="code" href="beepsession_8h.html#a27a12">sbSESSTXSTATE_IN_TX</a>,                    
-00071                 <a class="code" href="beepsession_8h.html#a27a13">sbSESSTXSTATE_UNKNOWN</a> = 0               
+00069                 <a class="code" href="beepsession_8h.html#a28a11">sbSESSTXSTATE_NO_TX_PENDING</a>,    
+00070                 <a class="code" href="beepsession_8h.html#a28a12">sbSESSTXSTATE_IN_TX</a>,                    
+00071                 <a class="code" href="beepsession_8h.html#a28a13">sbSESSTXSTATE_UNKNOWN</a> = 0               
 00072         };
-00073         <span class="keyword">typedef</span> <span class="keyword">enum</span> <a class="code" href="beepsession_8h.html#a27">sbSessTXState_</a> sbSessTXState;
+00073         <span class="keyword">typedef</span> <span class="keyword">enum</span> <a class="code" href="beepsession_8h.html#a28">sbSessTXState_</a> sbSessTXState;
 00074 <span class="preprocessor">#endif</span>
 00075 <span class="preprocessor"></span>
 00076 <span class="keyword">struct </span><a class="code" href="structsbChanObject.html">sbChanObject</a>;
-00077 <span class="keyword">struct </span><a class="code" href="structsbFramObject.html">sbFramObject</a>;
-00078 <span class="keyword">struct </span>sbNVTRObject;
-<a name="l00079"></a><a class="code" href="structsbSessObject.html">00079</a> <span class="keyword">struct </span><a class="code" href="structsbSessObject.html">sbSessObject</a> 
-00083 {       
-<a name="l00084"></a><a class="code" href="structsbSessObject.html#o0">00084</a>         srObjID <a class="code" href="structsbSessObject.html#o0">OID</a>;                                            
-<a name="l00085"></a><a class="code" href="structsbSessObject.html#o1">00085</a>         <a class="code" href="liblogging_8h.html#a6">srRetVal</a> <a class="code" href="structsbSessObject.html#o1">iLastErr</a>;                                      
-<a name="l00086"></a><a class="code" href="structsbSessObject.html#o2">00086</a>         <span class="keyword">struct </span><a class="code" href="structsbSockObject.html">sbSockObject</a> *pSock;                     
-<a name="l00087"></a><a class="code" href="structsbSessObject.html#o3">00087</a>         <span class="keyword">struct </span><a class="code" href="structsbChanObject.html">sbChanObject</a> *pChan0;            
-<a name="l00089"></a><a class="code" href="structsbSessObject.html#o4">00089</a>         <span class="keyword">struct </span>sbNVTRObject *pChannels;         
-<a name="l00090"></a><a class="code" href="structsbSessObject.html#o5">00090</a>         <span class="keyword">struct </span>sbNVTRObject* pRXQue;            
-<a name="l00091"></a><a class="code" href="structsbSessObject.html#o6">00091</a>         <span class="keyword">struct </span>sbNVTRObject *pRemoteProfiles; 
-00092         <a class="code" href="liblogging_8h.html#a6">srRetVal</a> (*SendFramMethod)(<span class="keyword">struct </span><a class="code" href="structsbSessObject.html">sbSessObject</a> *, struct sbFramObject *, struct sbChanObject *); 
-00094 <span class="preprocessor">#if FEATURE_LISTENER == 1</span>
-<a name="l00095"></a><a class="code" href="structsbSessObject.html#o8">00095</a> <span class="preprocessor"></span>        sbSessState <a class="code" href="structsbSessObject.html#o8">iState</a>;                                             
-<a name="l00096"></a><a class="code" href="structsbSessObject.html#o9">00096</a>         sbSessTXState <a class="code" href="structsbSessObject.html#o9">iTXState</a>;                                 
-<a name="l00097"></a><a class="code" href="structsbSessObject.html#o10">00097</a>         <span class="keyword">struct </span>sbNVTRObject *pProfilesSupported;
-<a name="l00098"></a><a class="code" href="structsbSessObject.html#o11">00098</a>         <span class="keyword">struct </span>sbNVTRObject *pSendQue;                  
-<a name="l00099"></a><a class="code" href="structsbSessObject.html#o12">00099</a>         <span class="keyword">struct </span>sbFramObject *pRecvFrame;                
-<a name="l00100"></a><a class="code" href="structsbSessObject.html#o13">00100</a>         <span class="keywordtype">int</span>     <a class="code" href="structsbSessObject.html#o13">bNeedData</a>;                                                      
-00101 <span class="preprocessor">#endif</span>
-00102 <span class="preprocessor"></span>};
-00103 <span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="structsbSessObject.html">sbSessObject</a> sbSessObj;
-00104 
-00105 sbSessObj* <a class="code" href="beepsession_8c.html#a2">sbSessOpenSession</a>(<span class="keywordtype">char</span>* pszRemotePeer, <span class="keywordtype">int</span> iPort);
-00106 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> <a class="code" href="beepsession_8c.html#a10">sbSessCloseSession</a>(sbSessObj *pThis);
-00107 
-00108 
-00109 <span class="comment">/* The following three macros could also be inline code.</span>
-00110 <span class="comment"> * For now, I have kept them to be macros to make </span>
-00111 <span class="comment"> * facilitate porting.</span>
-00112 <span class="comment"> */</span>
-00113 
-<a name="l00115"></a><a class="code" href="beepsession_8h.html#a2">00115</a> <span class="preprocessor">#define sbSessGetLastError(pThis) pThis-&gt;iLastErr</span>
-00116 <span class="preprocessor"></span>
-<a name="l00118"></a><a class="code" href="beepsession_8h.html#a3">00118</a> <span class="preprocessor">#define sbSessSetLastError(pThis, iRet) pThis-&gt;iLastErr = iRet</span>
-00119 <span class="preprocessor"></span>
-<a name="l00121"></a><a class="code" href="beepsession_8h.html#a4">00121</a> <span class="preprocessor">#define sbSessResetLastError(pThis) pThis-&gt;iLastErr = SR_RET_OK</span>
-00122 <span class="preprocessor"></span>
-00132 <span class="keyword">struct </span><a class="code" href="structsbChanObject.html">sbChanObject</a>* <a class="code" href="beepsession_8c.html#a0">sbSessRetrChanObj</a>(sbSessObj *pThis, <a class="code" href="liblogging_8h.html#a7">SBchannel</a> uChanNo);
-00133 
-00146 <span class="keyword">struct </span><a class="code" href="structsbFramObject.html">sbFramObject</a>* <a class="code" href="beepsession_8c.html#a6">sbSessRecvFram</a>(sbSessObj* pThis, struct sbChanObject  *pChan);
-00147 
-00162 <span class="keyword">struct </span>sbChanObject* <a class="code" href="beepsession_8c.html#a8">sbSessOpenChan</a>(sbSessObj* pThis, sbProfObj* pProf);
-00163 
-00184 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> <a class="code" href="beepsession_8h.html#a19">sbSessCloseChan</a>(sbSessObj *pThis, <span class="keyword">struct</span> sbChanObject *pChan);
-00185 
-00193 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> <a class="code" href="beepsession_8c.html#a10">sbSessCloseSession</a>(sbSessObj *pThis);
-00194 
-00201 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> <a class="code" href="beepsession_8c.html#a5">sbSessDoReceive</a>(sbSessObj *pThis);
+00077 <span class="keyword">struct </span><a class="code" href="structsbChanObject.html">sbChanObject</a>;
+00078 <span class="keyword">struct </span><a class="code" href="structsbFramObject.html">sbFramObject</a>;
+00079 <span class="keyword">struct </span>sbNVTRObject;
+<a name="l00080"></a><a class="code" href="structsbSessObject.html">00080</a> <span class="keyword">struct </span><a class="code" href="structsbSessObject.html">sbSessObject</a> 
+00084 {       
+<a name="l00085"></a><a class="code" href="structsbSessObject.html#o0">00085</a>         srObjID <a class="code" href="structsbSessObject.html#o0">OID</a>;                                            
+<a name="l00086"></a><a class="code" href="structsbSessObject.html#o1">00086</a>         <a class="code" href="liblogging_8h.html#a6">srRetVal</a> <a class="code" href="structsbSessObject.html#o1">iLastErr</a>;                                      
+<a name="l00087"></a><a class="code" href="structsbSessObject.html#o2">00087</a>         <span class="keyword">struct </span><a class="code" href="structsbSockObject.html">sbSockObject</a> *pSock;                     
+<a name="l00088"></a><a class="code" href="structsbSessObject.html#o3">00088</a>         <span class="keyword">struct </span><a class="code" href="structsbChanObject.html">sbChanObject</a> *pChan0;            
+<a name="l00090"></a><a class="code" href="structsbSessObject.html#o4">00090</a>         <span class="keyword">struct </span>sbNVTRObject *pChannels;         
+<a name="l00091"></a><a class="code" href="structsbSessObject.html#o5">00091</a>         <span class="keyword">struct </span>sbNVTRObject* pRXQue;            
+<a name="l00092"></a><a class="code" href="structsbSessObject.html#o6">00092</a>         <span class="keyword">struct </span>sbNVTRObject *pRemoteProfiles; 
+00093         <a class="code" href="liblogging_8h.html#a6">srRetVal</a> (*SendFramMethod)(<span class="keyword">struct </span><a class="code" href="structsbSessObject.html">sbSessObject</a> *, struct sbFramObject *, struct sbChanObject *); 
+<a name="l00095"></a><a class="code" href="structsbSessObject.html#o8">00095</a>         <span class="keyword">struct </span>sbNVTRObject *pProfilesSupported;
+00096 <span class="preprocessor">#if FEATURE_LISTENER == 1</span>
+<a name="l00097"></a><a class="code" href="structsbSessObject.html#o9">00097</a> <span class="preprocessor"></span>        sbSessState <a class="code" href="structsbSessObject.html#o9">iState</a>;                                             
+<a name="l00098"></a><a class="code" href="structsbSessObject.html#o10">00098</a>         sbSessTXState <a class="code" href="structsbSessObject.html#o10">iTXState</a>;                                 
+<a name="l00099"></a><a class="code" href="structsbSessObject.html#o11">00099</a>         <span class="keyword">struct </span>sbNVTRObject *pSendQue;                  
+<a name="l00100"></a><a class="code" href="structsbSessObject.html#o12">00100</a>         <span class="keyword">struct </span>sbFramObject *pRecvFrame;                
+<a name="l00101"></a><a class="code" href="structsbSessObject.html#o13">00101</a>         <span class="keywordtype">int</span>     <a class="code" href="structsbSessObject.html#o13">bNeedData</a>;                                                      
+00102 <span class="preprocessor">#endif</span>
+00103 <span class="preprocessor"></span>};
+00104 <span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="structsbSessObject.html">sbSessObject</a> sbSessObj;
+00105 
+00115 sbSessObj* <a class="code" href="beepsession_8h.html#a14">sbSessOpenSession</a>(<span class="keywordtype">char</span>* pszRemotePeer, <span class="keywordtype">int</span> iPort, <span class="keyword">struct</span> sbNVTRObject *pProfSupported);
+00116 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> <a class="code" href="beepsession_8c.html#a10">sbSessCloseSession</a>(sbSessObj *pThis);
+00117 
+00118 
+00119 <span class="comment">/* The following three macros could also be inline code.</span>
+00120 <span class="comment"> * For now, I have kept them to be macros to make </span>
+00121 <span class="comment"> * facilitate porting.</span>
+00122 <span class="comment"> */</span>
+00123 
+<a name="l00125"></a><a class="code" href="beepsession_8h.html#a2">00125</a> <span class="preprocessor">#define sbSessGetLastError(pThis) pThis-&gt;iLastErr</span>
+00126 <span class="preprocessor"></span>
+<a name="l00128"></a><a class="code" href="beepsession_8h.html#a3">00128</a> <span class="preprocessor">#define sbSessSetLastError(pThis, iRet) pThis-&gt;iLastErr = iRet</span>
+00129 <span class="preprocessor"></span>
+<a name="l00131"></a><a class="code" href="beepsession_8h.html#a4">00131</a> <span class="preprocessor">#define sbSessResetLastError(pThis) pThis-&gt;iLastErr = SR_RET_OK</span>
+00132 <span class="preprocessor"></span>
+00142 <span class="keyword">struct </span><a class="code" href="structsbChanObject.html">sbChanObject</a>* <a class="code" href="beepsession_8c.html#a0">sbSessRetrChanObj</a>(sbSessObj *pThis, <a class="code" href="liblogging_8h.html#a7">SBchannel</a> uChanNo);
+00143 
+00156 <span class="keyword">struct </span><a class="code" href="structsbFramObject.html">sbFramObject</a>* <a class="code" href="beepsession_8c.html#a6">sbSessRecvFram</a>(sbSessObj* pThis, struct sbChanObject  *pChan);
+00157 
+00170 <span class="keyword">struct </span>sbChanObject* <a class="code" href="beepsession_8c.html#a8">sbSessOpenChan</a>(sbSessObj* pThis);
+00171 
+00192 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> <a class="code" href="beepsession_8h.html#a19">sbSessCloseChan</a>(sbSessObj *pThis, <span class="keyword">struct</span> sbChanObject *pChan);
+00193 
+00201 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> <a class="code" href="beepsession_8c.html#a10">sbSessCloseSession</a>(sbSessObj *pThis);
 00202 
-00215 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> <a class="code" href="beepsession_8h.html#a21">sbSessSendFram</a>(sbSessObj *pThis, <span class="keyword">struct</span> <a class="code" href="structsbFramObject.html">sbFramObject</a> *pFram, <span class="keyword">struct</span> sbChanObject *pChan);
-00216 
-00222 <span class="keywordtype">void</span> <a class="code" href="beepsession_8c.html#a4">sbSessDestroy</a>(sbSessObj *pThis);
-00223 
-00230 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> <a class="code" href="beepsession_8h.html#a23">sbSessRemoteOpen</a>(sbSessObj **pThis, <a class="code" href="structsbSockObject.html">sbSockObj</a> *pSock, <span class="keyword">struct</span> sbNVTRObject *pProfSupported);
-00231 
-00243 <span class="keywordtype">void</span> <a class="code" href="beepsession-lstn_8c.html#a11">sbSessAbort</a>(sbSessObj *pThis);
-00244 
-00252 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> <a class="code" href="beepsession_8h.html#a25">sbSessProcessGreeting</a>(<span class="keyword">struct</span> <a class="code" href="structsbSessObject.html">sbSessObject</a> *pThis, <span class="keyword">struct</span> <a class="code" href="structsbMesgObject.html">sbMesgObject</a> *pMesg);
-00253 
-00254 <span class="preprocessor">#endif</span>
-</pre></div><hr size="1"><address style="align: right;"><small>Generated on Thu Sep 4 12:10:30 2003 for liblogging by
+00218 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> <a class="code" href="beepsession_8c.html#a5">sbSessDoReceive</a>(sbSessObj *pThis, <span class="keywordtype">int</span> bMustRcvPayloadFrame);
+00219 
+00232 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> <a class="code" href="beepsession_8h.html#a21">sbSessSendFram</a>(sbSessObj *pThis, <span class="keyword">struct</span> <a class="code" href="structsbFramObject.html">sbFramObject</a> *pFram, <span class="keyword">struct</span> sbChanObject *pChan);
+00233 
+00239 <span class="keywordtype">void</span> <a class="code" href="beepsession_8c.html#a4">sbSessDestroy</a>(sbSessObj *pThis);
+00240 
+00247 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> <a class="code" href="beepsession_8h.html#a23">sbSessRemoteOpen</a>(sbSessObj **pThis, <a class="code" href="structsbSockObject.html">sbSockObj</a> *pSock, <span class="keyword">struct</span> sbNVTRObject *pProfSupported);
+00248 
+00260 <span class="keywordtype">void</span> <a class="code" href="beepsession-lstn_8c.html#a11">sbSessAbort</a>(sbSessObj *pThis);
+00261 
+00269 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> <a class="code" href="beepsession_8h.html#a25">sbSessProcessGreeting</a>(<span class="keyword">struct</span> <a class="code" href="structsbSessObject.html">sbSessObject</a> *pThis, <span class="keyword">struct</span> <a class="code" href="structsbMesgObject.html">sbMesgObject</a> *pMesg);
+00270 
+00282 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> <a class="code" href="beepsession_8h.html#a26">sbSessSendGreeting</a>(<span class="keyword">struct</span> <a class="code" href="structsbSessObject.html">sbSessObject</a>* pSess, <span class="keyword">struct</span> sbNVTRObject *pProfsSupported);
+00283 
+00284 
+00285 <span class="preprocessor">#endif</span>
+</pre></div><hr size="1"><address style="align: right;"><small>Generated on Fri Sep 12 11:20:13 2003 for liblogging by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 > 
 </a>1.3.2 </small></address>

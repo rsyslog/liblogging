@@ -1,12 +1,14 @@
 LIBLOGGING_SRC = beepchannel.c beepframe.c beepmessage.c beepprofile.c \
 	beepsession.c sockets.c srAPI.c namevaluetree.c stringbuf.c \
 	beepsession-lstn.c lstnprof-3195raw.c beeplisten.c srAPI-lstn.c \
-	syslogmessage.c oscalls.c
+	syslogmessage.c oscalls.c clntprof-3195raw.c clntprof-3195cooked.c \
+	lstnprof-3195cooked.c srUtils.c
 LIBLOGGING_OBJ = $(LIBLOGGING_SRC:.c=.o)
 LIBLOGGING_H = beepchannel.h beepframe.h  beepmessage.h beepprofile.h  beepsession.h \
 	config.h liblogging.h namevaluetree.h sockets.h srAPI.h \
 	namevaluetree.h stringbuf.h beeplisten.h lstnprof-3195raw.h \
-	syslogmessage.h oscalls.h
+	syslogmessage.h oscalls.h clntprof-3195cooked.h clntprof-3195raw.h \
+	lstnprof-3195raw.h lstnprof-3195cooked.h srUtils.h
 
 TESTSRVR_SRC = testsrvr.c
 TESTSRVR_OBJ = $(TESTSRVR_SRC:.c=.o)

@@ -67,58 +67,59 @@
 00125         <span class="keywordtype">int</span> iTimStampOffsetMinute;
 00126         <span class="keywordtype">char</span> cTimStampOffsetMode;               <span class="comment">/* '+'/'-' */</span>
 00127         <span class="keywordtype">int</span>     bTimStampIncludesTZ;            
-00129 <span class="preprocessor">#       endif</span>
-00130 <span class="preprocessor"></span>};
-00131 <span class="keyword">typedef</span> <span class="keyword">struct </span>srSLMGObject srSLMGObj;
-00132 
+00128         <span class="keywordtype">char</span> *pszTimeStamp;                             
+00130 <span class="preprocessor">#       endif</span>
+00131 <span class="preprocessor"></span>};
+00132 <span class="keyword">typedef</span> <span class="keyword">struct </span>srSLMGObject srSLMGObj;
 00133 
-00142 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> srSLMGConstruct(srSLMGObj **ppThis);
-00143 
-00147 <span class="keywordtype">void</span> <a class="code" href="syslogmessage_8c.html#a2">srSLMGDestroy</a>(srSLMGObj *pThis);
-00148 
-00154 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> srSLMGGetPriority(srSLMGObj *pThis, <span class="keywordtype">int</span> *piPrio);
-00155 
-00161 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> srSLMGGetFacility(srSLMGObj *pThis, <span class="keywordtype">int</span> *piFac);
-00162 
-00179 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> srSLMGGetRemoteHost(srSLMGObj *pThis, <span class="keywordtype">char</span>**ppsz);
-00180 
-00195 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> srSLMGGetHostname(srSLMGObj *pThis, <span class="keywordtype">char</span>**ppsz);
-00196 
-00212 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> srSLMGGetTag(srSLMGObj *pThis, <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>**ppsz);
-00213 
-00229 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> srSLMGGetMSG(srSLMGObj *pThis, <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>**ppsz);
-00230 
-00236 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> srSLMGParseMesg(srSLMGObj *pThis);
-00237 
-00253 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> <a class="code" href="syslogmessage_8c.html#a18">srSLMGGetRawMSG</a>(srSLMGObj *pThis, <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>**ppsz);
-00254 
-00267 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> srSLMGSetRemoteHostIP(srSLMGObj *pThis, <span class="keywordtype">char</span> *pszRemHostIP, <span class="keywordtype">int</span> bCopyRemHost);
-00268 
-00279 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> srSLMGSetRawMsg(srSLMGObj *pThis, <span class="keywordtype">char</span> *pszRawMsg, <span class="keywordtype">int</span> bCopyRawMsg);
-00280 
-00291 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> srSLMGSetMSG(srSLMGObj *pThis, <span class="keywordtype">char</span> *pszMSG, <span class="keywordtype">int</span> bCopyMSG);
-00292 
-00296 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> srSLMGSetTIMESTAMPtoCurrent(srSLMGObj *pThis);
-00297 
-00301 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> <a class="code" href="syslogmessage_8c.html#a24">srSLMGSetHOSTNAMEtoCurrent</a>(srSLMGObj* pThis);
-00302 
-00317 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> srSLMGFormatRawMsg(srSLMGObj *pThis, srSLMGFormat iFmtToUse);
-00318 
-00323 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> srSLMGSetSeverity(srSLMGObj* pThis, <span class="keywordtype">int</span> iNewVal);
-00324 
-00329 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> srSLMGSetFacility(srSLMGObj* pThis, <span class="keywordtype">int</span> iNewVal);
-00330 
-00339 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> srSLMGSetTAG(srSLMGObj* pThis, <span class="keywordtype">char</span>* pszNewTag);
-00340 
+00134 
+00143 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> srSLMGConstruct(srSLMGObj **ppThis);
+00144 
+00148 <span class="keywordtype">void</span> <a class="code" href="syslogmessage_8c.html#a2">srSLMGDestroy</a>(srSLMGObj *pThis);
+00149 
+00155 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> srSLMGGetPriority(srSLMGObj *pThis, <span class="keywordtype">int</span> *piPrio);
+00156 
+00162 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> srSLMGGetFacility(srSLMGObj *pThis, <span class="keywordtype">int</span> *piFac);
+00163 
+00180 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> srSLMGGetRemoteHost(srSLMGObj *pThis, <span class="keywordtype">char</span>**ppsz);
+00181 
+00196 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> srSLMGGetHostname(srSLMGObj *pThis, <span class="keywordtype">char</span>**ppsz);
+00197 
+00213 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> srSLMGGetTag(srSLMGObj *pThis, <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>**ppsz);
+00214 
+00230 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> srSLMGGetMSG(srSLMGObj *pThis, <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>**ppsz);
+00231 
+00237 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> srSLMGParseMesg(srSLMGObj *pThis);
+00238 
+00254 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> <a class="code" href="syslogmessage_8c.html#a18">srSLMGGetRawMSG</a>(srSLMGObj *pThis, <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>**ppsz);
+00255 
+00268 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> srSLMGSetRemoteHostIP(srSLMGObj *pThis, <span class="keywordtype">char</span> *pszRemHostIP, <span class="keywordtype">int</span> bCopyRemHost);
+00269 
+00280 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> srSLMGSetRawMsg(srSLMGObj *pThis, <span class="keywordtype">char</span> *pszRawMsg, <span class="keywordtype">int</span> bCopyRawMsg);
+00281 
+00292 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> srSLMGSetMSG(srSLMGObj *pThis, <span class="keywordtype">char</span> *pszMSG, <span class="keywordtype">int</span> bCopyMSG);
+00293 
+00297 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> srSLMGSetTIMESTAMPtoCurrent(srSLMGObj *pThis);
+00298 
+00302 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> <a class="code" href="syslogmessage_8c.html#a24">srSLMGSetHOSTNAMEtoCurrent</a>(srSLMGObj* pThis);
+00303 
+00318 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> srSLMGFormatRawMsg(srSLMGObj *pThis, srSLMGFormat iFmtToUse);
+00319 
+00324 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> srSLMGSetSeverity(srSLMGObj* pThis, <span class="keywordtype">int</span> iNewVal);
+00325 
+00330 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> srSLMGSetFacility(srSLMGObj* pThis, <span class="keywordtype">int</span> iNewVal);
+00331 
+00340 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> srSLMGSetTAG(srSLMGObj* pThis, <span class="keywordtype">char</span>* pszNewTag);
 00341 
-00342 <span class="preprocessor">#endif </span><span class="comment">/* #if (FEATURE_LISTENER == 1) || (FEATURE_MSGAPI == 1) */</span>
-00343 
-00344 <span class="preprocessor">#ifdef __cplusplus</span>
-00345 <span class="preprocessor"></span>};
-00346 <span class="preprocessor">#endif</span>
-00347 <span class="preprocessor"></span>
-00348 <span class="preprocessor">#endif</span>
-</pre></div><hr size="1"><address style="align: right;"><small>Generated on Thu Sep 4 12:10:31 2003 for liblogging by
+00342 
+00343 <span class="preprocessor">#endif </span><span class="comment">/* #if (FEATURE_LISTENER == 1) || (FEATURE_MSGAPI == 1) */</span>
+00344 
+00345 <span class="preprocessor">#ifdef __cplusplus</span>
+00346 <span class="preprocessor"></span>};
+00347 <span class="preprocessor">#endif</span>
+00348 <span class="preprocessor"></span>
+00349 <span class="preprocessor">#endif</span>
+</pre></div><hr size="1"><address style="align: right;"><small>Generated on Fri Sep 12 11:20:14 2003 for liblogging by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 > 
 </a>1.3.2 </small></address>

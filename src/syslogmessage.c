@@ -921,7 +921,7 @@ srRetVal srSLMGSetTIMESTAMPtoCurrent(srSLMGObj *pThis)
 srRetVal srSLMGSetHOSTNAMEtoCurrent(srSLMGObj* pThis)
 {
 	srSLMGCHECKVALIDOBJECT_API(pThis);
-	return sbSock_gethostname(&pThis->pszHostname);
+	return sbSock_gethostname((char**) (&(pThis->pszHostname)));
 }
 
 

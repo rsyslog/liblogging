@@ -99,9 +99,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 <p>
 Wrapper for gethostname(). 
 <p>
-<dl compact><dt><b>Note:</b></dt><dd>The Windows sockets API seems to be broken. We often have seen that only the computer name part (not the domain name) is returned by gethostname, even if the full identity is configured. A way to work around this may be to call gethostbyname() on the returned name and then call gethostbyaddr() on what is returned there. </dd></dl>
-<p>
-<dl compact><dt><b><a class="el" href="todo.html#_todo000016">Todo:</a></b></dt><dd>implement that workaround or check how to make windows behave correctly. </dd></dl>
+<dl compact><dt><b>Note:</b></dt><dd>The Windows sockets API seems to be broken. We often have seen that only the computer name part (not the domain name) is returned by gethostname, even if the full identity is configured. A way to work around this may be to call gethostbyname() on the returned name and then call gethostbyaddr() on what is returned there. WE HAVE NOW IMPLEMENTED THIS WORKAROUND, but leave the text above in just in case...</dd></dl>
 <dl compact><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign=top><em>psz</em>&nbsp;</td><td>Pointer to Pointer to hostname. Must not be NULL. On return, this pointer will refer to a newly allocated buffer containing the hostname. This buffer must be free()ed by the caller! </td></tr>
@@ -447,7 +445,7 @@ Wrapper for the socket select call on a fd_set structure.
     </td>
   </tr>
 </table>
-<hr size="1"><address style="align: right;"><small>Generated on Thu Sep 4 12:10:31 2003 for liblogging by
+<hr size="1"><address style="align: right;"><small>Generated on Fri Sep 12 11:20:14 2003 for liblogging by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 > 
 </a>1.3.2 </small></address>

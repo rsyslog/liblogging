@@ -112,6 +112,51 @@ void sbProfDestroy(sbProfObj* pThis)
 	SRFREEOBJ(pThis);
 }
 
+/**
+ * Take a list of profile objects AND a list
+ * of (remotely supported) profile URIs and
+ * find a match in them. The matching is done
+ * so that the first local profile found in the
+ * remote URI list will be returned. If there
+ * are multiple matches, all other matches will
+ * be IGNORED.
+ *
+ * \param pProfListLocal List of locally supported profile
+ *        objects.
+ *
+ * \param pURIListRemote List of remotely supported
+ *        profile URIs.
+ *
+ * \retval The matching profile object from the
+ *         local profile object.
+ */
+sbProfObj*  sbProfFindProfileURIMatch(sbNVTRObj *pProfListLocal, sbNVTRObj *pURIListRemote)
+{
+	sbNVTEObj *pEntry;
+	sbProfObj *pThis;
+
+	pThis = NULL;
+
+	if((pProfListLocal == NULL) || (pURIListRemote == NULL))
+		return NULL; /* done, there can't be any match ;) */
+
+	pEntry = sbNVTSearchKeySZ(pProfListLocal, NULL, NULL);
+	while(pEntry != NULL)
+	{
+		if(sbNVTSearchKeySZ(pURIListRemote, NULL, pEntry->pszKey) != NULL)
+			break;
+		pEntry = sbNVTSearchKeySZ(pProfListLocal, pEntry, NULL);
+	}
+
+	if(pEntry != NULL)
+	{
+		pThis = (sbProfObj*) pEntry->pUsr;
+		sbProfCHECKVALIDOBJECT(pThis);
+	}
+
+	return pThis;
+}
+
 
 sbProfObj*  sbProfFindProfileMatch(sbNVTRObj *pProfListRemote, sbNVTRObj *pProfList2)
 {
@@ -151,7 +196,7 @@ sbProfObj*  sbProfFindProfile(sbNVTRObj *pProfList, char* pszSearch)
 	while(pEntry != NULL)
 	{
 		pProf = (sbProfObj*) pEntry->pUsr;
-		assert(pProf != NULL);
+		sbProfCHECKVALIDOBJECT(pProf);
 		if(!strcmp(pszSearch, pProf->pszProfileURI))
 		{
 			pThis = pProf;

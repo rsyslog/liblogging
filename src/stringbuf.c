@@ -104,7 +104,6 @@ srRetVal sbStrBAppendStr(sbStrBObj *pThis, char* psz)
 srRetVal sbStrBAppendInt(sbStrBObj *pThis, int i)
 {
 	srRetVal iRet;
-	char *pszNumber;
 	char szBuf[32];
 
 	sbSTRBCHECKVALIDOBJECT(pThis);

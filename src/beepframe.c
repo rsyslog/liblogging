@@ -370,6 +370,7 @@ sbFramObj* sbFramCreateFramFromMesg(sbChanObj* pChan, sbMesgObj* pMesg, char* ps
 	pChan->uMsgno++;
 
 	pThis->iFrameLen = (int) strlen(pszFramBuf);
+	pThis->uSize = sbMesgGetOverallSize(pMesg);
 	pThis->szRawBuf = pszFramBuf;
 	pThis->OID = OIDsbFram;
 	pThis->idHdr = sbFramHdrID(pszCmd);

@@ -205,8 +205,17 @@ srRetVal sbSessCloseSession(sbSessObj *pThis);
  * are processed as they arrive. Other frames are
  * buffered in the respective in-memory queue. This is
  * a helper to sbSessRecvFram() and sbSessSendFram().
+ *
+ * \param bMustRcvPayloadFrame A boolean indicating if an
+ *       actual payload frame must be received. If set to
+ *       TRUE, the method blocks until a payload frame is
+ *       received. All interim SEQ frames are processed, but
+ *       will not make this method to return.
+ *       If FALSE, the method will block until anything is received,
+ *       including a SEQ. If a SEQ is received, it will be processed
+ *       and the method returns.
  */
-srRetVal sbSessDoReceive(sbSessObj *pThis);
+srRetVal sbSessDoReceive(sbSessObj *pThis, int bMustRcvPayloadFrame);
 
 /**
  * Send the provided frame on the provided channel. While sending,

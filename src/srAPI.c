@@ -110,7 +110,7 @@ static srRetVal srAPIAddProfile(srAPIObj *pThis, sbProfObj *pProf)
 	if((pEntry = sbNVTAddEntry(pThis->pProfsSupported)) == NULL)
 		return SR_RET_OUT_OF_MEMORY;
 	sbNVTESetKeySZ(pEntry, pProf->pszProfileURI, TRUE);
-	sbNVTESetUsrPtr(pEntry, pProf, sbProfDestroy);
+	sbNVTESetUsrPtr(pEntry, pProf, (void*) sbProfDestroy);
 	
 	return SR_RET_OK;
 }
@@ -155,6 +155,13 @@ srRetVal srAPISetOption(srAPIObj* pThis, SRoption iOpt, int iOptVal)
 		if(iOptVal != TRUE && iOptVal != FALSE)
 			return SR_RET_INVALID_OPTVAL;
 		srAPI_bCallOSSocketInitializer = iOptVal;
+		break;
+	case srOPTION_3195_ALLOWED_CLIENT_PROFILES:
+		if((pThis == NULL) || (pThis->OID != OIDsrAPI))
+			return SR_RET_INVALID_HANDLE;
+		if(iOptVal != USE_3195_PROFILE_ANY && iOptVal != USE_3195_PROFILE_RAW_ONLY  && iOptVal != USE_3195_PROFILE_COOKED_ONLY)
+			return SR_RET_INVALID_OPTVAL;
+		pThis->iUse3195Profiles = iOptVal;
 		break;
 	default:
 		return SR_RET_INVALID_LIB_OPTION;
@@ -207,59 +214,67 @@ srRetVal srAPIOpenlog(srAPIObj *pThis, char* pszRemotePeer, int iPort)
 	 * RAW because we would like to select COOKED if both are available
 	 * at the remote peer!
 	 */
+
 	/* set up the rfc 3195 COOKED profile */
-	if((iRet = sbProfConstruct(&pProf, "http://xml.resource.org/profiles/syslog/COOKED")) != SR_RET_OK)
+	if(    (pThis->iUse3195Profiles == USE_3195_PROFILE_COOKED_ONLY)
+		|| (pThis->iUse3195Profiles == USE_3195_PROFILE_ANY))
 	{
-		sbLstnDestroy(pThis->pLstn);
-		return iRet;
-	}
+		if((iRet = sbProfConstruct(&pProf, "http://xml.resource.org/profiles/syslog/COOKED")) != SR_RET_OK)
+		{
+			sbLstnDestroy(pThis->pLstn);
+			return iRet;
+		}
 
-	if((iRet = sbProfSetAPIObj(pProf, pThis)) != SR_RET_OK)
-	{
-		srAPIDestroy(pThis);
-		sbProfDestroy(pProf);
-		return iRet;
-	}
+		if((iRet = sbProfSetAPIObj(pProf, pThis)) != SR_RET_OK)
+		{
+			srAPIDestroy(pThis);
+			sbProfDestroy(pProf);
+			return iRet;
+		}
 
-	if((iRet = sbProfSetClntEventHandlers(pProf, sbPSRCClntOpenLogChan, sbPSRCClntSendMsg, sbPSRCClntSendSLMG, sbPSRCCOnClntCloseLogChan)) != SR_RET_OK)
-	{
-		sbProfDestroy(pProf);
-		return iRet;
-	}
+		if((iRet = sbProfSetClntEventHandlers(pProf, sbPSRCClntOpenLogChan, sbPSRCClntSendMsg, sbPSRCClntSendSLMG, sbPSRCCOnClntCloseLogChan)) != SR_RET_OK)
+		{
+			sbProfDestroy(pProf);
+			return iRet;
+		}
 
-	if((iRet = srAPIAddProfile(pThis, pProf)) != SR_RET_OK)
-	{
-		srAPIDestroy(pThis);
-		sbProfDestroy(pProf);
-		return iRet;
+		if((iRet = srAPIAddProfile(pThis, pProf)) != SR_RET_OK)
+		{
+			srAPIDestroy(pThis);
+			sbProfDestroy(pProf);
+			return iRet;
+		}
 	}
-
 
 	/* set up the rfc 3195/raw profile */
-	if((iRet = sbProfConstruct(&pProf, "http://xml.resource.org/profiles/syslog/RAWx")) != SR_RET_OK)
+	if(    (pThis->iUse3195Profiles == USE_3195_PROFILE_RAW_ONLY)
+		|| (pThis->iUse3195Profiles == USE_3195_PROFILE_ANY))
 	{
-		sbLstnDestroy(pThis->pLstn);
-		return iRet;
-	}
+		if((iRet = sbProfConstruct(&pProf, "http://xml.resource.org/profiles/syslog/RAW")) != SR_RET_OK)
+		{
+			sbLstnDestroy(pThis->pLstn);
+			return iRet;
+		}
 
-	if((iRet = sbProfSetAPIObj(pProf, pThis)) != SR_RET_OK)
-	{
-		srAPIDestroy(pThis);
-		sbProfDestroy(pProf);
-		return iRet;
-	}
+		if((iRet = sbProfSetAPIObj(pProf, pThis)) != SR_RET_OK)
+		{
+			srAPIDestroy(pThis);
+			sbProfDestroy(pProf);
+			return iRet;
+		}
 
-	if((iRet = sbProfSetClntEventHandlers(pProf, sbPSSRClntOpenLogChan, sbPSSRClntSendMsg, sbPSRCClntSendSLMG, sbPSSRCOnClntCloseLogChan)) != SR_RET_OK)
-	{
-		sbProfDestroy(pProf);
-		return iRet;
-	}
+		if((iRet = sbProfSetClntEventHandlers(pProf, sbPSSRClntOpenLogChan, sbPSSRClntSendMsg, sbPSSRClntSendSLMG, sbPSSRCOnClntCloseLogChan)) != SR_RET_OK)
+		{
+			sbProfDestroy(pProf);
+			return iRet;
+		}
 
-	if((iRet = srAPIAddProfile(pThis, pProf)) != SR_RET_OK)
-	{
-		srAPIDestroy(pThis);
-		sbProfDestroy(pProf);
-		return iRet;
+		if((iRet = srAPIAddProfile(pThis, pProf)) != SR_RET_OK)
+		{
+			srAPIDestroy(pThis);
+			sbProfDestroy(pProf);
+			return iRet;
+		}
 	}
 
 	/* OK, we got our housekeeping done, so let's talk to the peer )

@@ -14,103 +14,107 @@
 00091 <span class="preprocessor"></span><span class="preprocessor">#define sbNVTECHECKVALIDOBJECT(x) {assert(x != NULL); assert(x-&gt;OID == OIDsbNVTE);}</span>
 00092 <span class="preprocessor"></span>
 00096 <span class="keyword">struct </span><a class="code" href="structsbNVTEObject.html">sbNVTEObject</a>;
-00097 <span class="keyword">struct </span>sbNVTRObject
-00098 {       
-00099         srObjID OID;                                    
-00100         <span class="keyword">struct </span><a class="code" href="structsbNVTEObject.html">sbNVTEObject</a> *pFirst;    
-00101         <span class="keyword">struct </span><a class="code" href="structsbNVTEObject.html">sbNVTEObject</a> *pLast;             
-00102         <span class="keyword">struct </span><a class="code" href="structsbNVTEObject.html">sbNVTEObject</a> *pParent;   
-00103 };
-00104 <span class="keyword">typedef</span> <span class="keyword">struct </span>sbNVTRObject sbNVTRObj;
-00105 
+00097 <span class="keyword">struct </span><a class="code" href="structsbStrBObject.html">sbStrBObject</a>;
+00098 <span class="keyword">struct </span>sbNVTRObject
+00099 {       
+00100         srObjID OID;                                    
+00101         <span class="keyword">struct </span><a class="code" href="structsbNVTEObject.html">sbNVTEObject</a> *pFirst;    
+00102         <span class="keyword">struct </span><a class="code" href="structsbNVTEObject.html">sbNVTEObject</a> *pLast;             
+00103         <span class="keyword">struct </span><a class="code" href="structsbNVTEObject.html">sbNVTEObject</a> *pParent;   
+00104 };
+00105 <span class="keyword">typedef</span> <span class="keyword">struct </span>sbNVTRObject sbNVTRObj;
 00106 
-<a name="l00115"></a><a class="code" href="structsbNVTEObject.html">00115</a> <span class="keyword">struct </span><a class="code" href="structsbNVTEObject.html">sbNVTEObject</a>
-00116 {       
-<a name="l00117"></a><a class="code" href="structsbNVTEObject.html#o0">00117</a>         srObjID <a class="code" href="structsbNVTEObject.html#o0">OID</a>;                                    
-<a name="l00118"></a><a class="code" href="structsbNVTEObject.html#o1">00118</a>         <span class="keyword">struct </span><a class="code" href="structsbNVTEObject.html">sbNVTEObject</a> *pNext;             
-<a name="l00119"></a><a class="code" href="structsbNVTEObject.html#o2">00119</a>         sbNVTRObj *<a class="code" href="structsbNVTEObject.html#o2">pChild</a>;                              
-<a name="l00120"></a><a class="code" href="structsbNVTEObject.html#o3">00120</a>         sbNVTRObj *<a class="code" href="structsbNVTEObject.html#o3">pXMLProps</a>;                   
-<a name="l00121"></a><a class="code" href="structsbNVTEObject.html#o4">00121</a>         <span class="keywordtype">void</span> *<a class="code" href="structsbNVTEObject.html#o4">pUsr</a>;                                             
-00122         void (*pUsrDestroy)(<span class="keywordtype">void</span>*);             
-<a name="l00123"></a><a class="code" href="structsbNVTEObject.html#o6">00123</a>         <span class="keywordtype">char</span> *<a class="code" href="structsbNVTEObject.html#o6">pszKey</a>;                                   
-<a name="l00124"></a><a class="code" href="structsbNVTEObject.html#o7">00124</a>         <span class="keywordtype">unsigned</span> <a class="code" href="structsbNVTEObject.html#o7">uKey</a>;                                  
-<a name="l00125"></a><a class="code" href="structsbNVTEObject.html#o8">00125</a>         <span class="keywordtype">int</span> <a class="code" href="structsbNVTEObject.html#o8">uKeyPresent</a>;                                
-<a name="l00126"></a><a class="code" href="structsbNVTEObject.html#o9">00126</a>         <span class="keywordtype">char</span> *<a class="code" href="structsbNVTEObject.html#o9">pszValue</a>;                                 
-<a name="l00127"></a><a class="code" href="structsbNVTEObject.html#o10">00127</a>         <span class="keywordtype">unsigned</span> <a class="code" href="structsbNVTEObject.html#o10">uValue</a>;                                
-<a name="l00128"></a><a class="code" href="structsbNVTEObject.html#o11">00128</a>         <span class="keywordtype">int</span>     <a class="code" href="structsbNVTEObject.html#o11">bIsSetUValue</a>;                           
-<a name="l00129"></a><a class="code" href="structsbNVTEObject.html#o12">00129</a>         <span class="keywordtype">char</span> *<a class="code" href="structsbNVTEObject.html#o12">pCDATA</a>;                                   
-00130 };
-00131 <span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="structsbNVTEObject.html">sbNVTEObject</a> sbNVTEObj;
-00132 
+00107 
+<a name="l00116"></a><a class="code" href="structsbNVTEObject.html">00116</a> <span class="keyword">struct </span><a class="code" href="structsbNVTEObject.html">sbNVTEObject</a>
+00117 {       
+<a name="l00118"></a><a class="code" href="structsbNVTEObject.html#o0">00118</a>         srObjID <a class="code" href="structsbNVTEObject.html#o0">OID</a>;                                    
+<a name="l00119"></a><a class="code" href="structsbNVTEObject.html#o1">00119</a>         <span class="keyword">struct </span><a class="code" href="structsbNVTEObject.html">sbNVTEObject</a> *pNext;             
+<a name="l00120"></a><a class="code" href="structsbNVTEObject.html#o2">00120</a>         sbNVTRObj *<a class="code" href="structsbNVTEObject.html#o2">pChild</a>;                              
+<a name="l00121"></a><a class="code" href="structsbNVTEObject.html#o3">00121</a>         sbNVTRObj *<a class="code" href="structsbNVTEObject.html#o3">pXMLProps</a>;                   
+<a name="l00122"></a><a class="code" href="structsbNVTEObject.html#o4">00122</a>         <span class="keywordtype">void</span> *<a class="code" href="structsbNVTEObject.html#o4">pUsr</a>;                                             
+00123         void (*pUsrDestroy)(<span class="keywordtype">void</span>*);             
+<a name="l00124"></a><a class="code" href="structsbNVTEObject.html#o6">00124</a>         <span class="keywordtype">char</span> *<a class="code" href="structsbNVTEObject.html#o6">pszKey</a>;                                   
+<a name="l00125"></a><a class="code" href="structsbNVTEObject.html#o7">00125</a>         <span class="keywordtype">unsigned</span> <a class="code" href="structsbNVTEObject.html#o7">uKey</a>;                                  
+<a name="l00126"></a><a class="code" href="structsbNVTEObject.html#o8">00126</a>         <span class="keywordtype">int</span> <a class="code" href="structsbNVTEObject.html#o8">uKeyPresent</a>;                                
+<a name="l00127"></a><a class="code" href="structsbNVTEObject.html#o9">00127</a>         <span class="keywordtype">char</span> *<a class="code" href="structsbNVTEObject.html#o9">pszValue</a>;                                 
+<a name="l00128"></a><a class="code" href="structsbNVTEObject.html#o10">00128</a>         <span class="keywordtype">unsigned</span> <a class="code" href="structsbNVTEObject.html#o10">uValue</a>;                                
+<a name="l00129"></a><a class="code" href="structsbNVTEObject.html#o11">00129</a>         <span class="keywordtype">int</span>     <a class="code" href="structsbNVTEObject.html#o11">bIsSetUValue</a>;                           
+<a name="l00130"></a><a class="code" href="structsbNVTEObject.html#o12">00130</a>         <span class="keywordtype">char</span> *<a class="code" href="structsbNVTEObject.html#o12">pCDATA</a>;                                   
+00131 };
+00132 <span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="structsbNVTEObject.html">sbNVTEObject</a> sbNVTEObj;
 00133 
-00141 <span class="keywordtype">void</span> <a class="code" href="namevaluetree_8c.html#a1">sbNVTRDestroy</a>(sbNVTRObj* pThis);
-00142 
-00156 <span class="keywordtype">void</span> <a class="code" href="namevaluetree_8c.html#a2">sbNVTEDestroy</a>(sbNVTEObj* pThis);
-00157 
-00165  sbNVTRObj* <a class="code" href="namevaluetree_8c.html#a15">sbNVTRConstruct</a>(<span class="keywordtype">void</span>);
-00166 
-00174  sbNVTEObj* <a class="code" href="namevaluetree_8c.html#a16">sbNVTEConstruct</a>(<span class="keywordtype">void</span>);
-00175 
-00188  sbNVTEObj* <a class="code" href="namevaluetree_8c.html#a20">sbNVTUnlinkElement</a>(sbNVTRObj* pRoot);
-00189 
-00212 sbNVTEObj* <a class="code" href="namevaluetree_8c.html#a21">sbNVTSearchKeySZ</a>(sbNVTRObj* pRoot, sbNVTEObj* pStart, <span class="keywordtype">char</span>* pszSearch);
-00213 
-00233 sbNVTEObj* <a class="code" href="namevaluetree_8c.html#a22">sbNVTSearchKeyU</a>(sbNVTRObj* pRoot, sbNVTEObj* pStart, <span class="keywordtype">unsigned</span> uSearch);
-00234 
+00134 
+00142 <span class="keywordtype">void</span> <a class="code" href="namevaluetree_8c.html#a1">sbNVTRDestroy</a>(sbNVTRObj* pThis);
+00143 
+00157 <span class="keywordtype">void</span> <a class="code" href="namevaluetree_8c.html#a2">sbNVTEDestroy</a>(sbNVTEObj* pThis);
+00158 
+00166  sbNVTRObj* <a class="code" href="namevaluetree_8c.html#a16">sbNVTRConstruct</a>(<span class="keywordtype">void</span>);
+00167 
+00175  sbNVTEObj* <a class="code" href="namevaluetree_8c.html#a17">sbNVTEConstruct</a>(<span class="keywordtype">void</span>);
+00176 
+00189  sbNVTEObj* <a class="code" href="namevaluetree_8c.html#a21">sbNVTUnlinkElement</a>(sbNVTRObj* pRoot);
+00190 
+00213 sbNVTEObj* <a class="code" href="namevaluetree_8c.html#a22">sbNVTSearchKeySZ</a>(sbNVTRObj* pRoot, sbNVTEObj* pStart, <span class="keywordtype">char</span>* pszSearch);
+00214 
+00234 sbNVTEObj* <a class="code" href="namevaluetree_8c.html#a23">sbNVTSearchKeyU</a>(sbNVTRObj* pRoot, sbNVTEObj* pStart, <span class="keywordtype">unsigned</span> uSearch);
 00235 
-00249 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> <a class="code" href="namevaluetree_8c.html#a26">sbNVTESetKeySZ</a>(sbNVTEObj* pThis, <span class="keywordtype">char</span>* pszKey, <span class="keywordtype">int</span> bCopy);
-00250 
-00264 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> <a class="code" href="namevaluetree_8c.html#a27">sbNVTESetValueSZ</a>(sbNVTEObj* pThis, <span class="keywordtype">char</span>* pszVal, <span class="keywordtype">int</span> bCopy);
-00265 
-00270 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> <a class="code" href="namevaluetree_8c.html#a28">sbNVTESetKeyU</a>(sbNVTEObj* pThis, <span class="keywordtype">unsigned</span> uKey);
-00271 
-00275 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> <a class="code" href="namevaluetree_8c.html#a29">sbNVTEUnsetKeyU</a>(sbNVTEObj* pThis);
-00276 
-00281 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> <a class="code" href="namevaluetree_8c.html#a31">sbNVTESetValueU</a>(sbNVTEObj* pThis, <span class="keywordtype">unsigned</span> uVal);
-00282 
+00236 
+00250 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> <a class="code" href="namevaluetree_8c.html#a27">sbNVTESetKeySZ</a>(sbNVTEObj* pThis, <span class="keywordtype">char</span>* pszKey, <span class="keywordtype">int</span> bCopy);
+00251 
+00265 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> <a class="code" href="namevaluetree_8c.html#a28">sbNVTESetValueSZ</a>(sbNVTEObj* pThis, <span class="keywordtype">char</span>* pszVal, <span class="keywordtype">int</span> bCopy);
+00266 
+00271 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> <a class="code" href="namevaluetree_8c.html#a29">sbNVTESetKeyU</a>(sbNVTEObj* pThis, <span class="keywordtype">unsigned</span> uKey);
+00272 
+00276 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> <a class="code" href="namevaluetree_8c.html#a30">sbNVTEUnsetKeyU</a>(sbNVTEObj* pThis);
+00277 
+00282 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> <a class="code" href="namevaluetree_8c.html#a32">sbNVTESetValueU</a>(sbNVTEObj* pThis, <span class="keywordtype">unsigned</span> uVal);
 00283 
-00297 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> <a class="code" href="namevaluetree_8c.html#a30">sbNVTESetUsrPtr</a>(sbNVTEObj* pThis, <span class="keywordtype">void</span> *pPtr, <span class="keywordtype">void</span>(pPtrDestroy)(<span class="keywordtype">void</span>*));
-00298 
+00284 
+00298 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> <a class="code" href="namevaluetree_8c.html#a31">sbNVTESetUsrPtr</a>(sbNVTEObj* pThis, <span class="keywordtype">void</span> *pPtr, <span class="keywordtype">void</span>(pPtrDestroy)(<span class="keywordtype">void</span>*));
 00299 
-00305 <span class="keywordtype">void</span> <a class="code" href="namevaluetree_8c.html#a34">sbNVTRUnlinkFromParent</a>(sbNVTRObj *pRoot);
-00306 
-00317  sbNVTEObj* <a class="code" href="namevaluetree_8c.html#a18">sbNVTAddEntry</a>(sbNVTRObj* pRoot);
-00318 
+00300 
+00306 <span class="keywordtype">void</span> <a class="code" href="namevaluetree_8c.html#a35">sbNVTRUnlinkFromParent</a>(sbNVTRObj *pRoot);
+00307 
+00318  sbNVTEObj* <a class="code" href="namevaluetree_8c.html#a19">sbNVTAddEntry</a>(sbNVTRObj* pRoot);
 00319 
-00328 <span class="keywordtype">void</span> <a class="code" href="namevaluetree_8c.html#a33">sbNVTEUnsetUsrPtr</a>(sbNVTEObj *pEntry);
-00329 
-00341 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> <a class="code" href="namevaluetree_8c.html#a36">sbNVTRRemoveKeyU</a>(sbNVTRObj *pRoot, <span class="keywordtype">unsigned</span> uKey);
-00342 
+00320 
+00329 <span class="keywordtype">void</span> <a class="code" href="namevaluetree_8c.html#a34">sbNVTEUnsetUsrPtr</a>(sbNVTEObj *pEntry);
+00330 
+00342 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> <a class="code" href="namevaluetree_8c.html#a37">sbNVTRRemoveKeyU</a>(sbNVTRObj *pRoot, <span class="keywordtype">unsigned</span> uKey);
 00343 
-00357 sbNVTEObj *<a class="code" href="namevaluetree_8c.html#a41">sbNVTRHasElement</a>(sbNVTRObj* pRoot, <span class="keywordtype">char</span> *pEltname, <span class="keywordtype">int</span> bMustBeOnly);
-00358 
+00344 
+00358 sbNVTEObj *<a class="code" href="namevaluetree_8c.html#a42">sbNVTRHasElement</a>(sbNVTRObj* pRoot, <span class="keywordtype">char</span> *pEltname, <span class="keywordtype">int</span> bMustBeOnly);
 00359 
-00366  <a class="code" href="liblogging_8h.html#a6">srRetVal</a> <a class="code" href="namevaluetree_8c.html#a17">sbNVTESetChild</a>(sbNVTEObj *pEntry, sbNVTRObj *pChildRoot);
-00367 
-00376 <span class="keywordtype">void</span> <a class="code" href="namevaluetree_8c.html#a40">sbNVTDebugPrintTree</a>(sbNVTRObj *pRoot, <span class="keywordtype">int</span> iLevel);
-00377 
-00384  <a class="code" href="liblogging_8h.html#a6">srRetVal</a> <a class="code" href="namevaluetree_8c.html#a19">sbNVTRRemoveFirst</a>(sbNVTRObj* pRoot);
-00385 
-00434 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> <a class="code" href="namevaluetree_8c.html#a38">sbNVTRParseXML</a>(sbNVTRObj *pRoot, <span class="keywordtype">char</span> *pszXML);
-00435 
-00450 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> <a class="code" href="namevaluetree_8c.html#a37">sbNVTRRemovEntryWithpUsr</a>(sbNVTRObj *pRoot, <span class="keywordtype">void</span>* pUsr);
-00451 
-00463 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> <a class="code" href="namevaluetree_8c.html#a36">sbNVTRRemoveKeyU</a>(sbNVTRObj *pRoot, <span class="keywordtype">unsigned</span> uKey);
-00464 
-00475 <span class="keywordtype">void</span> <a class="code" href="namevaluetree_8c.html#a35">sbNVTEUnlinkFromList</a>(sbNVTRObj *pRoot, sbNVTEObj* pEntry, sbNVTEObj* pPrev);
-00476 
-00504 sbNVTEObj* <a class="code" href="namevaluetree_8c.html#a24">sbNVTSearchpUsrAndPrev</a>(sbNVTRObj* pRoot, sbNVTEObj* pStart, <span class="keywordtype">void</span> *pUsr, sbNVTEObj** ppPrevEntry);
-00505 
-00520 sbNVTEObj* <a class="code" href="namevaluetree_8c.html#a23">sbNVTSearchKeyUAndPrev</a>(sbNVTRObj* pRoot, sbNVTEObj* pStart, <span class="keywordtype">unsigned</span> uSearch, sbNVTEObj** ppPrevEntry);
-00521 
-00536 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> <a class="code" href="namevaluetree_8c.html#a32">sbNVTEGetValueU</a>(sbNVTEObj* pThis, <span class="keywordtype">unsigned</span>* puValue);
-00537 
-00551 <span class="keywordtype">char</span>* <a class="code" href="namevaluetree_8c.html#a11">sbNVTXMLEscapePCDATA</a>(<span class="keywordtype">char</span> *pszToEscape);
-00552 
-00560 <span class="keywordtype">char</span>* <a class="code" href="namevaluetree_8c.html#a25">sbNVTEUtilStrDup</a>(<span class="keywordtype">char</span> *pszStrToDup);
-00561 
-00562 <span class="preprocessor">#endif</span>
-</pre></div><hr size="1"><address style="align: right;"><small>Generated on Thu Sep 4 12:10:30 2003 for liblogging by
+00360 
+00367  <a class="code" href="liblogging_8h.html#a6">srRetVal</a> <a class="code" href="namevaluetree_8c.html#a18">sbNVTESetChild</a>(sbNVTEObj *pEntry, sbNVTRObj *pChildRoot);
+00368 
+00377 <span class="keywordtype">void</span> <a class="code" href="namevaluetree_8c.html#a41">sbNVTDebugPrintTree</a>(sbNVTRObj *pRoot, <span class="keywordtype">int</span> iLevel);
+00378 
+00385  <a class="code" href="liblogging_8h.html#a6">srRetVal</a> <a class="code" href="namevaluetree_8c.html#a20">sbNVTRRemoveFirst</a>(sbNVTRObj* pRoot);
+00386 
+00435 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> <a class="code" href="namevaluetree_8c.html#a39">sbNVTRParseXML</a>(sbNVTRObj *pRoot, <span class="keywordtype">char</span> *pszXML);
+00436 
+00451 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> <a class="code" href="namevaluetree_8c.html#a38">sbNVTRRemovEntryWithpUsr</a>(sbNVTRObj *pRoot, <span class="keywordtype">void</span>* pUsr);
+00452 
+00464 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> <a class="code" href="namevaluetree_8c.html#a37">sbNVTRRemoveKeyU</a>(sbNVTRObj *pRoot, <span class="keywordtype">unsigned</span> uKey);
+00465 
+00476 <span class="keywordtype">void</span> <a class="code" href="namevaluetree_8c.html#a36">sbNVTEUnlinkFromList</a>(sbNVTRObj *pRoot, sbNVTEObj* pEntry, sbNVTEObj* pPrev);
+00477 
+00505 sbNVTEObj* <a class="code" href="namevaluetree_8c.html#a25">sbNVTSearchpUsrAndPrev</a>(sbNVTRObj* pRoot, sbNVTEObj* pStart, <span class="keywordtype">void</span> *pUsr, sbNVTEObj** ppPrevEntry);
+00506 
+00521 sbNVTEObj* <a class="code" href="namevaluetree_8c.html#a24">sbNVTSearchKeyUAndPrev</a>(sbNVTRObj* pRoot, sbNVTEObj* pStart, <span class="keywordtype">unsigned</span> uSearch, sbNVTEObj** ppPrevEntry);
+00522 
+00537 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> <a class="code" href="namevaluetree_8c.html#a33">sbNVTEGetValueU</a>(sbNVTEObj* pThis, <span class="keywordtype">unsigned</span>* puValue);
+00538 
+00552 <span class="keywordtype">char</span>* <a class="code" href="namevaluetree_8c.html#a12">sbNVTXMLEscapePCDATA</a>(<span class="keywordtype">char</span> *pszToEscape);
+00553 
+00554 
+00568 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> <a class="code" href="namevaluetree_8h.html#a33">sbNVTXMLEscapePCDATAintoStrB</a>(<span class="keywordtype">char</span> *pszToEscape, <span class="keyword">struct</span> <a class="code" href="structsbStrBObject.html">sbStrBObject</a> *pStr);
+00569 
+00577 <span class="keywordtype">char</span>* <a class="code" href="namevaluetree_8c.html#a26">sbNVTEUtilStrDup</a>(<span class="keywordtype">char</span> *pszStrToDup);
+00578 
+00579 <span class="preprocessor">#endif</span>
+</pre></div><hr size="1"><address style="align: right;"><small>Generated on Fri Sep 12 11:20:13 2003 for liblogging by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 > 
 </a>1.3.2 </small></address>

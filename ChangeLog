@@ -1,9 +1,22 @@
+0.5.0         - fixed a bug in the server code where an <ok/> response
+                for a channel close request was sent over the to-be-closed
+                channel instead of channel 0. This can be an interoperability
+                issue with 
+              - implemented 3195/COOKED in the client. Server is still RAW
+                only.
+              - fixed some smaller bugs I don't remeber ;)
+              - enhanced the client API to directly support sending
+                syslog message objects. This is now the preferred way
+                of sending messages.
+              
+              THE SERVER API MAY STILL CHANGE AND IS NOT FINALIZED IN 0.5.0!
+              
 0.4.0	      - fixed a hang condition on server shutdown (the listening
                 sockets was accidently not in nonblocking state)
               - added support for parsing the syslog message
               - modified the directory structure, each OS will now have its
                 own subdirectory (including Windows)
-	      - included a syslog message API, which can also be used
+	          - included a syslog message API, which can also be used
                 to create syslog messages
               - added support for syslog-sign-12 in the message object
 0.3.1

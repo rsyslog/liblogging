@@ -44,12 +44,25 @@ void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="beeppr
 <tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="liblogging_8h.html#a6">srRetVal</a>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="beepprofile_8h.html#a7">sbProfSetAPIObj</a> (<a class="el" href="structsbProfObject.html">sbProfObj</a> *pThis, <a class="el" href="structsrAPIObject.html">srAPIObj</a> *pAPI)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Set the associated API object. </em> <a href="#a7"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="structsbProfObject.html">sbProfObj</a> *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="beepprofile_8h.html#a8">sbProfFindProfileMatch</a> (struct sbNVTRObject *pProfListRemote, struct sbNVTRObject *pProfList2)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Find a matching profile in two lists of profiles. </em> <a href="#a8"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="structsbProfObject.html">sbProfObj</a> *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="beepprofile_8h.html#a9">sbProfFindProfile</a> (struct sbNVTRObject *pProfList, char *pszSearch)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Find a profile based on an URI in a list of profiles. </em> <a href="#a9"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="liblogging_8h.html#a6">srRetVal</a>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="beepprofile_8h.html#a10">sbProfSetClntEventHandlers</a> (<a class="el" href="structsbProfObject.html">sbProfObj</a> *pProf, <a class="el" href="liblogging_8h.html#a6">srRetVal</a>(*OnClntOpenLogChan)(struct <a class="el" href="structsbChanObject.html">sbChanObject</a> *pChan), <a class="el" href="liblogging_8h.html#a6">srRetVal</a>(*OnClntSendLogMsg)(struct <a class="el" href="structsbChanObject.html">sbChanObject</a> *pChan, char *szLogmsg), <a class="el" href="liblogging_8h.html#a6">srRetVal</a>(*OnClntSendSLMG)(struct <a class="el" href="structsbChanObject.html">sbChanObject</a> *pChan, struct srSLMGObject *pSLMG), <a class="el" href="liblogging_8h.html#a6">srRetVal</a>(*OnClntCloseLogChan)(struct <a class="el" href="structsbChanObject.html">sbChanObject</a> *pChan))</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Set the 4 mandatory event handlers for client profiles. </em> <a href="#a10"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="structsbProfObject.html">sbProfObj</a> *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="beepprofile_8h.html#a11">sbProfFindProfileURIMatch</a> (struct sbNVTRObject *pProfListLocal, struct sbNVTRObject *pURIListRemote)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Take a list of profile objects AND a list of (remotely supported) profile URIs and find a match in them. </em> <a href="#a11"></a><em><br><br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 The BEEP Profile Object. 
 <p>
 <dl compact><dt><b>Author:</b></dt><dd>Rainer Gerhards &lt;<a href="mailto:rgerhards@adiscon.com">rgerhards@adiscon.com</a>&gt; </dd></dl>
-<dl compact><dt><b>Date:</b></dt><dd>2003-08-04</dd></dl>
+<dl compact><dt><b>Date:</b></dt><dd>2003-08-04<p>
+2003-09-04 Updated so that a client can have multiple profiles.</dd></dl>
 Copyright 2002-2003 Rainer Gerhards and Adiscon GmbH. All Rights Reserved.<p>
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:<p>
 * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.<p>
@@ -97,6 +110,161 @@ Constructor to create a sbProf.
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign=top><em>ppThis</em>&nbsp;</td><td>[out] pointer to a buffer that will receive the pointer to the newly created profile object. </td></tr>
     <tr><td valign=top><em>szURI</em>&nbsp;</td><td>[in] - name of uri to be used in greeting. May be NULL for a profile, that should not be advertised (channel 0 is a meaningful sample). </td></tr>
+  </table>
+</dl>
+    </td>
+  </tr>
+</table>
+<a name="a9" doxytag="beepprofile.h::sbProfFindProfile"></a><p>
+<table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> <a class="el" href="structsbProfObject.html">sbProfObj</a>* sbProfFindProfile </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top">struct sbNVTRObject *&nbsp;</td>
+          <td class="mdname" nowrap> <em>pProfList</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>char *&nbsp;</td>
+          <td class="mdname" nowrap> <em>pszSearch</em></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td class="md">)&nbsp;</td>
+          <td class="md" colspan="2"></td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Find a profile based on an URI in a list of profiles. 
+<p>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign=top><em>pProfileList</em>&nbsp;</td><td>Pointer to list of Profiles. May be NULL. </td></tr>
+    <tr><td valign=top><em>pszSearch</em>&nbsp;</td><td>string to be compared to. Must not be NULL. </td></tr>
+  </table>
+</dl>
+<dl compact><dt><b>Return values:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign=top><em>Pointer</em>&nbsp;</td><td>to the profile found or NULL, if none found. </td></tr>
+  </table>
+</dl>
+    </td>
+  </tr>
+</table>
+<a name="a8" doxytag="beepprofile.h::sbProfFindProfileMatch"></a><p>
+<table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> <a class="el" href="structsbProfObject.html">sbProfObj</a>* sbProfFindProfileMatch </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top">struct sbNVTRObject *&nbsp;</td>
+          <td class="mdname" nowrap> <em>pProfListRemote</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>struct sbNVTRObject *&nbsp;</td>
+          <td class="mdname" nowrap> <em>pProfList2</em></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td class="md">)&nbsp;</td>
+          <td class="md" colspan="2"></td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Find a matching profile in two lists of profiles. 
+<p>
+The matching is done based on the URI. If a match is found, we return the pointer to it. If it is not found, we return NULL. The FIRST matching profile will be returned. It is not tried to find the best match.<p>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign=top><em>pProfListRemote</em>&nbsp;</td><td>List of remote profiles, created from the greeting. This are NOT profile objects but rather URI strings in pszKey. </td></tr>
+    <tr><td valign=top><em>pProfList2</em>&nbsp;</td><td>list (sbNVTRObj) of profiles. MAY BE NULL! (which indicates an empty list of profiles. </td></tr>
+  </table>
+</dl>
+<dl compact><dt><b>Return values:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign=top><em>Pointer</em>&nbsp;</td><td>to the first matching entry or NULL, if none found. </td></tr>
+  </table>
+</dl>
+    </td>
+  </tr>
+</table>
+<a name="a11" doxytag="beepprofile.h::sbProfFindProfileURIMatch"></a><p>
+<table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> <a class="el" href="structsbProfObject.html">sbProfObj</a>* sbProfFindProfileURIMatch </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top">struct sbNVTRObject *&nbsp;</td>
+          <td class="mdname" nowrap> <em>pProfListLocal</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>struct sbNVTRObject *&nbsp;</td>
+          <td class="mdname" nowrap> <em>pURIListRemote</em></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td class="md">)&nbsp;</td>
+          <td class="md" colspan="2"></td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Take a list of profile objects AND a list of (remotely supported) profile URIs and find a match in them. 
+<p>
+The matching is done so that the first local profile found in the remote URI list will be returned. If there are multiple matches, all other matches will be IGNORED.<p>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign=top><em>pProfListLocal</em>&nbsp;</td><td>List of locally supported profile objects.</td></tr>
+    <tr><td valign=top><em>pURIListRemote</em>&nbsp;</td><td>List of remotely supported profile URIs.</td></tr>
+  </table>
+</dl>
+<dl compact><dt><b>Return values:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign=top><em>The</em>&nbsp;</td><td>matching profile object from the local profile object. </td></tr>
   </table>
 </dl>
     </td>
@@ -183,6 +351,65 @@ Set the associated API object.
     </td>
   </tr>
 </table>
+<a name="a10" doxytag="beepprofile.h::sbProfSetClntEventHandlers"></a><p>
+<table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> <a class="el" href="liblogging_8h.html#a6">srRetVal</a> sbProfSetClntEventHandlers </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top"><a class="el" href="structsbProfObject.html">sbProfObj</a> *&nbsp;</td>
+          <td class="mdname" nowrap> <em>pProf</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap><a class="el" href="liblogging_8h.html#a6">srRetVal</a>(*&nbsp;</td>
+          <td class="mdname" nowrap> <em>OnClntOpenLogChan</em>)(struct <a class="el" href="structsbChanObject.html">sbChanObject</a> *pChan), </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap><a class="el" href="liblogging_8h.html#a6">srRetVal</a>(*&nbsp;</td>
+          <td class="mdname" nowrap> <em>OnClntSendLogMsg</em>)(struct <a class="el" href="structsbChanObject.html">sbChanObject</a> *pChan, char *szLogmsg), </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap><a class="el" href="liblogging_8h.html#a6">srRetVal</a>(*&nbsp;</td>
+          <td class="mdname" nowrap> <em>OnClntSendSLMG</em>)(struct <a class="el" href="structsbChanObject.html">sbChanObject</a> *pChan, struct srSLMGObject *pSLMG), </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap><a class="el" href="liblogging_8h.html#a6">srRetVal</a>(*&nbsp;</td>
+          <td class="mdname" nowrap> <em>OnClntCloseLogChan</em>)(struct <a class="el" href="structsbChanObject.html">sbChanObject</a> *pChan)</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td class="md">)&nbsp;</td>
+          <td class="md" colspan="2"></td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Set the 4 mandatory event handlers for client profiles. 
+<p>
+As all of them need to be set for the profile to work, we provide a single call to set them all at once.<p>
+The param names reflect the names of the event handlers. All event handlers MUST point to actual handlers, none if them is allowed to be NULL.     </td>
+  </tr>
+</table>
 <a name="a6" doxytag="beepprofile.h::sbProfSetEventHandler"></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
@@ -236,7 +463,7 @@ A new handler is set for the specified event. To unset it, provide NULL as the h
     </td>
   </tr>
 </table>
-<hr size="1"><address style="align: right;"><small>Generated on Thu Sep 4 12:10:31 2003 for liblogging by
+<hr size="1"><address style="align: right;"><small>Generated on Fri Sep 12 11:20:14 2003 for liblogging by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 > 
 </a>1.3.2 </small></address>

@@ -297,7 +297,7 @@ void sbSessDestroy(sbSessObj *pThis)
 }
 
 
-srRetVal sbSessDoReceive(sbSessObj *pThis)
+srRetVal sbSessDoReceive(sbSessObj *pThis, int bMustRcvPayloadFrame)
 {
 	sbFramObj* pFram;
 	srRetVal iRet;
@@ -326,7 +326,7 @@ srRetVal sbSessDoReceive(sbSessObj *pThis)
 				return iRet;
 		}
 	}
-	while(pThis->pRXQue->pFirst == NULL);	/* WARNING: do...while */
+	while((bMustRcvPayloadFrame == TRUE) && (pThis->pRXQue->pFirst == NULL));	/* WARNING: do...while */
 
 	return SR_RET_OK;
 }
@@ -341,7 +341,7 @@ sbFramObj* sbSessRecvFram(sbSessObj* pThis, sbChanObj *pChan)
 	do
 	{
 		if(sbSockHasReceiveData(pThis->pSock))
-			if((iRet = sbSessDoReceive(pThis)) != SR_RET_OK)
+			if((iRet = sbSessDoReceive(pThis, TRUE)) != SR_RET_OK)
 				return NULL;
 
 		if((pEntry = sbNVTUnlinkElement(pThis->pRXQue)) == NULL)
@@ -382,7 +382,7 @@ srRetVal sbSessSendFram(sbSessObj *pThis, sbFramObj *pFram, sbChanObj *pChan)
 	sbChanCHECKVALIDOBJECT(pChan);
 
 	if(sbSockHasReceiveData(pThis->pSock))
-		sbSessDoReceive(pThis);
+		sbSessDoReceive(pThis, FALSE);
 
 	do
 	{
@@ -392,7 +392,7 @@ srRetVal sbSessSendFram(sbSessObj *pThis, sbFramObj *pFram, sbChanObj *pChan)
 			bRetry = FALSE;
 		else if(iRet == SR_RET_REMAIN_WIN_TOO_SMALL)
 		{ /* we now need to wait for a larger frame */
-			if((iRet = sbSessDoReceive(pThis)) != SR_RET_OK)	/* do a blocking read */
+			if((iRet = sbSessDoReceive(pThis, FALSE)) != SR_RET_OK)	/* do a blocking read */
 				return iRet;
 			bRetry = TRUE;
 		}
@@ -425,7 +425,7 @@ sbChanObj* sbSessOpenChan(sbSessObj* pThis)
 	 * supports at least one of the profiles we do support. If there
 	 * is no match, there is no point in trying it...
 	 */
-	if((pProf = sbProfFindProfileMatch(pThis->pRemoteProfiles, pThis->pProfilesSupported)) == NULL)
+	if((pProf = sbProfFindProfileURIMatch(pThis->pProfilesSupported, pThis->pRemoteProfiles)) == NULL)
 	{
 		sbSessSetLastError(pThis, SR_RET_PEER_DOESNT_SUPPORT_PROFILE);
 		return NULL;

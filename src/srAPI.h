@@ -62,6 +62,7 @@ struct srAPIObject
 	struct sbSessObject *pSess;		/**< the associated session */
 	void *pUsr;						/**< for the user's use - not handled in any way in this lib */
 	/** \todo create the methods for pUsr */
+	srOPTION3195Profiles iUse3195Profiles; /**< specifies which profiles to use for 3195 */
 #	if FEATURE_LISTENER == 1
 	void (*OnSyslogMessageRcvd)(struct srAPIObject* pAPI, struct srSLMGObject *pSyslogMesg);
 	struct sbLstnObject *pLstn;	/**< pointer to associated listener object */

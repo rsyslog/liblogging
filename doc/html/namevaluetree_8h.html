@@ -122,9 +122,12 @@ typedef <a class="el" href="structsbNVTEObject.html">sbNVTEObject</a>&nbsp;</td>
 <tr><td class="memItemLeft" nowrap align=right valign=top>char *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="namevaluetree_8h.html#a32">sbNVTXMLEscapePCDATA</a> (char *pszToEscape)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">XML-Escape a string. </em> <a href="#a32"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>char *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="namevaluetree_8h.html#a33">sbNVTEUtilStrDup</a> (char *pszStrToDup)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="liblogging_8h.html#a6">srRetVal</a>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="namevaluetree_8h.html#a33">sbNVTXMLEscapePCDATAintoStrB</a> (char *pszToEscape, struct <a class="el" href="structsbStrBObject.html">sbStrBObject</a> *pStr)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Duplicate a string and return it. </em> <a href="#a33"></a><em><br><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">XML-Escape a string. </em> <a href="#a33"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>char *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="namevaluetree_8h.html#a34">sbNVTEUtilStrDup</a> (char *pszStrToDup)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Duplicate a string and return it. </em> <a href="#a34"></a><em><br><br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 The NameValueTree helper object (includes XML parser). 
@@ -736,7 +739,7 @@ This is needed if the element got deleted by the user itself. If not done, the l
 If the user pointer is not set, nothing happens.     </td>
   </tr>
 </table>
-<a name="a33" doxytag="namevaluetree.h::sbNVTEUtilStrDup"></a><p>
+<a name="a34" doxytag="namevaluetree.h::sbNVTEUtilStrDup"></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1428,7 +1431,54 @@ The resulting string is suitable for use in #pcdata, that is as a string BETWEEN
     </td>
   </tr>
 </table>
-<hr size="1"><address style="align: right;"><small>Generated on Thu Sep 4 12:10:31 2003 for liblogging by
+<a name="a33" doxytag="namevaluetree.h::sbNVTXMLEscapePCDATAintoStrB"></a><p>
+<table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> <a class="el" href="liblogging_8h.html#a6">srRetVal</a> sbNVTXMLEscapePCDATAintoStrB </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top">char *&nbsp;</td>
+          <td class="mdname" nowrap> <em>pszToEscape</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>struct <a class="el" href="structsbStrBObject.html">sbStrBObject</a> *&nbsp;</td>
+          <td class="mdname" nowrap> <em>pStr</em></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td class="md">)&nbsp;</td>
+          <td class="md" colspan="2"></td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+XML-Escape a string. 
+<p>
+The resulting string is suitable for use in #pcdata, that is as a string BETWEEN XML tags (e.g. string. It is NOT suitable to be used inside a tag parameter (e.g. ).<p>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign=top><em>pszToEscape</em>&nbsp;</td><td>The string to be escaped. Should not be NULL. If it is NULL, the provided string buffer will not be modified.</td></tr>
+    <tr><td valign=top><em>pStr</em>&nbsp;</td><td>Pointer to a sbStrBObj to be filled with the escaped string. </td></tr>
+  </table>
+</dl>
+    </td>
+  </tr>
+</table>
+<hr size="1"><address style="align: right;"><small>Generated on Fri Sep 12 11:20:14 2003 for liblogging by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 > 
 </a>1.3.2 </small></address>

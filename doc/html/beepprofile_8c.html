@@ -12,6 +12,7 @@
 <code>#include "<a class="el" href="config_8h-source.html">config.h</a>"</code><br>
 <code>#include "<a class="el" href="liblogging_8h-source.html">liblogging.h</a>"</code><br>
 <code>#include "<a class="el" href="beepprofile_8h-source.html">beepprofile.h</a>"</code><br>
+<code>#include "<a class="el" href="namevaluetree_8h-source.html">namevaluetree.h</a>"</code><br>
 <table border=0 cellpadding=0 cellspacing=0>
 <tr><td></td></tr>
 <tr><td colspan=2><br><h2>Functions</h2></td></tr>
@@ -25,10 +26,22 @@
 void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="beepprofile_8c.html#a2">sbProfDestroy</a> (<a class="el" href="structsbProfObject.html">sbProfObj</a> *pThis)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Profile Object Destructor. <br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="liblogging_8h.html#a6">srRetVal</a>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="beepprofile_8c.html#a3">sbProfSetAPIObj</a> (<a class="el" href="structsbProfObject.html">sbProfObj</a> *pThis, <a class="el" href="structsrAPIObject.html">srAPIObj</a> *pAPI)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="structsbProfObject.html">sbProfObj</a> *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="beepprofile_8c.html#a3">sbProfFindProfileURIMatch</a> (sbNVTRObj *pProfListLocal, sbNVTRObj *pURIListRemote)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Set the associated API object. </em> <a href="#a3"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top><a name="a4" doxytag="beepprofile.c::sbProfSetEventHandler"></a>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Take a list of profile objects AND a list of (remotely supported) profile URIs and find a match in them. </em> <a href="#a3"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a name="a4" doxytag="beepprofile.c::sbProfFindProfileMatch"></a>
+<a class="el" href="structsbProfObject.html">sbProfObj</a> *&nbsp;</td><td class="memItemRight" valign=bottom><b>sbProfFindProfileMatch</b> (sbNVTRObj *pProfListRemote, sbNVTRObj *pProfList2)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align=right valign=top><a name="a5" doxytag="beepprofile.c::sbProfFindProfile"></a>
+<a class="el" href="structsbProfObject.html">sbProfObj</a> *&nbsp;</td><td class="memItemRight" valign=bottom><b>sbProfFindProfile</b> (sbNVTRObj *pProfList, char *pszSearch)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="liblogging_8h.html#a6">srRetVal</a>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="beepprofile_8c.html#a6">sbProfSetClntEventHandlers</a> (<a class="el" href="structsbProfObject.html">sbProfObj</a> *pProf, <a class="el" href="liblogging_8h.html#a6">srRetVal</a>(*OnClntOpenLogChan)(struct <a class="el" href="structsbChanObject.html">sbChanObject</a> *pChan), <a class="el" href="liblogging_8h.html#a6">srRetVal</a>(*OnClntSendLogMsg)(struct <a class="el" href="structsbChanObject.html">sbChanObject</a> *pChan, char *szLogmsg), <a class="el" href="liblogging_8h.html#a6">srRetVal</a>(*OnClntSendSLMG)(struct <a class="el" href="structsbChanObject.html">sbChanObject</a> *pChan, struct srSLMGObject *pSLMG), <a class="el" href="liblogging_8h.html#a6">srRetVal</a>(*OnClntCloseLogChan)(struct <a class="el" href="structsbChanObject.html">sbChanObject</a> *pChan))</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Set the 4 mandatory event handlers for client profiles. </em> <a href="#a6"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="liblogging_8h.html#a6">srRetVal</a>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="beepprofile_8c.html#a7">sbProfSetAPIObj</a> (<a class="el" href="structsbProfObject.html">sbProfObj</a> *pThis, <a class="el" href="structsrAPIObject.html">srAPIObj</a> *pAPI)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Set the associated API object. </em> <a href="#a7"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a name="a8" doxytag="beepprofile.c::sbProfSetEventHandler"></a>
 <a class="el" href="liblogging_8h.html#a6">srRetVal</a>&nbsp;</td><td class="memItemRight" valign=bottom><b>sbProfSetEventHandler</b> (<a class="el" href="structsbProfObject.html">sbProfObj</a> *pThis, sbProfEvent iEvent, <a class="el" href="liblogging_8h.html#a6">srRetVal</a>(*handler)())</td></tr>
 
 </table>
@@ -36,7 +49,8 @@ void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="beeppr
 Implementation of the BEEP Profile Object. 
 <p>
 <dl compact><dt><b>Author:</b></dt><dd>Rainer Gerhards &lt;<a href="mailto:rgerhards@adiscon.com">rgerhards@adiscon.com</a>&gt; </dd></dl>
-<dl compact><dt><b>Date:</b></dt><dd>2003-08-04</dd></dl>
+<dl compact><dt><b>Date:</b></dt><dd>2003-08-04<p>
+2003-09-04 begin coding support for multiple client profiles (the initial design just allowed one).</dd></dl>
 Copyright 2002-2003 Rainer Gerhards and Adiscon GmbH. All Rights Reserved.<p>
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:<p>
 * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.<p>
@@ -89,6 +103,58 @@ Constructor to create a sbProf.
     </td>
   </tr>
 </table>
+<a name="a3" doxytag="beepprofile.c::sbProfFindProfileURIMatch"></a><p>
+<table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> <a class="el" href="structsbProfObject.html">sbProfObj</a>* sbProfFindProfileURIMatch </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top">sbNVTRObj *&nbsp;</td>
+          <td class="mdname" nowrap> <em>pProfListLocal</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>sbNVTRObj *&nbsp;</td>
+          <td class="mdname" nowrap> <em>pURIListRemote</em></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td class="md">)&nbsp;</td>
+          <td class="md" colspan="2"></td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Take a list of profile objects AND a list of (remotely supported) profile URIs and find a match in them. 
+<p>
+The matching is done so that the first local profile found in the remote URI list will be returned. If there are multiple matches, all other matches will be IGNORED.<p>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign=top><em>pProfListLocal</em>&nbsp;</td><td>List of locally supported profile objects.</td></tr>
+    <tr><td valign=top><em>pURIListRemote</em>&nbsp;</td><td>List of remotely supported profile URIs.</td></tr>
+  </table>
+</dl>
+<dl compact><dt><b>Return values:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign=top><em>The</em>&nbsp;</td><td>matching profile object from the local profile object. </td></tr>
+  </table>
+</dl>
+    </td>
+  </tr>
+</table>
 <a name="a0" doxytag="beepprofile.c::sbProfGetURI"></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
@@ -125,7 +191,7 @@ The returned string is read-only. <dl compact><dt><b>Return values:</b></dt><dd>
     </td>
   </tr>
 </table>
-<a name="a3" doxytag="beepprofile.c::sbProfSetAPIObj"></a><p>
+<a name="a7" doxytag="beepprofile.c::sbProfSetAPIObj"></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -170,7 +236,66 @@ Set the associated API object.
     </td>
   </tr>
 </table>
-<hr size="1"><address style="align: right;"><small>Generated on Thu Sep 4 12:10:31 2003 for liblogging by
+<a name="a6" doxytag="beepprofile.c::sbProfSetClntEventHandlers"></a><p>
+<table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> <a class="el" href="liblogging_8h.html#a6">srRetVal</a> sbProfSetClntEventHandlers </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top"><a class="el" href="structsbProfObject.html">sbProfObj</a> *&nbsp;</td>
+          <td class="mdname" nowrap> <em>pProf</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap><a class="el" href="liblogging_8h.html#a6">srRetVal</a>(*&nbsp;</td>
+          <td class="mdname" nowrap> <em>OnClntOpenLogChan</em>)(struct <a class="el" href="structsbChanObject.html">sbChanObject</a> *pChan), </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap><a class="el" href="liblogging_8h.html#a6">srRetVal</a>(*&nbsp;</td>
+          <td class="mdname" nowrap> <em>OnClntSendLogMsg</em>)(struct <a class="el" href="structsbChanObject.html">sbChanObject</a> *pChan, char *szLogmsg), </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap><a class="el" href="liblogging_8h.html#a6">srRetVal</a>(*&nbsp;</td>
+          <td class="mdname" nowrap> <em>OnClntSendSLMG</em>)(struct <a class="el" href="structsbChanObject.html">sbChanObject</a> *pChan, struct srSLMGObject *pSLMG), </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap><a class="el" href="liblogging_8h.html#a6">srRetVal</a>(*&nbsp;</td>
+          <td class="mdname" nowrap> <em>OnClntCloseLogChan</em>)(struct <a class="el" href="structsbChanObject.html">sbChanObject</a> *pChan)</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td class="md">)&nbsp;</td>
+          <td class="md" colspan="2"></td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Set the 4 mandatory event handlers for client profiles. 
+<p>
+As all of them need to be set for the profile to work, we provide a single call to set them all at once.<p>
+The param names reflect the names of the event handlers. All event handlers MUST point to actual handlers, none if them is allowed to be NULL.     </td>
+  </tr>
+</table>
+<hr size="1"><address style="align: right;"><small>Generated on Fri Sep 12 11:20:14 2003 for liblogging by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 > 
 </a>1.3.2 </small></address>

@@ -136,15 +136,17 @@ sbChanObj* sbChanConstruct(sbSessObj* pSess)
 srRetVal sbChanActualSendFram(sbChanObj *pThis, sbFramObj* pFram)
 {
 	unsigned iPayloadLen;
+	unsigned iFrameLen;
 
 	sbChanCHECKVALIDOBJECT(pThis);
 	sbFramCHECKVALIDOBJECT(pFram);
 
-	iPayloadLen = sbFramGetFrameLen(pFram);
+	iFrameLen = sbFramGetFrameLen(pFram); /* physical size including header */
+	iPayloadLen = pFram->uSize;	/* logical size, THIS must be used for the 3081 window! */
 	if(iPayloadLen > pThis->uTXWinLeft)
 		return SR_RET_REMAIN_WIN_TOO_SMALL;
 
-	if(sbSockSend(pThis->pSock, sbFramGetFrame(pFram), iPayloadLen) != iPayloadLen)
+	if(sbSockSend(pThis->pSock, sbFramGetFrame(pFram), iFrameLen) != iFrameLen)
 		return SR_RET_SOCKET_ERR;
 
 	pThis->uTXWinLeft -= iPayloadLen;

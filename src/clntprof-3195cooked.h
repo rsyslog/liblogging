@@ -58,6 +58,14 @@ struct sbPSRCObject_
 };
 typedef struct sbPSRCObject_ sbPSRCObj;
 
+/** 
+ * Handler to send a srSLMGObj to the remote peer. This
+ * is the preferred way to send things - with COOKED, we would
+ * otherwise need to re-parse the message just to obtain the
+ * information that the caller most probably already has...
+ */
+srRetVal sbPSRCClntSendSLMG(struct sbChanObject* pChan, struct srSLMGObject *pSLMG);
+
 /**
  * Send a message to the remote peer.
  */

@@ -203,6 +203,18 @@ typedef enum srObjectID srObjID;
 
 
 /**
+ * Allowed options for 3195 client profile
+ * selection.
+ */
+enum srOPTION3195Profiles_
+{
+	USE_3195_PROFILE_ANY = 1,
+	USE_3195_PROFILE_RAW_ONLY = 2,
+	USE_3195_PROFILE_COOKED_ONLY = 3
+};
+typedef enum srOPTION3195Profiles_ srOPTION3195Profiles;
+
+/**
  * Library options. Modify library behaviour.
  * Currently, no options are defined.
  */
@@ -219,7 +231,15 @@ enum srOPTION
 	 * This is a global setting that NEEDS TO BE SET BEFORE the API 
 	 * object is created!!!!
 	 */
-	srOPTION_CALL_OS_SOCKET_INITIALIZER
+	srOPTION_CALL_OS_SOCKET_INITIALIZER = 1,
+	/**
+	 * This option tells the library which RFC 3195 Profile
+	 * should be used when talking to the remote peer. This
+	 * option so far is only used in the client parts of
+	 * liblogging. See \ref srOPTION3195Profiles for
+	 * allowed values.
+	 */
+	 srOPTION_3195_ALLOWED_CLIENT_PROFILES = 2
 };
 typedef enum srOPTION SRoption;
 

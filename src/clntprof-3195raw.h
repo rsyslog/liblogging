@@ -87,6 +87,6 @@ srRetVal sbPSSRCOnClntCloseLogChan(sbChanObj *pChan);
  * SendMesg method with the RAW string. There is nothing
  * that -RAW adds to this... ;)
  */
-srRetVal sbPSRCClntSendSLMG(sbChanObj* pChan, struct srSLMGObject *pSLMG);
+srRetVal sbPSSRClntSendSLMG(struct sbChanObject* pChan, struct srSLMGObject *pSLMG);
 
 #endif
