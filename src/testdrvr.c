@@ -54,6 +54,8 @@
 #include <time.h>
 #include "beepsession.h"
 
+#define DEFAULT_IP "172.19.1.20" 
+
 int main(int argc, char* argv[])
 {
 	int i;
@@ -61,6 +63,12 @@ int main(int argc, char* argv[])
 	char szMsg[1025];
 	srAPIObj* pAPI;
 	srSLMGObj *pMsg;
+    char *ipStr;
+
+    if (argc > 1)
+        ipStr = argv[1];
+    else
+        ipStr = DEFAULT_IP;
 
 #	ifdef	WIN32
 		_CrtSetDbgFlag(_CRTDBG_CHECK_ALWAYS_DF | _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
@@ -105,7 +113,7 @@ int main(int argc, char* argv[])
 		exit(2);
 	}
 
-	if((iRet = srAPIOpenlog(pAPI, "172.19.1.20", 601)) != SR_RET_OK)
+	if((iRet = srAPIOpenlog(pAPI, ipStr, 601)) != SR_RET_OK)
 	{
 		printf("Error %d: can't open session!\n", iRet);
 		exit(2);

@@ -192,6 +192,10 @@
 #	define SROS_WIN32
 #endif
 
+#ifdef SROS_Solaris_
+#   define SROS_Solaris
+#endif
+
 
 /* ######################################################################### *
  * # Now all environment defines are made, so let's get down to the meat ;)# *

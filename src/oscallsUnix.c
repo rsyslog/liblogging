@@ -85,7 +85,14 @@ srRetVal getCurrTime(int* year, int* month, int* day, int *hour, int* minute, in
 	*secfrac = tp.tv_usec;
 	*secfracPrecison = 6;
 
+#ifdef SROS_Solaris 
+    /* Solaris uses a different method of exporting the time zone.
+     * It is UTC - localtime, which is opposite sign of min east of GMT.
+     */
+    lBias = -(daylight ? altzone : timezone);
+#else
 	lBias = tm->tm_gmtoff;
+#endif
 	if(lBias < 0)
 	{
 		*pcOffsetMode = '-';
@@ -93,6 +100,7 @@ srRetVal getCurrTime(int* year, int* month, int* day, int *hour, int* minute, in
 	}
 	else
 		*pcOffsetMode = '+';
+
 	*pOffsetHour = lBias / 3600;
 	*pOffsetMinute = lBias % 3600;
 
