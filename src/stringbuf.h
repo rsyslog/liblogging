@@ -126,5 +126,11 @@ srRetVal sbStrBAppendStr(sbStrBObj *pThis, char* psz);
  */
 void sbStrBSetAllocIncrement(sbStrBObj *pThis, int iNewIncrement);
 
+/**
+ * Append an integer to the string. No special formatting is
+ * done.
+ */
+srRetVal sbStrBAppendInt(sbStrBObj *pThis, int i);
+
 
 #endif

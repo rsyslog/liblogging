@@ -377,19 +377,35 @@ static srRetVal sbNVTXMLProcessTAGwPARAMS(char **ppXML, sbNVTEObj *pEntry)
 }
 
 
-/**
- * XML-Escape a string. The resulting string is suitable for use
- * in #pcdata, that is as a string BETWEEN XML tags (e.g. 
- * <tag>string</tag>. It is NOT suitable to be used inside
- * a tag parameter (e.g. <tag p="string">).
- *
- * \param pszToEscape The string to be escaped. Should not be
- * NULL. If it is NULL, the return value will also be NULL.
- * \retval Pointer to an XML-escaped string or NULL, if no
- * memory for that string could be allocated. IMPORTANT: the 
- * caller MUST free() that buffer once he is done with the
- * string, otherwise a memory leak will be left.
- */
+srRetVal sbNVTXMLEscapePCDATAintoStrB(char *pszToEscape, sbStrBObj *pStr)
+{
+	srRetVal iRet;
+	sbSTRBCHECKVALIDOBJECT(pStr);
+	
+	if(pszToEscape == NULL)
+		return SR_RET_OK;
+
+	while(*pszToEscape)
+	{
+		if(*pszToEscape == '<')
+		{
+			if((iRet = sbStrBAppendStr(pStr, "&lt;")) != SR_RET_OK) return iRet;
+		}
+		else if(*pszToEscape == '&')
+		{
+			if((iRet = sbStrBAppendStr(pStr, "&quot;")) != SR_RET_OK) return iRet;
+		}
+		else
+		{
+			if((iRet = sbStrBAppendChar(pStr, *pszToEscape)) != SR_RET_OK) return iRet;
+		}
+		pszToEscape++;
+	}
+
+	return SR_RET_OK;
+}
+
+
 char* sbNVTXMLEscapePCDATA(char *pszToEscape)
 {
 	sbStrBObj *pStrBuf;
@@ -400,15 +416,10 @@ char* sbNVTXMLEscapePCDATA(char *pszToEscape)
 	if((pStrBuf = sbStrBConstruct()) == NULL)
 		return NULL;
 
-	while(*pszToEscape)
+	if(sbNVTXMLEscapePCDATAintoStrB(pszToEscape, pStrBuf) != SR_RET_OK)
 	{
-		if(*pszToEscape == '<')
-			sbStrBAppendStr(pStrBuf, "&lt;");
-		else if(*pszToEscape == '&')
-			sbStrBAppendStr(pStrBuf, "&quot;");
-		else
-			sbStrBAppendChar(pStrBuf, *pszToEscape);
-		pszToEscape++;
+		sbStrBDestruct(pStrBuf);
+		return NULL;
 	}
 
 	return sbStrBFinish(pStrBuf);

@@ -48,5 +48,4 @@ struct sbMesgObject;
 srRetVal psrrOnChanCreate(struct sbProfObject *pThis, struct sbSessObject* pSess, struct sbChanObject* pChan);
 srRetVal psrrOnMesgRecv(struct sbProfObject *pThis, int* pbAbort, struct sbSessObject* pSess, struct sbChanObject* pChan, struct sbMesgObject *pMesg);
 
-
 #endif

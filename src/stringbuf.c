@@ -42,6 +42,7 @@
 #include "config.h"
 #include "liblogging.h"
 #include "stringbuf.h"
+#include "srUtils.h"
 
 /* ################################################################# *
  * private members                                                   *
@@ -97,6 +98,21 @@ srRetVal sbStrBAppendStr(sbStrBObj *pThis, char* psz)
 			return iRet;
 
 	return SR_RET_OK;
+}
+
+
+srRetVal sbStrBAppendInt(sbStrBObj *pThis, int i)
+{
+	srRetVal iRet;
+	char *pszNumber;
+	char szBuf[32];
+
+	sbSTRBCHECKVALIDOBJECT(pThis);
+
+	if((iRet = srUtilItoA(szBuf, sizeof(szBuf), i)) != SR_RET_OK)
+		return iRet;
+
+	return sbStrBAppendStr(pThis, szBuf);
 }
 
 

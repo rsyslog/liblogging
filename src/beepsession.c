@@ -327,7 +327,6 @@ srRetVal sbSessDoReceive(sbSessObj *pThis)
 		}
 	}
 	while(pThis->pRXQue->pFirst == NULL);	/* WARNING: do...while */
-//	while(sbSockHasReceiveData(pThis->pSock));	/* WARNING: do...while */
 
 	return SR_RET_OK;
 }
@@ -356,6 +355,18 @@ sbFramObj* sbSessRecvFram(sbSessObj* pThis, sbChanObj *pChan)
 	pRetFram = pEntry->pUsr;
 	sbNVTEUnsetUsrPtr(pEntry);
 	sbNVTEDestroy(pEntry);
+
+	/* We now need to check if it is time to send a SEQ ourselfs ... */
+	pChan->uRXWinLeft -= pRetFram->uSize;
+	if(pChan->uRXWinLeft < BEEP_DEFAULT_WINDOWSIZE / 2)
+	{
+		pChan->uRXWinLeft = BEEP_DEFAULT_WINDOWSIZE;
+		if((iRet = sbChanSendSEQ(pChan, pRetFram->uSeqno+pRetFram->uSize, 0)) != SR_RET_OK)
+		{
+			sbFramDestroy(pRetFram);	/* out of options... */
+			return NULL;
+		}
+	}
 
 	return(pRetFram);
 }

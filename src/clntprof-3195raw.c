@@ -51,6 +51,7 @@
 #include "beepchannel.h"
 #include "beepprofile.h"
 #include "clntprof-3195raw.h"
+#include "syslogmessage.h"
 
 /* ################################################################# *
  * private members                                                   *
@@ -90,6 +91,11 @@ static void sbPSSRDestroy(sbPSSRObj* pThis)
  * public members                                                    *
  * ################################################################# */
 
+srRetVal sbPSSRClntSendSLMG(sbChanObj* pChan, srSLMGObj *pSLMG)
+{
+	return sbPSSRClntSendMsg(pChan, pSLMG->pszRawMsg);
+}
+
 srRetVal sbPSSRClntSendMsg(sbChanObj* pChan, char* szLogmsg)
 {
 	sbMesgObj *pMesg;
@@ -112,14 +118,13 @@ srRetVal sbPSSRClntSendMsg(sbChanObj* pChan, char* szLogmsg)
 }
 
 
-srRetVal sbPSSRClntOpenLogChan(sbChanObj *pChan, sbMesgObj *xx)
+srRetVal sbPSSRClntOpenLogChan(sbChanObj *pChan)
 {
 	srRetVal iRet;
 	sbPSSRObj *pThis;
 	sbMesgObj *pMesgGreeting;
 
 	sbChanCHECKVALIDOBJECT(pChan);
-	sbMesgCHECKVALIDOBJECT(pMesgGreeting);
 
 	if((iRet = sbPSSRConstruct(&pThis)) != SR_RET_OK)
 		return iRet;

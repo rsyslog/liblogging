@@ -121,6 +121,7 @@ sbChanObj* sbChanConstruct(sbSessObj* pSess)
 	pThis->uRXWin = BEEP_DEFAULT_WINDOWSIZE;
 	pThis->uTXWin = BEEP_DEFAULT_WINDOWSIZE;
 	pThis->uTXWinLeft = BEEP_DEFAULT_WINDOWSIZE;
+	pThis->uRXWinLeft = BEEP_DEFAULT_WINDOWSIZE;
 	pThis->uSeqno = 0;
 	pThis->uMsgno = 0;
 	pThis->OID = OIDsbChan;

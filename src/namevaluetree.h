@@ -550,6 +550,22 @@ srRetVal sbNVTEGetValueU(sbNVTEObj* pThis, unsigned* puValue);
  */
 char* sbNVTXMLEscapePCDATA(char *pszToEscape);
 
+
+/**
+ * XML-Escape a string. The resulting string is suitable for use
+ * in #pcdata, that is as a string BETWEEN XML tags (e.g. 
+ * <tag>string</tag>. It is NOT suitable to be used inside
+ * a tag parameter (e.g. <tag p="string">).
+ *
+ * \param pszToEscape The string to be escaped. Should not be
+ * NULL. If it is NULL, the provided string buffer will not be
+ * modified.
+ *
+ * \param pStr Pointer to a sbStrBObj to be filled with
+ *             the escaped string.
+ */
+srRetVal sbNVTXMLEscapePCDATAintoStrB(char *pszToEscape, struct sbStrBObject *pStr);
+
 /**
  * Duplicate a string and return it. This is a general utility, it
  * was just defined first in the context of NVTE.

@@ -125,10 +125,26 @@ srRetVal srAPIExitLib(srAPIObj *pThis);
  * already be correctly formatted according to RFC 3195. No
  * further formatting (or checks) are applied.
  *
+ * \param pThis [in] pointer to a proper srAPI object.
  * \param szLogmsg [in] message to be sent.
  */
 srRetVal srAPISendLogmsg(srAPIObj* pThis, char* szLogmsg);
 
+/**
+ * Send a syslog message object to the remote peer. This
+ * method SHOULD be called whenever the caller is already
+ * in possesion of a srSLMGObj. Calling srAPISendLogmsg would
+ * result in a performance penalty in those cases. In general,
+ * you should call this method here whenever you can and use
+ * srAPISendLogmsg only in those (rare) cases where you
+ * can not avoid it.
+ *
+ * \param pThis [in] pointer to a proper srAPI object.
+ * \param pSLMG pointer to the syslog message object. This
+ *              must be a proper object as it will be
+ *              used as the message source.
+ */
+srRetVal srAPISendSLMG(srAPIObj* pThis, struct srSLMGObject* pSLMG);
 
 /**
  * Close a syslog raw session.

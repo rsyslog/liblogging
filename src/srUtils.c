@@ -1,14 +1,11 @@
-/*! \file clntprof-3195raw.h
- *  \brief The client profile for RFC 3195 raw.
+/**\file srUtils.c
+ * \brief General utilties that fit nowhere else.
  *
- * The prefix for this "object" is psrr which stands for
- * *P*rofile *S*yslog *R*eliable *Raw*. This file works in
- * conjunction with \ref lstnprof-3195raw.c and shares
- * its namespace.
+ * The namespace for this file is "srUtil".
  *
  * \author  Rainer Gerhards <rgerhards@adiscon.com>
- * \date    2003-09-04
- *          coding begun
+ * \date    2003-09-09
+ *          Coding begun.
  *
  * Copyright 2002-2003 
  *     Rainer Gerhards and Adiscon GmbH. All Rights Reserved.
@@ -42,51 +39,60 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-#ifndef __LIB3195_CLNTPROF_3195RAW_H_INCLUDED__
-#define __LIB3195_CLNTPROF_3195RAW_H_INCLUDED__ 1
-#define sbPSSRCHECKVALIDOBJECT(x) {assert(x != NULL); assert(x->OID == OIDsbPSSR);}
 
-/**
- * The RAW profile object used by the client profile.
+#include "config.h"
+#include "liblogging.h"
+#include "srUtils.h"
+#include "assert.h"
+
+
+/* ################################################################# *
+ * private members                                                   *
+ * ################################################################# */
+
+/* As this is not a "real" object, there won't be any private
+ * members in this file.
  */
-struct sbPSSRObject_
+
+/* ################################################################# *
+ * public members                                                    *
+ * ################################################################# */
+
+srRetVal srUtilItoA(char *pBuf, int iLenBuf, int iToConv)
 {
-	srObjID OID;					/**< object ID */
-	SBansno	uAnsno;					/**< ansno  */
-	SBmsgno uMsgno4raw;				/**< msgno to be used for rfc3195/RAW messages */
-};
-typedef struct sbPSSRObject_ sbPSSRObj;
+	int i;
+	int bIsNegative;
+	char szBuf[32];	/* sufficiently large for my lifespan and those of my children... ;) */
 
-/**
- * Send a message to the remote peer.
- */
-srRetVal sbPSSRClntSendMsg(sbChanObj* pChan, char* szLogmsg);
+	assert(pBuf != NULL);
+	assert(iLenBuf > 1);	/* This is actually an app error and as thus checked for... */
 
-/**
- * Handler to be called when a new channel is
- * established.
- *
- * This handler is  the first to be called. So it
- * will also create the instance's data object, at least
- * for those profiles, that need such.
- *
- * There is not much to do for RFC 3195/RAW ;)
- */
-srRetVal sbPSSRClntOpenLogChan(sbChanObj *pChan);
+	if(iToConv < 0)
+	{
+		bIsNegative = TRUE;
+		iToConv *= -1;
+	}
+	else
+		bIsNegative = FALSE;
 
-/**
- * Handler to be called when a channel is to be closed.
- */
-srRetVal sbPSSRCOnClntCloseLogChan(sbChanObj *pChan);
+	/* first generate a string with the digits in the reverse direction */
+	i = 0;
+	do
+	{
+		szBuf[i] = iToConv % 10 + '0';
+		iToConv /= 10;
+	} while(iToConv > 0);	/* warning: do...while()! */
 
-/** 
- * Handler to send a srSLMGObj to the remote peer. This
- * is the preferred way to send things.
- *
- * For -RAW, it is very easy - it just needs to call the
- * SendMesg method with the RAW string. There is nothing
- * that -RAW adds to this... ;)
- */
-srRetVal sbPSRCClntSendSLMG(sbChanObj* pChan, struct srSLMGObject *pSLMG);
+	/* make sure we are within bounds... */
+	if(i + 2 > iLenBuf)	/* +2 because: a) i starts at zero! b) the \0 byte */
+		return SR_RET_PROVIDED_BUFFER_TOO_SMALL;
 
-#endif
+	/* then move it to the right direction... */
+	if(bIsNegative == TRUE)
+		*pBuf++ = '-';
+	while(i >= 0)
+		*pBuf++ = szBuf[i--];
+	*pBuf = '\0';	/* terminate it!!! */
+
+	return SR_RET_OK;
+}

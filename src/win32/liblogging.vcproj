@@ -144,6 +144,9 @@
 				RelativePath="..\srAPI.c">
 			</File>
 			<File
+				RelativePath="..\srUtils.c">
+			</File>
+			<File
 				RelativePath="..\stringbuf.c">
 			</File>
 			<File
@@ -203,6 +206,9 @@
 			</File>
 			<File
 				RelativePath="..\srAPI.h">
+			</File>
+			<File
+				RelativePath="..\srUtils.h">
 			</File>
 			<File
 				RelativePath="..\stringbuf.h">

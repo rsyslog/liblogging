@@ -7,6 +7,10 @@
  * \date    2003-09-04
  *          Updated to support multiple client profiles.
  *
+ * \date    2003-09-08
+ *          Added support for sending SEQs in reply to the server's
+ *          response.
+ *
  * Copyright 2002-2003 
  *     Rainer Gerhards and Adiscon GmbH. All Rights Reserved.
  * 
@@ -79,6 +83,7 @@ struct sbChanObject
 	unsigned uTXWin;		/**< maximum transmit window */
 	unsigned uTXWinLeft;	/**< remaining bytes left in current tx window */
 	unsigned uRXWin;		/**< maximum receive window */
+	unsigned uRXWinLeft;	/**< remaining bytes left in current rx window */
 	sbSockObj* pSock;		/**< associated socket object */
 	struct sbSessObject* pSess;/**< associated session */
 	sbChannelState iState;	/**< channel status */

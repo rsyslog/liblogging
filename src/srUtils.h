@@ -1,14 +1,9 @@
-/*! \file clntprof-3195raw.h
- *  \brief The client profile for RFC 3195 raw.
- *
- * The prefix for this "object" is psrr which stands for
- * *P*rofile *S*yslog *R*eliable *Raw*. This file works in
- * conjunction with \ref lstnprof-3195raw.c and shares
- * its namespace.
- *
+/*! \file srUtils.h
+ *  \brief General, small utilities that fit nowhere else.
+ * 
  * \author  Rainer Gerhards <rgerhards@adiscon.com>
- * \date    2003-09-04
- *          coding begun
+ * \date    2003-09-09
+ *          Coding begun.
  *
  * Copyright 2002-2003 
  *     Rainer Gerhards and Adiscon GmbH. All Rights Reserved.
@@ -42,51 +37,28 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-#ifndef __LIB3195_CLNTPROF_3195RAW_H_INCLUDED__
-#define __LIB3195_CLNTPROF_3195RAW_H_INCLUDED__ 1
-#define sbPSSRCHECKVALIDOBJECT(x) {assert(x != NULL); assert(x->OID == OIDsbPSSR);}
+#ifndef __LIB3195_SRUTILS_H_INCLUDED__
+#define __LIB3195_SRUTILS_H_INCLUDED__ 1
+
+#include "config.h"
 
 /**
- * The RAW profile object used by the client profile.
- */
-struct sbPSSRObject_
-{
-	srObjID OID;					/**< object ID */
-	SBansno	uAnsno;					/**< ansno  */
-	SBmsgno uMsgno4raw;				/**< msgno to be used for rfc3195/RAW messages */
-};
-typedef struct sbPSSRObject_ sbPSSRObj;
-
-/**
- * Send a message to the remote peer.
- */
-srRetVal sbPSSRClntSendMsg(sbChanObj* pChan, char* szLogmsg);
-
-/**
- * Handler to be called when a new channel is
- * established.
+ * A reimplementation of itoa(), as this is not available
+ * on all platforms. We used the chance to make an interface
+ * that fits us well, so it is no longer plain itoa().
  *
- * This handler is  the first to be called. So it
- * will also create the instance's data object, at least
- * for those profiles, that need such.
+ * This method works with the US-ASCII alphabet. If you port this
+ * to e.g. EBCDIC, you need to make a small adjustment. Keep in mind,
+ * that on the wire it MUST be US-ASCII, so basically all you need
+ * to do is replace the constant '0' with 0x30 ;).
  *
- * There is not much to do for RFC 3195/RAW ;)
- */
-srRetVal sbPSSRClntOpenLogChan(sbChanObj *pChan);
-
-/**
- * Handler to be called when a channel is to be closed.
- */
-srRetVal sbPSSRCOnClntCloseLogChan(sbChanObj *pChan);
-
-/** 
- * Handler to send a srSLMGObj to the remote peer. This
- * is the preferred way to send things.
+ * \param pBuf Caller-provided buffer that will receive the
+ *              generated ASCII string.
  *
- * For -RAW, it is very easy - it just needs to call the
- * SendMesg method with the RAW string. There is nothing
- * that -RAW adds to this... ;)
+ * \param iLenBuf Length of the caller-provided buffer.
+ *
+ * \param iToConv The integer to be converted.
  */
-srRetVal sbPSRCClntSendSLMG(sbChanObj* pChan, struct srSLMGObject *pSLMG);
+srRetVal srUtilItoA(char *pBuf, int iLenBuf, int iToConv);
 
 #endif

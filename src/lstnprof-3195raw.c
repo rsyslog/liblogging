@@ -135,23 +135,27 @@ static srRetVal psrrOnMesgRecvCallAPI(sbProfObj *pThis, int* pbAbort, sbSessObj*
 
 		if((iRet = srSLMGSetRawMsg(pSLMG, pszMsg, FALSE)) != SR_RET_OK)
 		{
+			srSLMGDestroy(pSLMG);
 			free(pszMsg);
 			return iRet;
 		}
 
 		if((iRet = sbSockGetRemoteHostIP(pSess->pSock, &pszRemHostIP)) != SR_RET_OK)
 		{
+			srSLMGDestroy(pSLMG);
 			free(pszMsg);
 			return iRet;
 		}
 		if((iRet = srSLMGSetRemoteHostIP(pSLMG, pszRemHostIP, FALSE)) != SR_RET_OK)
 		{
+			srSLMGDestroy(pSLMG);
 			free(pszRemHostIP);
 			free(pszMsg);
 			return iRet;
 		}
 		if((iRet = srSLMGParseMesg(pSLMG)) != SR_RET_OK)
 		{
+			srSLMGDestroy(pSLMG);
 			free(pszRemHostIP);
 			free(pszMsg);
 			return iRet;

@@ -164,27 +164,21 @@ sbProfObj*  sbProfFindProfile(sbNVTRObj *pProfList, char* pszSearch)
 }
 
 
-/**
- * Set the 3 mandatory event handlers for client profiles.
- * As all of them need to be set for the profile to work,
- * we provide a single call to set them all at once.
- *
- * The param names reflect the names of the event handlers. 
- * All event handlers MUST point to actual handlers, none
- * if them is allowed to be NULL.
- */
 srRetVal sbProfSetClntEventHandlers(sbProfObj *pProf,
-									srRetVal (*OnClntOpenLogChan)(struct sbChanObject *pChan, struct sbMesgObject *pMesgGreeting),
+									srRetVal (*OnClntOpenLogChan)(struct sbChanObject *pChan),
 									srRetVal (*OnClntSendLogMsg)(struct sbChanObject* pChan, char* szLogmsg),
+									srRetVal (*OnClntSendSLMG)(struct sbChanObject* pChan, struct srSLMGObject *pSLMG),
 									srRetVal (*OnClntCloseLogChan)(struct sbChanObject* pChan))
 {
 	sbProfCHECKVALIDOBJECT(pProf);
 	assert(OnClntOpenLogChan != NULL);
 	assert(OnClntSendLogMsg != NULL);
+	assert(OnClntSendSLMG != NULL);
 	assert(OnClntCloseLogChan != NULL);
 
 	pProf->OnClntOpenLogChan  = OnClntOpenLogChan;
 	pProf->OnClntSendLogMsg   = OnClntSendLogMsg;
+	pProf->OnClntSendSLMG     = OnClntSendSLMG;
 	pProf->OnClntCloseLogChan = OnClntCloseLogChan;
 
 	return SR_RET_OK;

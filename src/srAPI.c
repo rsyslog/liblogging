@@ -53,6 +53,7 @@
 #include "clntprof-3195raw.h"
 #include "clntprof-3195cooked.h"
 #include "srAPI.h"
+#include "syslogmessage.h"
 
 /* ################################################################# *
  * private members                                                   *
@@ -220,7 +221,7 @@ srRetVal srAPIOpenlog(srAPIObj *pThis, char* pszRemotePeer, int iPort)
 		return iRet;
 	}
 
-	if((iRet = sbProfSetClntEventHandlers(pProf, sbPSRCClntOpenLogChan, sbPSRCClntSendMsg, sbPSRCCOnClntCloseLogChan)) != SR_RET_OK)
+	if((iRet = sbProfSetClntEventHandlers(pProf, sbPSRCClntOpenLogChan, sbPSRCClntSendMsg, sbPSRCClntSendSLMG, sbPSRCCOnClntCloseLogChan)) != SR_RET_OK)
 	{
 		sbProfDestroy(pProf);
 		return iRet;
@@ -248,7 +249,7 @@ srRetVal srAPIOpenlog(srAPIObj *pThis, char* pszRemotePeer, int iPort)
 		return iRet;
 	}
 
-	if((iRet = sbProfSetClntEventHandlers(pProf, sbPSSRClntOpenLogChan, sbPSSRClntSendMsg, sbPSSRCOnClntCloseLogChan)) != SR_RET_OK)
+	if((iRet = sbProfSetClntEventHandlers(pProf, sbPSSRClntOpenLogChan, sbPSSRClntSendMsg, sbPSRCClntSendSLMG, sbPSSRCOnClntCloseLogChan)) != SR_RET_OK)
 	{
 		sbProfDestroy(pProf);
 		return iRet;
@@ -276,13 +277,14 @@ srRetVal srAPIOpenlog(srAPIObj *pThis, char* pszRemotePeer, int iPort)
 	}
 
 	/* Ok, we must now call the profile's new channel created handler */
-	iRet = pThis->pChan->pProf->OnClntOpenLogChan(pThis->pChan, NULL);
+	iRet = pThis->pChan->pProf->OnClntOpenLogChan(pThis->pChan);
 	// destroy API object on failur!
 	
 //	sbMesgDestroy(pProfileGreeting);
 
 	return iRet;
 }
+
 
 
 srRetVal srAPISendLogmsg(srAPIObj* pThis, char* szLogmsg)
@@ -297,6 +299,21 @@ srRetVal srAPISendLogmsg(srAPIObj* pThis, char* szLogmsg)
 	assert(pThis->pChan->pProf->OnClntSendLogMsg != NULL);
 
 	return pThis->pChan->pProf->OnClntSendLogMsg(pThis->pChan, szLogmsg);
+}
+
+
+srRetVal srAPISendSLMG(srAPIObj* pThis, srSLMGObj* pSLMG)
+{
+	/* Attention: order of conditions is vitally important! */
+	if((pThis == NULL) || (pThis->OID != OIDsrAPI))
+		return SR_RET_INVALID_HANDLE;
+
+	if((pSLMG == NULL) || (pSLMG->OID != OIDsrSLMG))
+		return SR_RET_INVALID_PARAM;
+
+	assert(pThis->pChan->pProf->OnClntSendSLMG != NULL);
+
+	return pThis->pChan->pProf->OnClntSendSLMG(pThis->pChan, pSLMG);
 }
 
 

@@ -403,7 +403,7 @@ srRetVal sbFramCreateSEQFram(sbFramObj **ppThis, sbChanObj* pChan, SBackno uAckn
 		return SR_RET_OUT_OF_MEMORY;
 	}
 
-	if((pszFramBuf = calloc(1, sizeof(char) * 64)) == NULL)
+	if((pszFramBuf = malloc(sizeof(char) * 64)) == NULL)
 	{	/* 64 is sufficiently large */
 		SRFREEOBJ(*ppThis);
 		return SR_RET_OUT_OF_MEMORY;

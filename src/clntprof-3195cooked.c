@@ -50,27 +50,29 @@
 #include "beepsession.h"
 #include "beepchannel.h"
 #include "beepprofile.h"
-#include "clntprof-3195raw.h"
+#include "clntprof-3195cooked.h"
 #include "namevaluetree.h"
 #include "stringbuf.h"
+#include "syslogmessage.h"
 
 /* ################################################################# *
  * private members                                                   *
  * ################################################################# */
 
 /**
- * Construct a sbPSSRObj.
+ * Construct a sbPSRCObj.
  */
-static srRetVal sbPSRCConstruct(sbPSSRObj** ppThis)
+static srRetVal sbPSRCConstruct(sbPSRCObj** ppThis)
 {
 	assert(ppThis != NULL);
 
-	if((*ppThis = calloc(1, sizeof(sbPSSRObj))) == NULL)
+	if((*ppThis = calloc(1, sizeof(sbPSRCObj))) == NULL)
 		return SR_RET_OUT_OF_MEMORY;
 
-	(*ppThis)->OID = OIDsbPSSR;
-	(*ppThis)->uAnsno = 0;
-	(*ppThis)->uMsgno4raw = 0;
+	(*ppThis)->OID = OIDsbPSRC;
+	(*ppThis)->uNextMsgno = 0;
+	(*ppThis)->pszMyIP = NULL;
+	(*ppThis)->pszMyHostName = NULL;
 
 	return SR_RET_OK;
 }
@@ -81,9 +83,15 @@ static srRetVal sbPSRCConstruct(sbPSSRObj** ppThis)
  * The handler must be called in the ChanClose handler, if instance
  * data was assigned.
  */
-static void sbPSRCDestroy(sbPSSRObj* pThis)
+static void sbPSRCDestroy(sbPSRCObj* pThis)
 {
-	sbPSSRCHECKVALIDOBJECT(pThis);
+	sbPSRCCHECKVALIDOBJECT(pThis);
+
+	if(pThis->pszMyIP != NULL)
+			free(pThis->pszMyIP);
+	if(pThis->pszMyHostName != NULL)
+			free(pThis->pszMyHostName);
+
 	SRFREEOBJ(pThis);
 }
 
@@ -134,35 +142,84 @@ static srRetVal sbPSRCClntWaitOK(sbChanObj* pChan)
  * public members                                                    *
  * ################################################################# */
 
-srRetVal sbPSRCClntSendMsg(sbChanObj* pChan, char* szLogmsg)
+/** 
+ * Handler to send a srSLMGObj to the remote peer. This
+ * is the preferred way to send things - with COOKED, we would
+ * otherwise need to re-parse the message just to obtain the
+ * information that the caller most probably already has...
+ */
+srRetVal sbPSRCClntSendSLMG(sbChanObj* pChan, srSLMGObj *pSLMG)
 {
 	srRetVal iRet;
 	sbMesgObj *pMesg;
-	sbPSSRObj *pThis;
+	sbPSRCObj *pThis;
 	sbStrBObj *pStrBuf;
 	char *pMsg;
 
 	sbChanCHECKVALIDOBJECT(pChan);
-	assert(szLogmsg != NULL);
+	srSLMGCHECKVALIDOBJECT(pSLMG);
 
-	if((pStrBuf = sbStrBConstruct()) == NULL)	return SR_RET_OUT_OF_MEMORY;
+	pThis = pChan->pProfInstance;
+	sbPSRCCHECKVALIDOBJECT(pThis);
+
+	if((pStrBuf = sbStrBConstruct()) == NULL)	{ srSLMGDestroy(pSLMG); return SR_RET_OUT_OF_MEMORY; }
 
 	/* build message */
-	if((iRet = sbStrBAppendStr(pStrBuf, "<entry facility='7' severity='0' hostname='wsrger' deviceFQDN='rger.adiscon' deviceIP='172.19.1.20' timestamp='Sep  8 15:05:00'>")) != SR_RET_OK) {sbStrBDestruct(pStrBuf); return iRet; }
-	if((iRet = sbStrBAppendStr(pStrBuf, sbNVTXMLEscapePCDATA(szLogmsg))) != SR_RET_OK) {sbStrBDestruct(pStrBuf); return iRet; }
+	/* begin & facility */
+	if((iRet = sbStrBAppendStr(pStrBuf, "<entry facility='")) != SR_RET_OK) {sbStrBDestruct(pStrBuf); return iRet; }
+	if((iRet = sbStrBAppendInt(pStrBuf, pSLMG->iFacility)) != SR_RET_OK) {sbStrBDestruct(pStrBuf); return iRet; }
+	if((iRet = sbStrBAppendChar(pStrBuf, '\'')) != SR_RET_OK) {sbStrBDestruct(pStrBuf); return iRet; }
+
+	/* severity */
+	if((iRet = sbStrBAppendStr(pStrBuf, " severity='")) != SR_RET_OK) {sbStrBDestruct(pStrBuf); return iRet; }
+	if((iRet = sbStrBAppendInt(pStrBuf, pSLMG->iSeverity)) != SR_RET_OK) {sbStrBDestruct(pStrBuf); return iRet; }
+	if((iRet = sbStrBAppendChar(pStrBuf, '\'')) != SR_RET_OK) {sbStrBDestruct(pStrBuf); return iRet; }
+
+	/* timestamp */
+	if((iRet = sbStrBAppendStr(pStrBuf, " timestamp='")) != SR_RET_OK) {sbStrBDestruct(pStrBuf); return iRet; }
+	if((iRet = sbStrBAppendStr(pStrBuf, pSLMG->pszTimeStamp)) != SR_RET_OK) {sbStrBDestruct(pStrBuf); return iRet; }
+	if((iRet = sbStrBAppendChar(pStrBuf, '\'')) != SR_RET_OK) {sbStrBDestruct(pStrBuf); return iRet; }
+
+	/* hostname */
+	if((iRet = sbStrBAppendStr(pStrBuf, " hostname='")) != SR_RET_OK) {sbStrBDestruct(pStrBuf); return iRet; }
+	if((iRet = sbStrBAppendStr(pStrBuf, pSLMG->pszHostname)) != SR_RET_OK) {sbStrBDestruct(pStrBuf); return iRet; }
+	if((iRet = sbStrBAppendChar(pStrBuf, '\'')) != SR_RET_OK) {sbStrBDestruct(pStrBuf); return iRet; }
+
+	/* tag (if available) */
+	if(pSLMG->pszTag != NULL)
+	{
+		if((iRet = sbStrBAppendStr(pStrBuf, " tag='")) != SR_RET_OK) {sbStrBDestruct(pStrBuf); return iRet; }
+		if((iRet = sbStrBAppendStr(pStrBuf, pSLMG->pszTag)) != SR_RET_OK) {sbStrBDestruct(pStrBuf); return iRet; }
+		if((iRet = sbStrBAppendChar(pStrBuf, '\'')) != SR_RET_OK) {sbStrBDestruct(pStrBuf); return iRet; }
+	}
+
+	/* deviceFQDN */
+	if((iRet = sbStrBAppendStr(pStrBuf, " deviceFQDN='")) != SR_RET_OK) {sbStrBDestruct(pStrBuf); return iRet; }
+	if((iRet = sbStrBAppendStr(pStrBuf, pSLMG->pszHostname)) != SR_RET_OK) {sbStrBDestruct(pStrBuf); return iRet; }
+	if((iRet = sbStrBAppendChar(pStrBuf, '\'')) != SR_RET_OK) {sbStrBDestruct(pStrBuf); return iRet; }
+
+	/* deviceIP */
+	if((iRet = sbStrBAppendStr(pStrBuf, " deviceIP='")) != SR_RET_OK) {sbStrBDestruct(pStrBuf); return iRet; }
+	if((iRet = sbStrBAppendStr(pStrBuf, pThis->pszMyIP)) != SR_RET_OK) {sbStrBDestruct(pStrBuf); return iRet; }
+	if((iRet = sbStrBAppendChar(pStrBuf, '\'')) != SR_RET_OK) {sbStrBDestruct(pStrBuf); return iRet; }
+
+	/* end of <entry> and data fields */
+	if((iRet = sbStrBAppendChar(pStrBuf, '>')) != SR_RET_OK) {sbStrBDestruct(pStrBuf); return iRet; }
+
+	if((iRet = sbNVTXMLEscapePCDATAintoStrB(pSLMG->pszRawMsg, pStrBuf)) != SR_RET_OK) {sbStrBDestruct(pStrBuf); return iRet; }
 	if((iRet = sbStrBAppendStr(pStrBuf, "</entry>")) != SR_RET_OK) {sbStrBDestruct(pStrBuf); return iRet; }
 	pMsg = sbStrBFinish(pStrBuf);
 
 	/* send message */
-	pThis = pChan->pProfInstance;
-	sbPSSRCHECKVALIDOBJECT(pThis);
-
 	if((pMesg = sbMesgConstruct(NULL, pMsg)) == NULL)
 		return SR_RET_ERR;
+	free(pMsg);
 
 	iRet = sbMesgSendMesg(pMesg, pChan, "MSG", 0);
 	sbMesgDestroy(pMesg);
-	free(pMsg);
+
+	if(iRet != SR_RET_OK)
+		return iRet;
 
 	/* message sent, now let's wait for the reply... */
 	iRet = sbPSRCClntWaitOK(pChan);
@@ -170,14 +227,35 @@ srRetVal sbPSRCClntSendMsg(sbChanObj* pChan, char* szLogmsg)
 	return iRet;
 }
 
-
-srRetVal sbPSRCClntOpenLogChan(sbChanObj *pChan, sbMesgObj *pMesgGreeting)
+srRetVal sbPSRCClntSendMsg(sbChanObj* pChan, char* szLogmsg)
 {
 	srRetVal iRet;
-	sbPSSRObj *pThis;
+	srSLMGObj *pSLMG;
+
+	sbChanCHECKVALIDOBJECT(pChan);
+	assert(szLogmsg != NULL);
+
+	/* OK, if we receive a raw message, we must parse it back so 
+	 * that we have the properties at hand. Probably this mode should
+	 * be removed, but who knows... It is better in any case to use
+	 * the SendSLMG() call...
+	 */
+	if((iRet = srSLMGConstruct(&pSLMG)) != SR_RET_OK)	return iRet;
+	if((iRet = srSLMGSetRawMsg(pSLMG, szLogmsg, FALSE)) != SR_RET_OK) { srSLMGDestroy(pSLMG); return iRet; }
+	if((iRet = srSLMGParseMesg(pSLMG)) != SR_RET_OK) { srSLMGDestroy(pSLMG); return iRet; }
+
+	iRet = sbPSRCClntSendSLMG(pChan, pSLMG);
+	srSLMGDestroy(pSLMG);
+
+	return iRet;
+}
+
+
+srRetVal sbPSRCClntOpenLogChan(sbChanObj *pChan)
+{
+	srRetVal iRet;
+	sbPSRCObj *pThis;
 	sbMesgObj *pMesg;
-	char *pBuf;
-	char *pHostName;
 	char fmtBuf[1024];
 
 	sbChanCHECKVALIDOBJECT(pChan);
@@ -185,27 +263,25 @@ srRetVal sbPSRCClntOpenLogChan(sbChanObj *pChan, sbMesgObj *pMesgGreeting)
 	if((iRet = sbPSRCConstruct(&pThis)) != SR_RET_OK)
 		return iRet;
 
-	if((iRet = sbSockGetIPusedForSending(pChan->pSess->pSock, &pBuf)) != SR_RET_OK)
+	if((iRet = sbSockGetIPusedForSending(pChan->pSess->pSock, &(pThis->pszMyIP))) != SR_RET_OK)
 	{
 		sbPSRCDestroy(pThis);
 		return iRet;
 	}
 
-	if((iRet = sbSock_gethostname(&pHostName)) != SR_RET_OK)
+	if((iRet = sbSock_gethostname(&(pThis->pszMyHostName))) != SR_RET_OK)
 	{
 		sbPSRCDestroy(pThis);
 		return iRet;
 	}
 
-	SNPRINTF(fmtBuf, sizeof(fmtBuf), "<iam fqdn='%s' ip='%s' type='device'/>", pHostName, pBuf);
+	SNPRINTF(fmtBuf, sizeof(fmtBuf), "<iam fqdn='%s' ip='%s' type='device' />", pThis->pszMyHostName, pThis->pszMyIP);
 	if((pMesg = sbMesgConstruct("Content-type: application/beep+xml\r\n",
 		fmtBuf)) == NULL)
 		return SR_RET_ERR;
 
 	iRet = sbMesgSendMesg(pMesg, pChan, "MSG", 0);
 	sbMesgDestroy(pMesg);
-	free(pBuf);
-	free(pHostName);
 
 	/* message sent, now let's wait for the reply... */
 	iRet = sbPSRCClntWaitOK(pChan);
@@ -219,12 +295,12 @@ srRetVal sbPSRCClntOpenLogChan(sbChanObj *pChan, sbMesgObj *pMesgGreeting)
 
 srRetVal sbPSRCCOnClntCloseLogChan(sbChanObj *pChan)
 {
-	sbPSSRObj *pThis;
+	sbPSRCObj *pThis;
 
 	sbChanCHECKVALIDOBJECT(pChan);
 
 	pThis = pChan->pProfInstance;
-	sbPSSRCHECKVALIDOBJECT(pThis);
+	sbPSRCCHECKVALIDOBJECT(pThis);
 
 	/* In this profile, we do not need to do any
 	 * profile-specific shutdown messages. All is

@@ -44,15 +44,17 @@
  */
 #ifndef __LIB3195_CLNTPROF_3195COOKED_H_INCLUDED__
 #define __LIB3195_CLNTPROF_3195COOKED_H_INCLUDED__ 1
-#define sbPSRCCHECKVALIDOBJECT(x) {assert(x != NULL); assert(x->OID == OIDsbPSSR);}
+#define sbPSRCCHECKVALIDOBJECT(x) {assert(x != NULL); assert(x->OID == OIDsbPSRC);}
 
 /**
- * The RAW profile object used by the client profile.
+ * The COOKED profile object used by the client profile.
  */
 struct sbPSRCObject_
 {
 	srObjID OID;					/**< object ID */
 	SBmsgno uNextMsgno;				/**< msgno for next message to be send */
+	char *pszMyIP;					/**< buffered local IP addres (that being used for sending to the remote peer) */
+	char *pszMyHostName;			/**< buffered local host FQDN (that being used for sending to the remote peer) */
 };
 typedef struct sbPSRCObject_ sbPSRCObj;
 
@@ -71,7 +73,7 @@ srRetVal sbPSRCClntSendMsg(sbChanObj* pChan, char* szLogmsg);
  *
  * There is not much to do for RFC 3195/RAW ;)
  */
-srRetVal sbPSRCClntOpenLogChan(sbChanObj *pChan, sbMesgObj *pMesgGreeting);
+srRetVal sbPSRCClntOpenLogChan(sbChanObj *pChan);
 
 /**
  * Handler to be called when a channel is to be closed.

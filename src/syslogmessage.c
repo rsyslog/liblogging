@@ -90,6 +90,7 @@ srRetVal srSLMGConstruct(srSLMGObj **ppThis)
 	(*ppThis)->pszTag = NULL;
 	(*ppThis)->pszMsg = NULL;
 	(*ppThis)->bOwnMsg = TRUE;	/* right now, we own it ;) */
+	(*ppThis)->pszTimeStamp = NULL;
 #	endif
 	return SR_RET_OK;
 }
@@ -129,6 +130,8 @@ void srSLMGDestroy(srSLMGObj *pThis)
 		free(pThis->pszTag);
 	if((pThis->bOwnMsg == TRUE) && (pThis->pszMsg != NULL))
 		free(pThis->pszMsg);
+	if(pThis->pszTimeStamp != NULL)
+		free(pThis->pszTimeStamp);
 #	endif
 
 	SRFREEOBJ(pThis);
@@ -447,17 +450,16 @@ static int srSLMGParseTIMESTAMP3164(srSLMGObj* pThis, unsigned char* pszTS)
  */
 static int srSLMGParseTIMESTAMP(srSLMGObj* pThis, unsigned char** ppszBuf)
 {
-	unsigned char szTSBuf[33];
+	sbStrBObj *pStrBuf;
 	int iLenTS;
 
 	srSLMGCHECKVALIDOBJECT(pThis);
 	assert(ppszBuf != NULL);
 	assert((*ppszBuf >= pThis->pszRawMsg));
 
-	/* first of all, extract timestamp. It may look like 
-	 * this is not a good idea performance-wise, but we
-	 * would run into at least a very complex algorithm
-	 * otherwise. So let's play safe...
+	/* first of all, extract timestamp. The timestamp
+	 * string is also used by other parts of liblogging,
+	 * so it must be stored within the SLMG obj.
 	 *
 	 * A timestamp must be at least 10 characters wide.
 	 * As such, we read at last 15 characters (if the 
@@ -467,13 +469,19 @@ static int srSLMGParseTIMESTAMP(srSLMGObj* pThis, unsigned char** ppszBuf)
 	 * them...
 	 */
 	iLenTS = 0;
+	if((pStrBuf = sbStrBConstruct()) == NULL)	return FALSE;
+	sbStrBSetAllocIncrement(pStrBuf, 33);
 	while((iLenTS < 32) && **ppszBuf)
 	{
 		if((**ppszBuf == ' ') && (iLenTS >= 10))
 			break;
-		szTSBuf[iLenTS++] = **ppszBuf;
+		if(sbStrBAppendChar(pStrBuf, **ppszBuf) != SR_RET_OK)	{ sbStrBDestruct(pStrBuf); return FALSE; }
 		++(*ppszBuf);
+		++iLenTS;
 	}
+	if(pThis->pszTimeStamp != NULL)
+		free(pThis->pszTimeStamp);
+	if((pThis->pszTimeStamp = sbStrBFinish(pStrBuf)) == NULL) return FALSE;
 
 	if(**ppszBuf != ' ')
 		return FALSE;
@@ -483,13 +491,13 @@ static int srSLMGParseTIMESTAMP(srSLMGObj* pThis, unsigned char** ppszBuf)
 	 *
      * we first see if it looks like a TIMESTAMP-3339
 	 */
-	if((iLenTS > 11) && (szTSBuf[10] == 'T'))
+	if((iLenTS > 11) && (pThis->pszTimeStamp[10] == 'T'))
 	{	/* looks like it is TIMESTAMP-3339, so let's try to parse it */
-		return srSLMGParseTIMESTAMP3339(pThis, szTSBuf);
+		return srSLMGParseTIMESTAMP3339(pThis, pThis->pszTimeStamp);
 	}
 	else
 	{	/* looks like TIMESTAMP-3164 */
-		return srSLMGParseTIMESTAMP3164(pThis, szTSBuf);
+		return srSLMGParseTIMESTAMP3164(pThis, pThis->pszTimeStamp);
 	}
 	/*NOTREACHED*/
 }
@@ -955,11 +963,16 @@ srRetVal srSLMGFormatRawMsg(srSLMGObj *pThis, srSLMGFormat iFmtToUse)
 	 * b) the extra space at the end of the TIMESTAMP
 	 * So the TIMESTAMP itself will by 32 bytes at most.
 	 */
+	if(pThis->pszTimeStamp != NULL)
+		free(pThis->pszTimeStamp);
+	if((pThis->pszTimeStamp = calloc(34, sizeof(char))) == NULL)
+		return SR_RET_OUT_OF_MEMORY;
 	if(iFmtToUse == srSLMGFmt_3164WELLFORMED)
 	{
-		SNPRINTF(szBuf, 34, "%s %2d %2.2d:%2.2d:%2.2d ",
-							srSLMGMonthNames[pThis->iTimStampMonth], pThis->iTimStampDay,
-							pThis->iTimStampHour, pThis->iTimStampMinute, pThis->iTimStampSecond);
+		SNPRINTF(pThis->pszTimeStamp,
+			     34, "%s %2d %2.2d:%2.2d:%2.2d ",
+				 srSLMGMonthNames[pThis->iTimStampMonth], pThis->iTimStampDay,
+				 pThis->iTimStampHour, pThis->iTimStampMinute, pThis->iTimStampSecond);
 	}
 	else
 	{ /* SIGN_12! */
@@ -976,19 +989,19 @@ srRetVal srSLMGFormatRawMsg(srSLMGObj *pThis, srSLMGFormat iFmtToUse)
 			SNPRINTF(szFmtStr, sizeof(szFmtStr), "%%04d-%%02d-%%02dT%%02d:%%02d:%%02d.%%0%dd%%c%%02d:%%02d ",
 								pThis->iTimStampSecFracPrecision);
 
-			SNPRINTF(szBuf, 34, szFmtStr,
+			SNPRINTF(pThis->pszTimeStamp, 34, szFmtStr,
 								pThis->iTimStampYear, pThis->iTimStampMonth, pThis->iTimStampDay,
 								pThis->iTimStampHour, pThis->iTimStampMinute, pThis->iTimStampSecond, pThis->iTimStampSecFrac,
 								pThis->cTimStampOffsetMode, pThis->iTimStampOffsetHour, pThis->iTimStampOffsetMinute);
 		}
 		else
-			SNPRINTF(szBuf, 34, "%4.4d-%2.2d-%2.2dT%2.2d:%2.2d:%2.2d%c%2.2d:%2.2d ",
+			SNPRINTF(pThis->pszTimeStamp, 34, "%4.4d-%2.2d-%2.2dT%2.2d:%2.2d:%2.2d%c%2.2d:%2.2d ",
 								pThis->iTimStampYear, pThis->iTimStampMonth, pThis->iTimStampDay,
 								pThis->iTimStampHour, pThis->iTimStampMinute, pThis->iTimStampSecond,
 								pThis->cTimStampOffsetMode, pThis->iTimStampOffsetHour, pThis->iTimStampOffsetMinute);
 	}
 	/* timestamp done, add it... */
-	if((iRet = sbStrBAppendStr(pStr, szBuf)) != SR_RET_OK) { sbStrBDestruct(pStr); return iRet; }
+	if((iRet = sbStrBAppendStr(pStr, pThis->pszTimeStamp)) != SR_RET_OK) { sbStrBDestruct(pStr); return iRet; }
 
 	/* HOSTNAME */
 	if((iRet = sbStrBAppendStr(pStr, pThis->pszHostname)) != SR_RET_OK) { sbStrBDestruct(pStr); return iRet; }

@@ -125,6 +125,7 @@ struct srSLMGObject
 	int iTimStampOffsetMinute;
 	char cTimStampOffsetMode;		/* '+'/'-' */
 	int	bTimStampIncludesTZ;		/**< indicates if the message timestamp included timezone information (TRUE=yes) */
+	char *pszTimeStamp;				/**< the timestamp in string format */
 
 #	endif
 };

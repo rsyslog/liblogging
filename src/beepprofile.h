@@ -45,8 +45,9 @@
 #define sbProfCHECKVALIDOBJECT(x) {assert(x != NULL); assert(x->OID == OIDsbProf);}
 
 struct sbMesgObject;
-struct srAPIObject;
 struct sbNVTRObject;
+struct srAPIObject;
+struct srSLMGObject;
 
 #if FEATURE_LISTENER == 1
 	/** event handlers */
@@ -82,9 +83,11 @@ struct sbProfObject
 #endif
 	/* now come client-side event handlers (always present) */
 	/** method to call if client-side API needs to open a log channel */ 
-	srRetVal (*OnClntOpenLogChan)(struct sbChanObject *pChan, struct sbMesgObject *pMesgGreeting);
-	/** method to call if client-side API needs to send a a log message */ 
+	srRetVal (*OnClntOpenLogChan)(struct sbChanObject *pChan);
+	/** method to call if client-side API needs to send a syslog message */ 
 	srRetVal (*OnClntSendLogMsg)(struct sbChanObject* pChan, char* szLogmsg);
+	/** method to call if client-side API needs to send a srSLMGObj */ 
+	srRetVal (*OnClntSendSLMG)(struct sbChanObject* pChan, struct srSLMGObject *pSLMG);
 	/** method to call if client-side API needs to close a log channel */
 	srRetVal (*OnClntCloseLogChan)(struct sbChanObject* pChan);
 };
@@ -157,7 +160,7 @@ sbProfObj*  sbProfFindProfileMatch(struct sbNVTRObject *pProfListRemote, struct 
 sbProfObj*  sbProfFindProfile(struct sbNVTRObject *pProfList, char* pszSearch);
 
 /**
- * Set the 3 mandatory event handlers for client profiles.
+ * Set the 4 mandatory event handlers for client profiles.
  * As all of them need to be set for the profile to work,
  * we provide a single call to set them all at once.
  *
@@ -166,9 +169,9 @@ sbProfObj*  sbProfFindProfile(struct sbNVTRObject *pProfList, char* pszSearch);
  * if them is allowed to be NULL.
  */
 srRetVal sbProfSetClntEventHandlers(sbProfObj *pProf,
-									srRetVal (*OnClntOpenLogChan)(struct sbChanObject *pChan, struct sbMesgObject *pMesgGreeting),
+									srRetVal (*OnClntOpenLogChan)(struct sbChanObject *pChan),
 									srRetVal (*OnClntSendLogMsg)(struct sbChanObject* pChan, char* szLogmsg),
+									srRetVal (*OnClntSendSLMG)(struct sbChanObject* pChan, struct srSLMGObject *pSLMG),
 									srRetVal (*OnClntCloseLogChan)(struct sbChanObject* pChan));
-
 
 #endif
