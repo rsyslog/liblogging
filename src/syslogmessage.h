@@ -87,6 +87,17 @@ enum srSLMGTimStampType_
 };
 typedef enum srSLMGTimStampType_ srSLMGTimStampType;
 
+enum srSLMGSource_
+{
+	srSLMG_Source_INVALID = 0,		/**< should never be used, value from calloc() */
+	srSLMG_Source_OWNGenerated = 1,
+	srSLMG_Source_BEEPRAW = 2,
+	srSLMG_Source_BEEPCOOKED = 3,
+	srSLMG_Source_UDP = 4,
+	srSLMG_Source_UX_DFLT_DOMSOCK = 5,
+};
+typedef enum srSLMGSource_ srSLMGSource;
+
 /**
  * The syslog message object used by the listener
  * callback and probably (later) other parts of the
@@ -100,6 +111,7 @@ struct srSLMGObject
 	unsigned char *pszRemoteHost;	/**< remote host we received the message from (from socket layer, NOT message) */
 	int bOwnRemoteHostBuf;			/**< TRUE pszRemoteHost owned by us & must be freed on destroy */
 	srSLMGFormat iFormat;			/**< the format this message (most probably) is in */
+	srSLMGSource iSource;			/**< the source this syslog message was received from */
 #	if FEATURE_MSGAPI == 1
 	int iFacility;					/**< the facility of the syslog message */
 	int iSeverity;					/**< the priority of the syslog message */
@@ -176,6 +188,10 @@ srRetVal srSLMGGetFacility(srSLMGObj *pThis, int *piFac);
  *
  * \param ppsz Pointer to Pointer to unsigned char to 
  *             receive the return string.
+ *
+ * \note If the message originated via inter-process communiction on
+ *       the same machine (e.g. UNIX /dev/log), the returned
+ *       pointer is NULL. The caller needs to check for this!
  */
 srRetVal srSLMGGetRemoteHost(srSLMGObj *pThis, char**ppsz);
 

@@ -1,9 +1,14 @@
 /*! \file beeplisten.h
- *  \brief The BEEP Listener Object
+ *  \brief The Listener Object.
  *
  * \author  Rainer Gerhards <rgerhards@adiscon.com>
  * \date    2003-08-13
  *          first version begun.
+ * \date    2003-09-29
+ *          Changed this object so that it is no longer "just" BEEP
+ *          listener but a general listener. As of 2003-09-29, it 
+ *          supports UDP (RFC 3164) in addition to BEEP. Later versions
+ *          will probably support other transports, too.
  *
  * Copyright 2002-2003 
  *     Rainer Gerhards and Adiscon GmbH. All Rights Reserved.
@@ -53,12 +58,30 @@ struct sbLstnObject
 	char* szListenAddr; /**< IP address the server should bind to - NULL means no specific address */
 	unsigned uListenPort; /**< port the server should bind to */
 	int	bRun;			  /**< run indicator for server. If set to FALSE, server will terminate */
+	int bLstnBEEP;		  /**< should we listen to BEEP (RFC3195)? */
+	struct srAPIObject *pAPI;	/**< pointer to our API Object */
+#	if FEATURE_UDP == 1
+	/* now come the selectors for different listeners. Remember, we are no
+	 * longer BEEP only (2003-09-29 RGerhards)
+	 */
+	int bLstnUDP;		/**< should we listen on plain UDP (RFC 3164)? TRUE/FALSE */
+	unsigned uUDPLstnPort;	/**< if listening on UDP, this is the port. 0 means default (services lookup) */
+	struct sbSockObject* pSockUDPListening;	/**< our listening socket for UDP */
+#	endif /* FEATURE_UDP */
+#	if FEATURE_UNIX_DOMAIN_SOCKETS == 1
+	/* now come the selectors for different listeners. Remember, we are no
+	 * longer BEEP only (2003-09-29 RGerhards)
+	 */
+	int bLstnUXDOMSOCK;	/**< should we listen on Unix Domain Sockets? TRUE/FALSE */
+	char *pSockName;	/**< if listening on domain sockets, this is the name of the socket */
+	struct sbSockObject* pSockUXDOMSOCKListening;	/**< our listening socket for UDP */
+#	endif /* FEATURE_UNIX_DOMAIN_SOCKETS */
 };
 typedef struct sbLstnObject sbLstnObj;
 
 
 /**
- * Initialize a BEEP listener. The listener socket is
+ * Initialize a listener. The listener socket is
  * created, but it is not yet set to listen() to incoming
  * calls.
  *
@@ -67,16 +90,18 @@ typedef struct sbLstnObject sbLstnObj;
  *				if an error occured. Consult the return value to learn more
  *              in the later case.
  */
-srRetVal sbLstnInit(sbLstnObj** pThis);
+srRetVal sbLstnInit(sbLstnObj* pThis);
 
 /**
- * THE BEEP listener.
+ * THE listener process. As of 2003-09-29, this no longer is
+ * a pure BEEP listener but THE listener who listens to all
+ * configured transports, e.g. UDP and BEEP.
  * See \ref listeners Listeners for details.
  */
 srRetVal sbLstnRun(sbLstnObj* pThis);
 
 /**
- * Exit a BEEP listener. Will do all cleanup necessary.
+ * Exit the listener. Will do all cleanup necessary.
  */
 srRetVal sbLstnExit(sbLstnObj *pThis);
 
@@ -97,5 +122,17 @@ srRetVal sbLstnExit(sbLstnObj *pThis);
  * Destructor for the beep listener object.
  */
 void sbLstnDestroy(sbLstnObj* pThis);
+
+/**
+ * Construct a sbLstnObj.
+ *
+ * This MUST be the first call a server makes. After the
+ * server has obtained the sbLstnObj, it can set the parameters
+ * and THEN call sbLstnInit().
+ *
+ * \retval pointer to constructed object or NULL, if
+ *         error occurred.
+ */
+sbLstnObj* sbLstnConstruct(void);
 
 #endif

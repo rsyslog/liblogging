@@ -128,12 +128,19 @@ srRetVal sbSockLayerExit(int bExitOSStack)
 
 sbSockObj* sbSockInit(void)
 {
+	return(sbSockInitEx(AF_INET, SOCK_STREAM));
+}
+
+sbSockObj* sbSockInitEx(int iAF, int iSockType)
+{
 	struct sbSockObject *pThis;
+
+	assert((iSockType == SOCK_STREAM) || (iSockType == SOCK_DGRAM));
 
 	pThis = (struct sbSockObject*) calloc(1, sizeof(struct sbSockObject));
 	if(pThis != NULL)
 	{	/* initialize class members */
-		if((pThis->sock = socket(AF_INET, SOCK_STREAM, 0)) == INVALID_SOCKET)
+		if((pThis->sock = socket(iAF, iSockType, 0)) == INVALID_SOCKET)
 		{
 			free(pThis);
 			return(NULL);
@@ -483,4 +490,19 @@ static srRetVal sbSock_getsockname(sbSockObj* pThis, struct sockaddr_in *pName, 
 		return sbSockSetLastSockError(pThis);
 
 	return SR_RET_OK;
+}
+
+/**
+ * Wrapper for recvfrom().
+ */
+static int sbSock_recvfrom(sbSockObj *pThis, char* buf, int len, int flags, struct sockaddr* from, int* fromlen)
+{
+	sbSockCHECKVALIDOBJECT(pThis);
+	assert(pThis->sock != INVALID_SOCKET);
+	assert(buf != NULL);
+	assert(len > 0);
+	assert(from != NULL);
+	assert(fromlen > 0);
+
+	return recvfrom(pThis->sock, buf, len, flags, from, fromlen);
 }

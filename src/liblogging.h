@@ -52,7 +52,7 @@ extern "C" {
  *  is notable change in the API or functionality.
  */
 #define LIBLOGGING_VERSION_MAJOR 0
-#define LIBLOGGING_VERSION_MINOR 5
+#define LIBLOGGING_VERSION_MINOR 6
 #define LIBLOGGING_VERSION_SUBMINOR 0
 
 
@@ -122,6 +122,8 @@ enum srRetVal_				/** return value. All methods return this if not specified oth
 	SR_RET_INVALID_SOCKET = -1003,		/**< invalid socket */
 	SR_RET_CONNECTION_CLOSED = -1004,	/**< the remote peer closed the connection */
 	SR_RET_INVALID_OS_SOCKETS_VERSION = -1005,/**< the operating system socket subsystem version is inappropriate (this error will most probably occur under Win32, only) */
+	SR_RET_CAN_NOT_INIT_SOCKET = -1006,	/**< socket() failed for whatever reason... */
+	SR_RET_UXDOMSOCK_CHMOD_ERR = -1007,	/**< chmod() failed on Unix Domain Socket */
 
 	/* BEEP frame format & other errors */
 	SR_RET_INVALID_HDRCMD = -2001,			/**< invalid HDRCMD (e.g. "MSG", "RPY",...) */
@@ -148,6 +150,7 @@ enum srRetVal_				/** return value. All methods return this if not specified oth
 	SR_RET_INVALID_WAITING_SP_ACKNO = -2022,/**< now the space before the next header */
 	SR_RET_INVALID_WAITING_SP_WINDOW = -2023,/**< now the space before the next header */
 	SR_RET_INAPROPRIATE_HDRCMD = -2024,		/**< the beep header was syntactically correct, but could not be used semantically */
+	SR_RET_OVERSIZED_FRAME = -2025,			/**< the frame's "size" field specifies a size that does not fit into the current windows. Eventually malicous. */
 
 	/* and finally the OK state... */
 	SR_RET_OK = 0			/**< operation successful */
@@ -239,7 +242,39 @@ enum srOPTION
 	 * liblogging. See \ref srOPTION3195Profiles for
 	 * allowed values.
 	 */
-	 srOPTION_3195_ALLOWED_CLIENT_PROFILES = 2
+	 srOPTION_3195_ALLOWED_CLIENT_PROFILES = 2,
+	 /**
+	  * This options tells the lib if a UDP listener should
+	  * be started. Option value must be TRUE or FALSE.
+	  */
+	 srOPTION_LISTEN_UDP = 3,
+	 /**
+	  * Sets the UDP listener port. Is only used if the
+	  * UDP listener is activated.
+	  */
+     srOPTION_UPD_LISTENPORT = 4,
+	 /**
+	  * This option tells the lib if a UNIX domain socket
+	  * listener should be started. Supported values are
+	  * TRUE and FALSE.
+	  */
+     srOPTION_LISTEN_UXDOMSOCK = 5,
+	 /**
+	  * Provides a pointer to the UNIX domain socket that
+	  * should be listened to (if listening is enabled).
+	  */
+     srOPTION_UXDOMSOCK_LISTENAME = 6,
+	 /**
+	  * This option tells the lib if a BEEP
+	  * listener should be started. Supported values are
+	  * TRUE and FALSE.
+	  */
+     srOPTION_LISTEN_BEEP = 7,
+	 /**
+	  * Sets the BEEP listener port. Is only used if the
+	  * UDP listener is activated.
+	  */
+     srOPTION_BEEP_LISTENPORT = 8
 };
 typedef enum srOPTION SRoption;
 

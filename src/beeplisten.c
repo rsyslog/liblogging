@@ -1,11 +1,23 @@
 /*! \file beeplisten.c
- *  \brief Implementation of the BEEP listener Object.
+ *  \brief Implementation of the (BEEP) listener Object.
+ *
+ * Actually, this module implements all the listeners. The initial
+ * release did only care about BEEP, but starting with 0.6.0 additional
+ * listeners are supported. In 0.6.0 at least a standard UDP listener
+ * has been added. Other listeners (eventually not implemented by the
+ * time you read this) are the simple syslog over TCP (aka "SELP") and
+ * the local /var/log "listener" on *nix.
  *
  * Please see \ref architecture.c for more details.
  *
  * \author  Rainer Gerhards <rgerhards@adiscon.com>
  * \date    2003-08-13
  *			File initially created.
+ * \date    2003-09-26
+ *			Changed the logical meaning of this module. It is no longer
+ *          the BEEP listener, only. It is now *the* listener for
+ *          all supported protocols. This allows us to keep all
+ *          listeners on a single thread.
  *
  * Copyright 2002-2003 
  *     Rainer Gerhards and Adiscon GmbH. All Rights Reserved.
@@ -50,11 +62,128 @@
 #include "beeplisten.h"
 #include "namevaluetree.h"
 #include "stringbuf.h"
+#include "syslogmessage.h"
 
 
 /* ################################################################# *
  * private members                                                   *
  * ################################################################# */
+#if FEATURE_UNIX_DOMAIN_SOCKETS == 1
+/**
+ * Process an incoming Unix Domain Socket message.
+ */
+static srRetVal sbLstnRecvUXDOMSOCK(sbLstnObj *pThis)
+{
+	srRetVal iRet;
+	int iLenBuf;	
+	int iLenRcvd;
+	char *pszFromHost;
+	srSLMGObj *pSLMG;
+	char szMsgBuf[BEEPFRAMEMAX];
+
+	sbLstnCHECKVALIDOBJECT(pThis);
+
+	iLenBuf = sizeof(szMsgBuf) / sizeof(char);
+	if((iLenRcvd  = sbSockReceive(pThis->pSockUXDOMSOCKListening, szMsgBuf, iLenBuf)) < 1)
+		return SR_RET_OK /* for now, this seems to be good enough... */;
+
+	/* We got the message - pass it to the "API" layer */
+
+	if((iRet = srSLMGConstruct(&pSLMG)) != SR_RET_OK)
+	{
+		return iRet;
+	}
+
+	pSLMG->iSource = srSLMG_Source_UX_DFLT_DOMSOCK;
+
+	if((iRet = srSLMGSetRawMsg(pSLMG, szMsgBuf, TRUE)) != SR_RET_OK)
+	{
+		srSLMGDestroy(pSLMG);
+		return iRet;
+	}
+
+	if((iRet = sbSock_gethostname((char**) &pszFromHost)) != SR_RET_OK)
+	{
+		srSLMGDestroy(pSLMG);
+		return iRet;
+	}
+
+	if((iRet = srSLMGSetRemoteHostIP(pSLMG, pszFromHost, FALSE)) != SR_RET_OK)
+	{
+		srSLMGDestroy(pSLMG);
+		free(pszFromHost);
+		return iRet;
+	}
+
+	if((iRet = srSLMGParseMesg(pSLMG)) != SR_RET_OK)
+	{
+		srSLMGDestroy(pSLMG);
+		return iRet;
+	}
+	pThis->pAPI->OnSyslogMessageRcvd(pThis->pAPI, pSLMG);
+	srSLMGDestroy(pSLMG);
+
+	return SR_RET_OK;
+}
+#endif  /* FEATURE_UNIX_DOMAIN_SOCKETS */
+
+#if FEATURE_UDP == 1
+/**
+ * Process an incoming UDP message.
+ *
+ * Please note that in UDP, we do not have any profiles. As such, we can
+ * call the API handler immediately (we know what to do in our processing).
+ */
+static srRetVal sbLstnRecvUDP(sbLstnObj *pThis)
+{
+	srRetVal iRet;
+	int iLenBuf;	
+	char *pszFromHost;
+	srSLMGObj *pSLMG;
+	char szMsgBuf[BEEPFRAMEMAX];
+
+	sbLstnCHECKVALIDOBJECT(pThis);
+
+	iLenBuf = sizeof(szMsgBuf) / sizeof(char);
+	if((iRet = sbSockRecvFrom(pThis->pSockUDPListening, szMsgBuf, &iLenBuf,
+		                       &pszFromHost)) != SR_RET_OK)
+		return iRet;
+
+	/* We got the message - pass it to the "API" layer */
+
+	if((iRet = srSLMGConstruct(&pSLMG)) != SR_RET_OK)
+	{
+		return iRet;
+	}
+
+	pSLMG->iSource = srSLMG_Source_UDP;
+
+	if((iRet = srSLMGSetRawMsg(pSLMG, szMsgBuf, TRUE)) != SR_RET_OK)
+	{
+		srSLMGDestroy(pSLMG);
+		return iRet;
+	}
+
+	if((iRet = srSLMGSetRemoteHostIP(pSLMG, pszFromHost, FALSE)) != SR_RET_OK)
+	{
+		srSLMGDestroy(pSLMG);
+		free(pszFromHost);
+		return iRet;
+	}
+	if((iRet = srSLMGParseMesg(pSLMG)) != SR_RET_OK)
+	{
+		srSLMGDestroy(pSLMG);
+		free(pszFromHost);
+		return iRet;
+	}
+	pThis->pAPI->OnSyslogMessageRcvd(pThis->pAPI, pSLMG);
+	srSLMGDestroy(pSLMG);
+
+	free(pszFromHost);
+
+	return SR_RET_OK;
+}
+#endif  /* FEATURE_UDP */
 
 
 /**
@@ -285,6 +414,17 @@ srRetVal sbLstnBuildFrame(sbLstnObj* pThis, sbSessObj* pSess, char c, int *pbAbo
 			pFram->uSize = pFram->uSize * 10 + (c - '0');
 		else
 		{
+			/* We need to guard against oversized frames here.
+			* To do it fully right, we would need to check the
+			* remaining bytes in the window and compare this against
+			* uSize. However, we right now do it somewhat simpler and
+			* just compare against the max window size. Later releases
+			* can than add the more complex checks. This one here is
+			* at least good enough against malicous frames... )
+			*/
+			/** \todo improve! */
+			if(pFram->uSize > BEEPFRAMEMAX)
+				return SR_RET_OVERSIZED_FRAME;
 			pFram->iState = (pFram->idHdr == BEEPHDR_ANS) ? sbFRAMSTATE_WAITING_SP_ANSNO : sbFRAMSTATE_WAITING_HDRCR;
 			return sbLstnBuildFrame(pThis, pSess, c, pbAbort);
 		}
@@ -638,10 +778,34 @@ srRetVal sbLstnServerLoop(sbLstnObj* pThis)
 		/* assemble list of all active sockets & figure out & remove closed ones */
 		sbSockFD_ZERO(&fdsetWR);
 		sbSockFD_ZERO(&fdsetRD);
+
+		/* add BEEP listener (can not be turned off so far) */
 #		ifndef SROS_WIN32
 			iHighestDesc = pThis->pSockListening->sock;
 #		endif
 		sbSockFD_SET(pThis->pSockListening->sock, &fdsetRD);
+
+		/* add UDP listener (if configured) */
+		if(pThis->bLstnUDP == TRUE)
+		{
+#		ifndef SROS_WIN32
+			if(pThis->pSockUDPListening->sock > iHighestDesc) 
+				iHighestDesc = pThis->pSockUDPListening->sock;
+#		endif
+		sbSockFD_SET(pThis->pSockUDPListening->sock, &fdsetRD);
+		}
+	
+		/* UNIX Domain Sockets (if configured) */
+#		if FEATURE_UNIX_DOMAIN_SOCKETS
+		if(pThis->bLstnUXDOMSOCK == TRUE)
+		{
+			if(pThis->pSockUXDOMSOCKListening->sock > iHighestDesc) 
+				iHighestDesc = pThis->pSockUXDOMSOCKListening->sock;
+			sbSockFD_SET(pThis->pSockUXDOMSOCKListening->sock, &fdsetRD);
+		}
+#		endif /* FEATURE_UNIX_DOMAIN_SOCKETS */
+
+		/* add active BEEP sessions */
 		pEntrySess = sbNVTSearchKeySZ(pThis->pRootSessions, NULL, NULL);
 		while(pEntrySess != NULL)
 		{	/* all are added into the read fdset, those with outstanding messages in the
@@ -682,8 +846,31 @@ srRetVal sbLstnServerLoop(sbLstnObj* pThis)
 			iReturnSock = sbSockSelectMulti(&fdsetRD, &fdsetWR, 10, 0, iHighestDesc);
 #		endif
 
+		if(iReturnSock == -1)
+			continue;
 
-		/* First let's see if we have any new connection requests. There
+		/* First let's see if we have any incoming UDP data (if UDP is configured). 
+		 * Please note: the ORDER of conditions is vitally important!
+		 */
+		if((pThis->bLstnUDP == TRUE) && sbSockFD_ISSET(pThis->pSockUDPListening->sock, &fdsetRD))
+		{
+			if((iRet = sbLstnRecvUDP(pThis)) != SR_RET_OK)
+				printf("UDP error %d!\n", iRet);
+		}
+
+		/* now check UNIX Domain Sockets (if configured) */
+#		if FEATURE_UNIX_DOMAIN_SOCKETS
+		if(pThis->bLstnUXDOMSOCK == TRUE)
+		{
+			if(sbSockFD_ISSET(pThis->pSockUXDOMSOCKListening->sock, &fdsetRD))
+			{
+				if((iRet = sbLstnRecvUXDOMSOCK(pThis)) != SR_RET_OK)
+					printf("UX DOM SOCK error %d!\n", iRet);
+			}
+		}
+#		endif /* FEATURE_UNIX_DOMAIN_SOCKETS */
+
+		/* Let's see if we have any new BEEP connection requests. There
 		 * is only very limited space in the connection buffers, so these
 		 * should be served ASAP.
 		 */
@@ -752,16 +939,10 @@ srRetVal sbLstnServerLoop(sbLstnObj* pThis)
 }
 
 
-
 /* ################################################################# *
  * public members                                                    *
  * ################################################################# */
 
-/**
- * Construct a sbLstnObj.
- * \retval pointer to constructed object or NULL, if
- *         error occurred.
- */
 sbLstnObj* sbLstnConstruct(void)
 {
 	sbLstnObj* pThis;
@@ -780,8 +961,25 @@ sbLstnObj* sbLstnConstruct(void)
 	pThis->pSockListening = NULL;
 	pThis->szListenAddr = NULL;
 	pThis->uListenPort = 601; /* IANA default for RFC 3195 */
+	pThis->bLstnBEEP = TRUE;
+	pThis->pAPI = NULL;
 
-	/** \todo get the listen addr & port from config or option! */
+#	if FEATURE_UNIX_DOMAIN_SOCKETS == 1
+	pThis->bLstnUXDOMSOCK = TRUE;
+	pThis->pSockUXDOMSOCKListening = NULL;
+	pThis->pSockName = NULL;
+#	endif
+#	if FEATURE_UDP == 1
+	pThis->bLstnUDP = FALSE;
+	pThis->uUDPLstnPort = 0;
+	pThis->pSockUDPListening = NULL;
+#	endif
+
+	if((pThis->pRootSessions = sbNVTRConstruct()) == NULL)
+	{
+		SRFREEOBJ(pThis);
+		return NULL;
+	}
 
 	return pThis;
 }
@@ -800,28 +998,70 @@ void sbLstnDestroy(sbLstnObj* pThis)
 	if(pThis->pSockListening != NULL)
 		sbSockExit(pThis->pSockListening);
 
+#	if FEATURE_UDP == 1
+	if(pThis->pSockUDPListening != NULL)
+		sbSockExit(pThis->pSockUDPListening);
+#	endif
+
+#	if FEATURE_UNIX_DOMAIN_SOCKETS == 1
+	if(pThis->pSockUXDOMSOCKListening != NULL)
+		sbSockExit(pThis->pSockUXDOMSOCKListening);
+#	endif
+
 	SRFREEOBJ(pThis);
 }
 
 
-srRetVal sbLstnInit(sbLstnObj** ppThis)
+srRetVal sbLstnInit(sbLstnObj* pThis)
 {
 	srRetVal iRet;
 
-	if((*ppThis = sbLstnConstruct()) == NULL)
-		return SR_RET_ERR;
+	sbLstnCHECKVALIDOBJECT(pThis);
 
-	if(((*ppThis)->pRootSessions = sbNVTRConstruct()) == NULL)
+	/* Init BEEP */
+	if(pThis->bLstnBEEP == TRUE)
 	{
-		sbLstnDestroy(*ppThis);
-		return SR_RET_OUT_OF_MEMORY;
+		if((pThis->pSockListening = sbSockInitListenSock(&iRet, SOCK_STREAM, pThis->szListenAddr, pThis->uListenPort)) == NULL)
+		{	
+			sbLstnDestroy(pThis);
+			return iRet; 
+		}
 	}
 
-	if(((*ppThis)->pSockListening = sbSockInitListenSock(&iRet, (*ppThis)->szListenAddr, (*ppThis)->uListenPort)) == NULL)
-	{	
-		sbLstnDestroy(*ppThis);
-		return iRet; 
+	/* Init UDP */
+#	if FEATURE_UDP == 1
+	if(pThis->bLstnUDP == TRUE)
+	{
+		if(pThis->uUDPLstnPort == 0)
+			/* if the port is not set, we use the IANA assigned port. OK, we
+			 * could also do a services lookup, but as of now we prefer to have
+			 * the caller provide us correct information. But this may be
+			 * reconsidered later. 2003-10-02 RGerhards
+			 */
+			pThis->uUDPLstnPort = 514; 
+		printf("port: %d\n", pThis->uUDPLstnPort);
+		if((pThis->pSockUDPListening = sbSockInitListenSock(&iRet, SOCK_DGRAM, pThis->szListenAddr, pThis->uUDPLstnPort)) == NULL)
+		{	
+			sbLstnDestroy(pThis);
+			return iRet; 
+		}
 	}
+#	endif /* FEATURE_UDP */
+
+#	if FEATURE_UNIX_DOMAIN_SOCKETS == 1
+	/* Unix Domain Sockets */
+	if(pThis->bLstnUXDOMSOCK == TRUE)
+	{
+		char *pActualSockName;
+		pActualSockName = (pThis->pSockName == NULL) ? "/dev/log" : pThis->pSockName;
+		printf("listeing to %s (config was %s)\n", pActualSockName, pThis->pSockName);
+		if((iRet = sbSock_InitUXDOMSOCK(&(pThis->pSockUXDOMSOCKListening), pActualSockName, /*SOCK_DGRAM*/ SOCK_STREAM)) != SR_RET_OK)
+		{	
+			sbLstnDestroy(pThis);
+			return iRet;
+		}
+	}
+#	endif  /* FEATURE_UNIX_DOMAIN_SOCKETS */
 
 	return(SR_RET_OK);
 }
@@ -835,25 +1075,78 @@ srRetVal sbLstnRun(sbLstnObj* pThis)
 
 	pThis->bRun = TRUE;
 	/* start listening */
-	if((iRet = sbSockListen(pThis->pSockListening) != SR_RET_OK))
-		return iRet;
 
-	if((iRet = sbSockSetNonblocking(pThis->pSockListening) != SR_RET_OK))
+	/* BEEP */
+	if(pThis->bLstnBEEP == TRUE)
 	{
-		sbSockExit(pThis->pSockListening); /* best we can do */
-		return iRet;
+		if((iRet = sbSockListen(pThis->pSockListening) != SR_RET_OK))
+			return iRet;
+
+		if((iRet = sbSockSetNonblocking(pThis->pSockListening) != SR_RET_OK))
+		{
+			sbSockExit(pThis->pSockListening); /* best we can do */
+			return iRet;
+		}
 	}
 
+#	if FEATURE_UDP == 1
+	/* UDP 
+	 * In this case, we just need to make it asynchronous
+	 */
+	if(pThis->bLstnUDP == TRUE)
+		if((iRet = sbSockSetNonblocking(pThis->pSockUDPListening) != SR_RET_OK))
+		{
+			sbSockExit(pThis->pSockUDPListening); /* best we can do */
+			return iRet;
+		}
+#	endif
 
+#	if FEATURE_UNIX_DOMAIN_SOCKETS == 1
+	/* Unix Domain Sockets */
+	if(pThis->bLstnUXDOMSOCK == TRUE)
+		if((iRet = sbSockSetNonblocking(pThis->pSockUXDOMSOCKListening) != SR_RET_OK))
+		{
+			sbSockExit(pThis->pSockUXDOMSOCKListening); /* best we can do */
+			return iRet;
+		}
+#	endif  /* FEATURE_UNIX_DOMAIN_SOCKETS */
+	
+	/* done init - now run the server */
 	if((iRet = sbLstnServerLoop(pThis)) != SR_RET_OK)
 	{
 		sbSockExit(pThis->pSockListening); /* best we can do */
 		return iRet;
 	}
 
-	/* shutdown listening socket */
-	iRet = sbSockExit(pThis->pSockListening);
-	pThis->pSockListening = NULL;
+	/* shutdown listening sockets */
+	/** \todo think of a smart way to handle iRet down here...  For
+	 ** now, we just make sure BEEP is closed last, as this has the
+	 ** highest potential for errors.
+	 **/
+	#	if FEATURE_UDP == 1
+	/* UDP */
+	if(pThis->bLstnUDP == TRUE)
+	{
+		iRet = sbSockExit(pThis->pSockUDPListening);
+		pThis->pSockUDPListening = NULL;
+	}
+#	endif
+
+#	if FEATURE_UNIX_DOMAIN_SOCKETS == 1
+	/* Unix Domain Sockets */
+	if(pThis->bLstnUXDOMSOCK == TRUE)
+	{
+		iRet = sbSockExit(pThis->pSockUXDOMSOCKListening);
+		pThis->pSockUXDOMSOCKListening = NULL;
+	}
+#	endif  /* FEATURE_UNIX_DOMAIN_SOCKETS */
+	
+	/* BEEP */
+	if(pThis->bLstnBEEP == TRUE)
+	{
+		iRet = sbSockExit(pThis->pSockListening);
+		pThis->pSockListening = NULL;
+	}
 
 	return iRet;
 }

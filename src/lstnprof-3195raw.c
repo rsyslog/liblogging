@@ -8,6 +8,10 @@
  * \date    2003-08-22
  *          coding begun.
  *
+ * \date    2003-09-16
+ *          Added a check so that failures sending SEQs now do not
+ *          go undetected.
+ *
  * Copyright 2002-2003 
  *     Rainer Gerhards and Adiscon GmbH. All Rights Reserved.
  * 
@@ -133,6 +137,8 @@ static srRetVal psrrOnMesgRecvCallAPI(sbProfObj *pThis, int* pbAbort, sbSessObj*
 			return iRet;
 		}
 
+		pSLMG->iSource = srSLMG_Source_BEEPRAW;
+
 		if((iRet = srSLMGSetRawMsg(pSLMG, pszMsg, FALSE)) != SR_RET_OK)
 		{
 			srSLMGDestroy(pSLMG);
@@ -191,8 +197,13 @@ srRetVal psrrOnMesgRecv(sbProfObj *pThis, int* pbAbort, sbSessObj* pSess, sbChan
 			if((iRet = psrrOnMesgRecvCallAPI(pThis, pbAbort, pSess, pMesg)) != SR_RET_OK)
 				return iRet;
 		}
-		/* quick & dirty to get it this week done - send SEQ ;) */
-		sbChanSendSEQ(pChan, pMesg->uNxtSeqno, 0);
+		/* quick & dirty to get it this week done - send SEQ ;) 
+		 * 2003-09-16/RGerhards: actually not as quick and dirty as I initially
+		 * thought. I think there is a chance this will stay for quite some while.
+		 * Let's see how it evolves...
+		 */
+		if((iRet = sbChanSendSEQ(pChan, pMesg->uNxtSeqno, 0)) != SR_RET_OK)
+			return iRet;
 		break;
 	case BEEPHDR_NUL:
 		sbChanSetAwaitingClose(pChan);

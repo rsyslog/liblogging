@@ -133,7 +133,9 @@ srRetVal sbSockLayerInit(int bInitOSStack);
  */
 srRetVal sbSockLayerExit(int bExitOSStack);
 
-sbSockObj* sbSockInit(void);	/**< Constructor. \retval Returns a pointer to the new instance or NULL, if it could not be created.  */
+sbSockObj* sbSockInit(void);	/**< Constructor for STREAM sockets, only \retval Returns a pointer to the new instance or NULL, if it could not be created.  */
+sbSockObj* sbSockInitEx(int af, int iSockType); /**< Alternate Constructur. Socket TYPE (STREAM/DGRAM) can be specified */
+
 srRetVal sbSockExit(sbSockObj*);	/**< Destructor */
 int sbSockGetLastSockError(sbSockObj*);	/**< get last error code. \retval last error code (OS specific) */
 
@@ -258,6 +260,8 @@ srRetVal sbSockListen(sbSockObj*pThis);
  * \param iRet [out] Pointer to a variable holding the return
  *                   code of this operation. Has the error
  *                   code if initialisation failed.
+ * \param iType sockets type to be used. Must be either
+ *              SOCK_STREAM or SOCK_DGRAM.
  * \param szBindToAdresse string with IP address to which the
  *		  socket should be bound. If NULL, do not bind to any
  *	      specific address.
@@ -269,7 +273,7 @@ srRetVal sbSockListen(sbSockObj*pThis);
  *         examine the socket error code to learn the error
  *         cause.
  */
-sbSockObj* 	sbSockInitListenSock(srRetVal *iRet, char *szBindToAddress, unsigned uBindToPort);
+sbSockObj* 	sbSockInitListenSock(srRetVal *iRet, int iType, char *szBindToAddress, unsigned uBindToPort);
 
 /**
  * This method accepts an incoming connection and creates
@@ -319,6 +323,19 @@ srRetVal sbSock_gethostname(char **psz);
  *             is done. The provided pointer must not be NULL.
  */
 srRetVal sbSockGetIPusedForSending(sbSockObj* pThis, char**ppsz);
+
+
+/**
+ * Enhanced recvfrom() clone. Will receive an C sz String. That is, any
+ * \0 received as part of the string will be replaced by ABNF SP (' ').
+ *
+ * \param pRecvBuf Pointer to buffer that will receive the incoming data.
+ * \param piBufLen On entry, the size of the buffer pointed to by pRecvBuf.
+ *                 On exit, the number of bytes received
+ * \param ppFrom   Pointer to a char pointer that will receive a string with the
+ *                 senders' IP address. This buffer MUST be free()ed by the caller!
+ */
+srRetVal sbSockRecvFrom(sbSockObj *pThis, char* pRecvBuf, int *piBufLen, char** ppFrom);
 
 
 #ifdef SROS_WIN32

@@ -30,8 +30,26 @@
  * Continue to read only if you would like to learn the inner
  * workings or port the lib to a different environment.
  *
- * So far, this library compiles under Win32 with Microsoft
- * Visual C++, only.
+ * This library compiles under a variety of platforms. It is
+ * originally developed and maintened under Win32. It is frequently
+ * ported and tested on Red Hat Linux. These are the platforms (in this
+ * order) we have the most confidience in the library on. Others may
+ * (though unlikely) show unexpected behaviour.
+ *
+ * This documentation file here is NOT up to date. However, it will
+ * provide you a good overview of the overall design and many specifics.
+ * To get the totally right details, please see the respective modules'
+ * documentation. Please note that the SEQ handling described below
+ * for the listener part is NOT YET implemented - but it is still on
+ * the list. As such, the server API should be considered unstable.
+ * If you base a server on liblogging, please be prepared to update your
+ * server to make it work with future versions of liblogging. Of course
+ * we try to keep the impact as low as possible, but that's not 
+ * a guarantee!
+ *
+ * The client side API is stable and changes should not be necessary
+ * for future releases (except, of course, you would like to use
+ * new features).
  *
  * \section designGoals Design Goals
  * The overall mission of liblogging is to provide a small, easy to

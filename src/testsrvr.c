@@ -82,7 +82,8 @@ void OnReceive(srAPIObj* pAPI, srSLMGObj* pSLMG)
 		pszHost = szNotWellformed;
 	srSLMGGetMSG(pSLMG, &pszMSG);
 
-	printf("Msg from %s, host %s, facility %d, priority %d:\n%s\nRAW:%s\n\n", pszRemoteHost, pszHost, iFacil, iPrio, pszMSG, pszRawMsg);
+	printf("Msg from %s (via %d), host %s, facility %d, priority %d:\n%s\nRAW:%s\n\n", pszRemoteHost, pSLMG->iSource,
+	       pszHost, iFacil, iPrio, pszMSG, pszRawMsg);
 }
 
 
@@ -116,6 +117,18 @@ int main(int argc, char* argv[])
 	{
 		printf("Error initializing lib!\n");
 		exit(1);
+	}
+
+	/* We now set the options so that the server receives all we desire... */
+	if((iRet = srAPISetOption(pAPI, srOPTION_LISTEN_UDP, TRUE)) != SR_RET_OK)
+	{
+		printf("Error %d: can't set UDP listener option to true!!\n", iRet);
+		exit(2);
+	}
+	if((iRet = srAPISetOption(pAPI, srOPTION_LISTEN_UXDOMSOCK, TRUE)) != SR_RET_OK)
+	{
+		printf("Error %d: can't set UDP listener option to true!!\n", iRet);
+		exit(2);
 	}
 
 	if((iRet = srAPISetupListener(pAPI, OnReceive)) != SR_RET_OK)

@@ -8,6 +8,9 @@
  * \author  Rainer Gerhards <rgerhards@adiscon.com>
  * \date    2003-08-04
  *          0.1 version created.
+ * \date    2003-10-02
+ *          Added a number of library options so that the different
+ *          listeners can be flexibly configured.
  *
  * Copyright 2002-2003 
  *     Rainer Gerhards and Adiscon GmbH. All Rights Reserved.
@@ -64,8 +67,14 @@ struct srAPIObject
 	/** \todo create the methods for pUsr */
 	srOPTION3195Profiles iUse3195Profiles; /**< specifies which profiles to use for 3195 */
 #	if FEATURE_LISTENER == 1
+	int bListenBEEP;			/**< TRUE/FALSE - listen to udp? */
+	int iBEEPListenPort;		/**< port to use when listening on BEEP */
 	void (*OnSyslogMessageRcvd)(struct srAPIObject* pAPI, struct srSLMGObject *pSyslogMesg);
 	struct sbLstnObject *pLstn;	/**< pointer to associated listener object */
+	int bListenUDP;				/**< TRUE/FALSE - listen to udp? */
+	int iUDPListenPort;			/**< port to use when listening on UDP */
+	int bListenUXDOMSOCK;		/**< TRUE/FALSE - listen to unix domain socket? */
+	char *szNameUXDOMSOCK;		/**< pointer to c-string with socket name */
 #	endif
 };
 typedef struct srAPIObject srAPIObj;
@@ -190,6 +199,8 @@ srRetVal srAPICloseLog(srAPIObj *pThis);
  *        respective option.
  */
 srRetVal srAPISetOption(srAPIObj* pThis, SRoption iOpt, int iOptVal);
+/* And the same method for string options... */
+srRetVal srAPISetStringOption(srAPIObj* pThis, SRoption iOpt, char *pszOptVal);
 
 /**
  * Run the listener process. Control is only returned if

@@ -47,5 +47,5 @@ clean:
 	$(RM) core
 
 # Special dependencies.
-socket.o: sockets.c socketsUnix.c sockets.h
+sockets.o: sockets.c socketsUnix.c sockets.h
 oscalls.o: oscalls.c oscallsUnix.c oscalls.h

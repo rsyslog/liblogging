@@ -134,6 +134,12 @@ srAPIObj* srAPIInitLib(void)
 #	if FEATURE_LISTENER == 1
 	pThis->OnSyslogMessageRcvd = NULL;
 	pThis->pLstn = NULL;
+	pThis->bListenBEEP = TRUE;
+	pThis->iBEEPListenPort = 0;
+	pThis->bListenUDP  = FALSE;
+	pThis->iUDPListenPort = 0;
+	pThis->bListenUXDOMSOCK = FALSE;
+	pThis->szNameUXDOMSOCK = NULL;
 #	endif
 	sbSockLayerInit(srAPI_bCallOSSocketInitializer);
 
@@ -162,6 +168,63 @@ srRetVal srAPISetOption(srAPIObj* pThis, SRoption iOpt, int iOptVal)
 		if(iOptVal != USE_3195_PROFILE_ANY && iOptVal != USE_3195_PROFILE_RAW_ONLY  && iOptVal != USE_3195_PROFILE_COOKED_ONLY)
 			return SR_RET_INVALID_OPTVAL;
 		pThis->iUse3195Profiles = iOptVal;
+		break;
+	case srOPTION_LISTEN_UDP:
+		if((pThis == NULL) || (pThis->OID != OIDsrAPI))
+			return SR_RET_INVALID_HANDLE;
+		if(iOptVal != TRUE && iOptVal != FALSE)
+			return SR_RET_INVALID_OPTVAL;
+		pThis->bListenUDP = iOptVal;
+		break;
+	case srOPTION_UPD_LISTENPORT:
+		if((pThis == NULL) || (pThis->OID != OIDsrAPI))
+			return SR_RET_INVALID_HANDLE;
+		if(iOptVal < 0 || iOptVal > 65535)
+			return SR_RET_INVALID_OPTVAL;
+		pThis->iUDPListenPort = iOptVal;
+		break;
+	case srOPTION_LISTEN_UXDOMSOCK:
+		if((pThis == NULL) || (pThis->OID != OIDsrAPI))
+			return SR_RET_INVALID_HANDLE;
+		if(iOptVal != TRUE && iOptVal != FALSE)
+			return SR_RET_INVALID_OPTVAL;
+		pThis->bListenUXDOMSOCK = iOptVal;
+		break;
+	case srOPTION_LISTEN_BEEP:
+		if((pThis == NULL) || (pThis->OID != OIDsrAPI))
+			return SR_RET_INVALID_HANDLE;
+		if(iOptVal != TRUE && iOptVal != FALSE)
+			return SR_RET_INVALID_OPTVAL;
+		pThis->iBEEPListenPort = iOptVal;
+		break;
+	case srOPTION_BEEP_LISTENPORT:
+		if((pThis == NULL) || (pThis->OID != OIDsrAPI))
+			return SR_RET_INVALID_HANDLE;
+		if(iOptVal < 0 || iOptVal > 65535)
+			return SR_RET_INVALID_OPTVAL;
+		pThis->iBEEPListenPort = iOptVal;
+		break;
+	default:
+		return SR_RET_INVALID_LIB_OPTION;
+	}
+
+	return SR_RET_OK;
+}
+
+
+srRetVal srAPISetStringOption(srAPIObj* pThis, SRoption iOpt, char *pszOptVal)
+{
+	switch(iOpt)
+	{
+	/* This must be done for all options, that require a pAPI
+		if((pThis == NULL) || (pThis->OID != OIDsrAPI))
+			return SR_RET_INVALID_HANDLE;
+    */
+	case srOPTION_UXDOMSOCK_LISTENAME:
+		if((pThis == NULL) || (pThis->OID != OIDsrAPI))
+			return SR_RET_INVALID_HANDLE;
+		if((pThis->szNameUXDOMSOCK = sbNVTEUtilStrDup(pszOptVal)) == NULL)
+			return SR_RET_OUT_OF_MEMORY;
 		break;
 	default:
 		return SR_RET_INVALID_LIB_OPTION;

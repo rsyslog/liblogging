@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding = "Windows-1252"?>
+<?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="7.00"
+	Version="7.10"
 	Name="liblogging"
 	ProjectGUID="{FEF17E17-E510-448A-8E4C-E9DC58DFED85}"
 	Keyword="Win32Proj">
@@ -49,6 +49,12 @@
 				Name="VCResourceCompilerTool"/>
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
@@ -86,8 +92,16 @@
 				Name="VCResourceCompilerTool"/>
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 	</Configurations>
+	<References>
+	</References>
 	<Files>
 		<Filter
 			Name="Source Files"
@@ -286,10 +300,10 @@
 			RelativePath="..\..\AUTHORS">
 		</File>
 		<File
-			RelativePath="..\..\COPYING">
+			RelativePath="..\..\ChangeLog">
 		</File>
 		<File
-			RelativePath="..\..\ChangeLog">
+			RelativePath="..\..\COPYING">
 		</File>
 		<File
 			RelativePath="..\..\README">

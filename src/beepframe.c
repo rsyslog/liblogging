@@ -135,6 +135,18 @@ srRetVal sbFramActualRecvFramCommonHdr(sbFramObj* pThis,sbChanObj *pChan)
 	if(sbSockGetRcvChar(pChan->pSock) != ' ')
 		return SR_RET_ERR;
 	pThis->uSize = sbFramRecvUnsigned(pChan->pSock);
+
+	/* We need to guard against oversized frames here.
+	 * To do it fully right, we would need to check the
+	 * remaining bytes in the window and compare this against
+	 * uSize. However, we right now do it somewhat simpler and
+	 * just compare against the max window size. Later releases
+	 * can than add the more complex checks. This one here is
+	 * at least good enough against malicous frames... )
+	 */
+	/** \todo improve! */
+	if(pThis->uSize > BEEPFRAMEMAX)
+		return SR_RET_OVERSIZED_FRAME;
 	
 	return SR_RET_OK;
 }

@@ -225,11 +225,11 @@ srRetVal sbSockWaitReceiveData(struct sbSockObject* pThis)
 	return(SR_RET_OK);
 }
 
-sbSockObj* 	sbSockInitListenSock(srRetVal *iRet, char *szBindToAddress, unsigned uBindToPort)
+sbSockObj* 	sbSockInitListenSock(srRetVal *iRet, int iType, char *szBindToAddress, unsigned uBindToPort)
 {
 	sbSockObj* pThis;
 
-	if((pThis = sbSockInit()) == NULL)
+	if((pThis = sbSockInitEx(AF_INET, iType)) == NULL)
 	{
 		*iRet = SR_RET_ERR;
 		return NULL;
@@ -322,6 +322,62 @@ srRetVal sbSockGetIPusedForSending(sbSockObj* pThis, char**ppsz)
 	if((*ppsz = (char*) malloc(iLenBuf * sizeof(char))) == NULL)
 		return SR_RET_OUT_OF_MEMORY;
 	memcpy(*ppsz, pBufRTL, iLenBuf);
+
+	return SR_RET_OK;
+}
+
+/**
+ * Enhanced recvfrom() clone. Will receive an C sz String. That is, any
+ * \0 received as part of the string will be replaced by ABNF SP (' ').
+ *
+ * \param pRecvBuf Pointer to buffer that will receive the incoming data.
+ * \param piBufLen On entry, the size of the buffer pointed to by pRecvBuf.
+ *                 On exit, the number of bytes received
+ * \param ppFrom   Pointer to a char pointer that will receive a string with the
+ *                 senders' IP address. This buffer MUST be free()ed by the caller!
+ */
+srRetVal sbSockRecvFrom(sbSockObj *pThis, char* pRecvBuf, int *piBufLen, char **ppFrom)
+{
+	srRetVal iRet;
+	struct sockaddr_in sa;
+	int iLenSA;
+	int iLenStr;
+	char *pBufRTL;
+
+	sbSockCHECKVALIDOBJECT(pThis);
+	assert(pThis->sock != INVALID_SOCKET);
+	assert(pRecvBuf != NULL);
+	assert(piBufLen != NULL);
+	assert(*piBufLen > 0);
+
+	iLenSA = sizeof(sa);
+	*piBufLen = sbSock_recvfrom(pThis, pRecvBuf, (*piBufLen) - 1, 0, (struct sockaddr*) &sa, &iLenSA);
+
+	if((iRet = sbSock_inet_ntoa(&sa, &pBufRTL)) != SR_RET_OK)
+		return iRet;
+	
+	/* we must now copy the returned buffer, as it is owned by the run time library (see man) */
+	pThis->iRemHostIPBufLen = (int) strlen(pBufRTL) + 1;
+	if((*ppFrom = (char*) malloc(pThis->iRemHostIPBufLen * sizeof(char))) == NULL)
+		return SR_RET_OUT_OF_MEMORY;
+	memcpy(*ppFrom, pBufRTL, pThis->iRemHostIPBufLen);
+
+	/** \todo handle the connection closed case (*piBuflen == 0) */
+	if(*piBufLen >= 0)
+		*(pRecvBuf + *piBufLen) = '\0';
+
+	if(*piBufLen < 0)
+		return SR_RET_ERR;
+
+	/* now guard against \0 bytes */
+	iLenStr = *piBufLen;
+	while(iLenStr > 0)
+	{
+		if(*pRecvBuf == '\0')
+			*pRecvBuf = ' ';
+		++pRecvBuf;
+		--iLenStr;
+	}
 
 	return SR_RET_OK;
 }

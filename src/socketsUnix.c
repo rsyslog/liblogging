@@ -2,7 +2,10 @@
  * \brief Socket layer/driver for Unix.
  *
  * This is the low-level socket layer for Unix. This
- * file is included from \ref sockets.c.
+ * file is included from \ref sockets.c. Please note
+ * that this file implements Unix Domain Sockets if that
+ * feature is enabled. This is not done in sockets.c, as this
+ * obviously is an Unix-only thing.
  *
  * \author  Rainer Gerhards <rgerhards@adiscon.com>
  * \author  Devin Kowatch <devink@sdsc.edu>
@@ -11,13 +14,16 @@
  *          rgerhards: inital version created
  *
  * \date    2003-08-04
- *          devink: initial UNIX port by 
+ *          devink: initial UNIX port 
  *
  * \date	2003-08-05
  *          rgerhards: Changed to be a lower layer to the generic sockets.c.
  * 
  * \date	2003-08-05
  *          devink: applied changes to compile under Solaris. AIX also works well.
+ *
+ * \date	2003-09-29
+ *          rgerhards: upgraded this module to support Unix Domain Sockets.
  *
  * Copyright 2002-2003 
  *     Rainer Gerhards and Adiscon GmbH. All Rights Reserved.
@@ -56,6 +62,9 @@
 #include <sys/types.h>
 #include <sys/time.h>
 #include <sys/socket.h>
+#if FEATURE_UNIX_DOMAIN_SOCKETS
+#	include <sys/un.h>
+#endif
 #include <sys/select.h>
 #include <unistd.h>
 #include <netinet/in.h>
@@ -83,14 +92,23 @@ srRetVal sbSockLayerExit(int bExitOSStack)
 	return SR_RET_OK;
 }
 
-struct sbSockObject* sbSockInit(void)
+
+sbSockObj* sbSockInit(void)
+{
+	return(sbSockInitEx(AF_INET, SOCK_STREAM));
+}
+
+
+sbSockObj* sbSockInitEx(int iAF, int iSockType)
 {
 	struct sbSockObject *pThis;
+
+	assert((iSockType == SOCK_STREAM) || (iSockType == SOCK_DGRAM));
 
 	pThis = (struct sbSockObject*) calloc(1, sizeof(struct sbSockObject));
 	if(pThis != NULL)
 	{	/* initialize class members */
-		if((pThis->sock = socket(AF_INET, SOCK_STREAM, 0)) < 0)
+		if((pThis->sock = socket(iAF, iSockType, 0)) == INVALID_SOCKET)
 		{
 			free(pThis);
 			return(NULL);
@@ -178,7 +196,6 @@ int sbSockReceive(struct sbSockObject* pThis, char * pszBuf, int iLen)
 
 	/* iLen - 1 to leave room for the terminating \0 character */
 	iBytesRcvd = recv(pThis->sock, pszBuf, iLen - 1, 0);
-
 	if(iBytesRcvd < 0)
 	{
 		sbSockSetSockErrState(pThis);
@@ -234,6 +251,7 @@ srRetVal sbSockConnectoToHost(sbSockObj* pThis, char* pszHost, int iPort)
 	}
 
 	/* Create target address */
+    memset(&remoteaddr, 0, sizeof(remoteaddr));
 	remoteaddr.sin_family = AF_INET;
 	remoteaddr.sin_port = htons(iPort);
 	
@@ -331,6 +349,7 @@ srRetVal sbSockBind(sbSockObj* pThis, char* pszHost, int iPort)
 	assert(pszHost == NULL);	/** sorry, other modes currently not supported \todo implement! */
 
 	/* Bind socket to any port on local machine */
+    memset(&srv_addr, 0, sizeof(srv_addr));
 	srv_addr.sin_family = AF_INET;
 	srv_addr.sin_addr.s_addr = INADDR_ANY;
 	srv_addr.sin_port = htons(iPort);
@@ -415,3 +434,56 @@ static srRetVal sbSock_getsockname(sbSockObj* pThis, struct sockaddr_in *pName, 
 
 	return SR_RET_OK;
 }
+
+/**
+ * Wrapper for recvfrom().
+ */
+static int sbSock_recvfrom(sbSockObj *pThis, char* buf, int len, int flags, struct sockaddr* from, int* fromlen)
+{
+	sbSockCHECKVALIDOBJECT(pThis);
+	assert(pThis->sock != INVALID_SOCKET);
+	assert(buf != NULL);
+	assert(len > 0);
+	assert(from != NULL);
+	assert(fromlen > 0);
+
+	return recvfrom(pThis->sock, buf, len, flags, from, fromlen);
+}
+
+#if FEATURE_UNIX_DOMAIN_SOCKETS == 1
+/**
+ *
+ */
+srRetVal sbSock_InitUXDOMSOCK(sbSockObj **ppThis, char *pszSockName, int iSockType)
+{
+	srRetVal iRet;
+	struct sockaddr_un sa;
+
+	assert(ppThis != NULL);
+	assert(pszSockName != NULL);
+
+	if(*pszSockName == '\0')
+		return SR_RET_INVALID_PARAM;
+
+	if((*ppThis = sbSockInitEx(AF_UNIX, SOCK_DGRAM)) == NULL)
+		return SR_RET_CAN_NOT_INIT_SOCKET;
+
+	/* socket allocated, now use it */
+	memset(&sa, 0, sizeof(sa));
+	sa.sun_family = AF_UNIX;
+	strncpy(sa.sun_path, pszSockName, sizeof(sa.sun_path) - 1);
+	sa.sun_path[sizeof(sa.sun_path) - 1] = '\0'; /* ensure no overrun */
+
+	unlink(sa.sun_path); /* don't use previous instance (if there) */
+
+	if(bind((*ppThis)->sock, (struct sockaddr *) &sa, sizeof(sa.sun_family)+strlen(sa.sun_path)) < 0)
+		return SR_RET_CANT_BIND_SOCKET;
+
+	/* make it world-writable */
+	if(chmod(sa.sun_path, 0666) < 0)
+		return SR_RET_UXDOMSOCK_CHMOD_ERR;
+
+	return SR_RET_OK;
+}
+
+#endif /* FEATURE_UNIX_DOMAIN_SOCKETS */

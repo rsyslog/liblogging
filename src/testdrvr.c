@@ -99,13 +99,13 @@ int main(int argc, char* argv[])
 	 * like to limit the profiles used. This is NOT
 	 * recommended.
 	 */
-	if((iRet = srAPISetOption(pAPI, srOPTION_3195_ALLOWED_CLIENT_PROFILES, USE_3195_PROFILE_RAW_ONLY)) != SR_RET_OK)
+	if((iRet = srAPISetOption(pAPI, srOPTION_3195_ALLOWED_CLIENT_PROFILES, USE_3195_PROFILE_ANY)) != SR_RET_OK)
 	{
 		printf("Error %d: can't set 3195 profile!\n", iRet);
 		exit(2);
 	}
 
-	if((iRet = srAPIOpenlog(pAPI, "172.19.1.26", 601)) != SR_RET_OK)
+	if((iRet = srAPIOpenlog(pAPI, "172.19.1.20", 601)) != SR_RET_OK)
 	{
 		printf("Error %d: can't open session!\n", iRet);
 		exit(2);

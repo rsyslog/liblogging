@@ -150,6 +150,16 @@
 #define FEATURE_LISTENER 1
 
 /**
+ * Should UDP (RFC 3164) features be provided?
+ */
+#define FEATURE_UDP 1
+
+/**
+ * Should Unix Domain Sockets feature be provided?
+ */
+#define FEATURE_UNIX_DOMAIN_SOCKETS 1
+
+/**
  * Should the COOKED profile be provided?
  * If set to 1, COOKED will be implemented for the
  * client and, if FEATURE_LISTNER is set, for the
@@ -196,6 +206,9 @@
 #	define SLEEP(x) Sleep(x)
 #	define SR_SOCKET	SOCKET
 #	define SNPRINTF		_snprintf
+	/* for obvious reasons, we define FEATURE_UNIX_DOMAIN_SOCKETS to 0 under win32... */
+#	undef FEATURE_UNIX_DOMAIN_SOCKETS
+#	define FEATURE_UNIX_DOMAIN_SOCKETS 0
 #else
 #	define SLEEP(x) sleep(x)
 #	define SR_SOCKET	int

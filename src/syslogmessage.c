@@ -77,6 +77,7 @@ srRetVal srSLMGConstruct(srSLMGObj **ppThis)
 
 	(*ppThis)->OID = OIDsrSLMG;
 	(*ppThis)->pszRawMsg = NULL;
+	(*ppThis)->iSource = srSLMG_Source_OWNGenerated;
 #	if FEATURE_MSGAPI == 1
 	(*ppThis)->bTimStampIncludesTZ = FALSE;
 	(*ppThis)->cTimStampOffsetMode = srSLMG_TimStamp_INVALID;
@@ -107,16 +108,6 @@ void srSLMGDestroy(srSLMGObj *pThis)
 	if(pThis->OID != OIDsrSLMG)
 		return;
 
-	/**
-	 * \todo free memory (if needed in later releases).
-	 * Currently, all memory is caller-provided, so it is
-	 * also the callers job to free it. This may change, however,
-	 * as the class evolves.
-	 *
-	 * As of 2003-09-01, all buffers except for pszRawMsg
-	 * are being freed because they are allocated by the lib
-	 * itself.
-	 */
 	if((pThis->bOwnRemoteHostBuf == TRUE) && (pThis->pszRemoteHost != NULL))
 		free(pThis->pszRemoteHost);
 	if((pThis->bOwnRawMsgBuf == TRUE) && (pThis->pszRawMsg != NULL))
@@ -514,24 +505,34 @@ static int srSLMGParseHOSTNAME(srSLMGObj* pThis, unsigned char** ppszBuf)
 	assert(ppszBuf != NULL);
 	assert((*ppszBuf >= pThis->pszRawMsg));
 
-	if((pStr = sbStrBConstruct()) == NULL)
-		return FALSE; /* we have no way to indicated this (unlikely) error - so this is better than nothing.. */
-
-	sbStrBSetAllocIncrement(pStr, 64); /* should match always */
-
-	while(**ppszBuf && **ppszBuf != ' ')
-	{
-		sbStrBAppendChar(pStr, **ppszBuf);
-		++(*ppszBuf);
+	if(pThis->pszRemoteHost == NULL)
+	{ /* the hostname is NOT present on /dev/log */
+		if(sbSock_gethostname((char**) &(pThis->pszHostname)) != SR_RET_OK)
+		{
+			return FALSE;
+		}
 	}
-
-	if(**ppszBuf == ' ')
-		++(*ppszBuf);
 	else
-		/* something went wrong ;) */
-		return FALSE;
+	{ /* remotely received - extract hostname from message */
+		if((pStr = sbStrBConstruct()) == NULL)
+			return FALSE; /* we have no way to indicated this (unlikely) error - so this is better than nothing.. */
 
-	pThis->pszHostname = sbStrBFinish(pStr);
+		sbStrBSetAllocIncrement(pStr, 64); /* should match always */
+
+		while(**ppszBuf && **ppszBuf != ' ')
+		{
+			sbStrBAppendChar(pStr, **ppszBuf);
+			++(*ppszBuf);
+		}
+
+		if(**ppszBuf == ' ')
+			++(*ppszBuf);
+		else
+			/* something went wrong ;) */
+			return FALSE;
+
+		pThis->pszHostname = sbStrBFinish(pStr);
+	}
 
 	return TRUE;
 }
