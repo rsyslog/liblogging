@@ -10,4 +10,3 @@ EXTRA_LIBS = -lsocket -lnsl
 CFLAGS+=-DSROS_Solaris_
 
 include ../makefile
-
