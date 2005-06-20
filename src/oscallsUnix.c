@@ -75,34 +75,13 @@ srRetVal getCurrTime(int* year, int* month, int* day, int *hour, int* minute, in
 
 	gettimeofday(&tp, NULL);
 	tm = localtime(&(tp.tv_sec));
-
-	*year = tm->tm_year + 1900;
-	*month = tm->tm_mon + 1;
-	*day = tm->tm_mday;
-	*hour = tm->tm_hour;
-	*minute = tm->tm_min;
-	*second = tm->tm_sec;
-	*secfrac = tp.tv_usec;
-	*secfracPrecison = 6;
-
+	*year = tm->tm_year + 1900;	*month = tm->tm_mon + 1;	*day = tm->tm_mday;	*hour = tm->tm_hour;	*minute = tm->tm_min;	*second = tm->tm_sec;	*secfrac = tp.tv_usec;	*secfracPrecison = 6;
 #ifdef SROS_Solaris 
     /* Solaris uses a different method of exporting the time zone.
      * It is UTC - localtime, which is opposite sign of min east of GMT.
      */
     lBias = -(daylight ? altzone : timezone);
 #else
-	lBias = tm->tm_gmtoff;
-#endif
-	if(lBias < 0)
-	{
-		*pcOffsetMode = '-';
-		lBias *= -1;
-	}
-	else
-		*pcOffsetMode = '+';
-
-	*pOffsetHour = lBias / 3600;
-	*pOffsetMinute = lBias % 3600;
-
-	return SR_RET_OK;
-}
+	lBias = tm->tm_gmtoff;#endif
+	if(lBias < 0)	{		*pcOffsetMode = '-';		lBias *= -1;	}	else		*pcOffsetMode = '+';	*pOffsetHour = lBias / 3600;	*pOffsetMinute = lBias % 3600;
+	return SR_RET_OK;}
