@@ -1,3 +1,26 @@
+0.6.0
+   2005-09-06
+   Unfortunately, when I stopped working on liblogging due to some higher
+   priority work (in 2003 ;)), I didn't update this file here. While I
+   initially thought I'd push it away for a few weeks at most, it actually
+   become suspended for some month. The lack of real interest in it didn't
+   justify any more work. Thankfully, interest in RFC 3195 is now improving
+   and I've also done my own syslogd for unix (www.rsyslog.com), so I am
+   now able to look at least partly at the lib. In the mean time, some
+   users have successfully used the 0.5.0 release and their feedback was
+   generally pleasant. So I think this is a good release.
+   I will now go through the code and extract what has been upgraded since
+   0.5.0. So we have a rough record of that. Here are the changes:
+              - support for UDP and unix domain socket listening - these
+                features were initially introduced to support a to-be-written
+                syslogd. They are not very well tested and will probably not
+                be for quite some time.
+              - code enhanced to guard against oversize BEEP frames, which
+                could be introduced by a malicous person (security related)
+              - some support for Solaris has been added (not sure what it
+                was exactly...)
+              - added the COOKED listener
+              - some checks against invalid SEQs
 0.5.0         - fixed a bug in the server code where an <ok/> response
                 for a channel close request was sent over the to-be-closed
                 channel instead of channel 0. This can be an interoperability
