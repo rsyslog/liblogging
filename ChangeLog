@@ -21,6 +21,10 @@
                 was exactly...)
               - added the COOKED listener
               - some checks against invalid SEQs
+   0.6.0 is not as thouroughly tested as 0.5.0, which by now I consider to
+   be stable. I advise people to use 0.5.0 if they are looking for stable
+   code and do not urgently need the new features introduced in 0.6.0.
+
 0.5.0         - fixed a bug in the server code where an <ok/> response
                 for a channel close request was sent over the to-be-closed
                 channel instead of channel 0. This can be an interoperability
