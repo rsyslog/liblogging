@@ -38,7 +38,7 @@ int&nbsp;</td><td class="memItemRight" valign=bottom><b>sbSockHasReceiveData</b>
 <tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="liblogging_8h.html#a6">srRetVal</a>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="sockets_8c.html#a7">sbSockWaitReceiveData</a> (struct <a class="el" href="structsbSockObject.html">sbSockObject</a> *pThis)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Wait until the socket has some receive data. </em> <a href="#a7"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="structsbSockObject.html">sbSockObj</a> *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="sockets_8c.html#a8">sbSockInitListenSock</a> (<a class="el" href="liblogging_8h.html#a6">srRetVal</a> *iRet, char *szBindToAddress, unsigned uBindToPort)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="structsbSockObject.html">sbSockObj</a> *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="sockets_8c.html#a8">sbSockInitListenSock</a> (<a class="el" href="liblogging_8h.html#a6">srRetVal</a> *iRet, int iType, char *szBindToAddress, unsigned uBindToPort)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Initialize a listen socket. </em> <a href="#a8"></a><em><br><br></td></tr>
 <tr><td class="memItemLeft" nowrap align=right valign=top><a name="a9" doxytag="sockets.c::sbSockAcceptConnection"></a>
@@ -51,6 +51,9 @@ int&nbsp;</td><td class="memItemRight" valign=bottom><b>sbSockHasReceiveData</b>
 <tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="liblogging_8h.html#a6">srRetVal</a>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="sockets_8c.html#a11">sbSockGetIPusedForSending</a> (<a class="el" href="structsbSockObject.html">sbSockObj</a> *pThis, char **ppsz)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Provide the (local) IP address this session is sending to the remote peer on as a string. </em> <a href="#a11"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="liblogging_8h.html#a6">srRetVal</a>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="sockets_8c.html#a12">sbSockRecvFrom</a> (<a class="el" href="structsbSockObject.html">sbSockObj</a> *pThis, char *pRecvBuf, int *piBufLen, char **ppFrom)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Enhanced recvfrom() clone. </em> <a href="#a12"></a><em><br><br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 Implements the socket object. 
@@ -241,6 +244,12 @@ The caller must free the returned string.     </td>
         <tr>
           <td></td>
           <td></td>
+          <td class="md" nowrap>int&nbsp;</td>
+          <td class="mdname" nowrap> <em>iType</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
           <td class="md" nowrap>char *&nbsp;</td>
           <td class="mdname" nowrap> <em>szBindToAddress</em>, </td>
         </tr>
@@ -274,6 +283,7 @@ This includes everything so that the next call can be listen().<p>
 <dl compact><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign=top><em>iRet</em>&nbsp;</td><td>[out] Pointer to a variable holding the return code of this operation. Has the error code if initialisation failed. </td></tr>
+    <tr><td valign=top><em>iType</em>&nbsp;</td><td>sockets type to be used. Must be either SOCK_STREAM or SOCK_DGRAM. </td></tr>
     <tr><td valign=top><em>szBindToAdresse</em>&nbsp;</td><td>string with IP address to which the socket should be bound. If NULL, do not bind to any specific address. </td></tr>
     <tr><td valign=top><em>iBindToPort</em>&nbsp;</td><td>Port the socket should be bound to. For listening sockets, this is the port that the remote peer will to connect to. </td></tr>
   </table>
@@ -323,6 +333,67 @@ The character is NOT removed from the stream. If no data is ready on the stream,
     </td>
   </tr>
 </table>
+<a name="a12" doxytag="sockets.c::sbSockRecvFrom"></a><p>
+<table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> <a class="el" href="liblogging_8h.html#a6">srRetVal</a> sbSockRecvFrom </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top"><a class="el" href="structsbSockObject.html">sbSockObj</a> *&nbsp;</td>
+          <td class="mdname" nowrap> <em>pThis</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>char *&nbsp;</td>
+          <td class="mdname" nowrap> <em>pRecvBuf</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>int *&nbsp;</td>
+          <td class="mdname" nowrap> <em>piBufLen</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>char **&nbsp;</td>
+          <td class="mdname" nowrap> <em>ppFrom</em></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td class="md">)&nbsp;</td>
+          <td class="md" colspan="2"></td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Enhanced recvfrom() clone. 
+<p>
+Will receive an C sz String. That is, any  received as part of the string will be replaced by ABNF SP (' ').<p>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign=top><em>pRecvBuf</em>&nbsp;</td><td>Pointer to buffer that will receive the incoming data. </td></tr>
+    <tr><td valign=top><em>piBufLen</em>&nbsp;</td><td>On entry, the size of the buffer pointed to by pRecvBuf. On exit, the number of bytes received </td></tr>
+    <tr><td valign=top><em>ppFrom</em>&nbsp;</td><td>Pointer to a char pointer that will receive a string with the senders' IP address. This buffer MUST be free()ed by the caller!</td></tr>
+  </table>
+</dl>
+<dl compact><dt><b><a class="el" href="todo.html#_todo000016">Todo:</a></b></dt><dd>handle the connection closed case (*piBuflen == 0)</dd></dl>
+    </td>
+  </tr>
+</table>
 <a name="a7" doxytag="sockets.c::sbSockWaitReceiveData"></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
@@ -354,7 +425,7 @@ Wait until the socket has some receive data.
 This is a blocking call.     </td>
   </tr>
 </table>
-<hr size="1"><address style="align: right;"><small>Generated on Fri Sep 12 11:20:14 2003 for liblogging by
+<hr size="1"><address style="align: right;"><small>Generated on Mon Oct 3 12:29:56 2005 for liblogging by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 > 
 </a>1.3.2 </small></address>

@@ -8,9 +8,8 @@
 <h1>beepsession.h File Reference</h1>The BEEP Session Object.  
 <a href="#_details">More...</a>
 <p>
-<code>#include "beepchannel.h"</code><br>
-<code>#include "<a class="el" href="beepprofile_8h-source.html">beepprofile.h</a>"</code><br>
 <code>#include "<a class="el" href="beepchannel_8h-source.html">beepchannel.h</a>"</code><br>
+<code>#include "<a class="el" href="beepprofile_8h-source.html">beepprofile.h</a>"</code><br>
 
 <p>
 <a href="beepsession_8h-source.html">Go to the source code of this file.</a><table border=0 cellpadding=0 cellspacing=0>
@@ -255,7 +254,7 @@ This method is void, because it *must* complete, no matter which errors it encou
 Close a channel. 
 <p>
 This is a very partial implementation of RFC 3080. For syslog-raw, I honestly and strongly beliefe it works. However, there may be implementations of syslog raw where it will not work or at least not work fully correctly.<p>
-<dl compact><dt><b><a class="el" href="todo.html#_todo000012">Todo:</a></b></dt><dd>This method (and some of the plumbing behind) must be updated to be fully compliant to RFC 3080. </dd></dl>
+<dl compact><dt><b><a class="el" href="todo.html#_todo000014">Todo:</a></b></dt><dd>This method (and some of the plumbing behind) must be updated to be fully compliant to RFC 3080. </dd></dl>
 Issues are:<ul>
 <li>we do not expect other messages to come in during the session</li><li>if the remote peer closes the session before us, we may be in trouble</li></ul>
 <p>
@@ -403,7 +402,7 @@ SEQ frames are processed as they arrive. Other frames are buffered in the respec
 <p>
 Open a BEEP channel on an established session. 
 <p>
-<dl compact><dt><b><a class="el" href="todo.html#_todo000011">Todo:</a></b></dt><dd>think if we need to shut down anything else inside the BEEP session. <p>
+<dl compact><dt><b><a class="el" href="todo.html#_todo000013">Todo:</a></b></dt><dd>think if we need to shut down anything else inside the BEEP session. <p>
 think if we need to shut down anything else inside the BEEP session. </dd></dl>
     </td>
   </tr>
@@ -761,7 +760,7 @@ We generate the greeting via a simple stringbuf, not with an XML parser. This sa
     </td>
   </tr>
 </table>
-<hr size="1"><address style="align: right;"><small>Generated on Fri Sep 12 11:20:14 2003 for liblogging by
+<hr size="1"><address style="align: right;"><small>Generated on Mon Oct 3 12:29:56 2005 for liblogging by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 > 
 </a>1.3.2 </small></address>

@@ -23,7 +23,8 @@
 <tr><td class="memItemLeft" nowrap align=right valign=top><a name="a1" doxytag="syslogmessage.c::srSLMGConstruct"></a>
 <a class="el" href="liblogging_8h.html#a6">srRetVal</a>&nbsp;</td><td class="memItemRight" valign=bottom><b>srSLMGConstruct</b> (srSLMGObj **ppThis)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="syslogmessage_8c.html#a2">srSLMGDestroy</a> (srSLMGObj *pThis)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a name="a2" doxytag="syslogmessage.c::srSLMGDestroy"></a>
+void&nbsp;</td><td class="memItemRight" valign=bottom><b>srSLMGDestroy</b> (srSLMGObj *pThis)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="syslogmessage_8c.html#a3">srSLMGParseInt32</a> (unsigned char **ppsz)</td></tr>
 
@@ -95,36 +96,6 @@ Redistribution and use in source and binary forms, with or without modification,
 * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.<p>
 * Neither the name of Adiscon GmbH or Rainer Gerhards nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.<p>
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.<hr><h2>Function Documentation</h2>
-<a name="a2" doxytag="syslogmessage.c::srSLMGDestroy"></a><p>
-<table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
-  <tr>
-    <td class="mdRow">
-      <table cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td class="md" nowrap valign="top"> void srSLMGDestroy </td>
-          <td class="md" valign="top">(&nbsp;</td>
-          <td class="md" nowrap valign="top">srSLMGObj *&nbsp;</td>
-          <td class="mdname1" valign="top" nowrap> <em>pThis</em>          </td>
-          <td class="md" valign="top">&nbsp;)&nbsp;</td>
-          <td class="md" nowrap></td>
-        </tr>
-
-      </table>
-    </td>
-  </tr>
-</table>
-<table cellspacing=5 cellpadding=0 border=0>
-  <tr>
-    <td>
-      &nbsp;
-    </td>
-    <td>
-
-<p>
-<dl compact><dt><b><a class="el" href="todo.html#_todo000018">Todo:</a></b></dt><dd>free memory (if needed in later releases). Currently, all memory is caller-provided, so it is also the callers job to free it. This may change, however, as the class evolves. </dd></dl>
-As of 2003-09-01, all buffers except for pszRawMsg are being freed because they are allocated by the lib itself.    </td>
-  </tr>
-</table>
 <a name="a18" doxytag="syslogmessage.c::srSLMGGetRawMSG"></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
@@ -325,7 +296,7 @@ Parse a 32 bit integer number from a string.
     </td>
   </tr>
 </table>
-<hr size="1"><address style="align: right;"><small>Generated on Fri Sep 12 11:20:15 2003 for liblogging by
+<hr size="1"><address style="align: right;"><small>Generated on Mon Oct 3 12:29:56 2005 for liblogging by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 > 
 </a>1.3.2 </small></address>

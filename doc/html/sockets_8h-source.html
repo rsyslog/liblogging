@@ -63,64 +63,68 @@
 00134 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> <a class="code" href="socketsWin32_8c.html#a2">sbSockLayerExit</a>(<span class="keywordtype">int</span> bExitOSStack);
 00135 
 00136 sbSockObj* <a class="code" href="socketsUnix_8c.html#a2">sbSockInit</a>(<span class="keywordtype">void</span>);    
-00137 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> <a class="code" href="sockets_8h.html#a16">sbSockExit</a>(sbSockObj*);        
-00138 <span class="keywordtype">int</span> <a class="code" href="sockets_8c.html#a2">sbSockGetLastSockError</a>(sbSockObj*); 
-00144 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> <a class="code" href="socketsWin32_8c.html#a12">sbSockConnectoToHost</a>(sbSockObj* pThis, <span class="keywordtype">char</span>* pszHost, <span class="keywordtype">int</span> iPort);
-00145 
-00152 <span class="keywordtype">int</span> <a class="code" href="sockets_8h.html#a19">sbSockHasReceiveData</a>(sbSockObj* pThis);
-00153 
-00162 <span class="keywordtype">int</span> <a class="code" href="sockets_8h.html#a20">sbSockReceive</a>(sbSockObj* pThis, <span class="keywordtype">char</span> * pszBuf, <span class="keywordtype">int</span> iLen);
-00163 
-00171 <span class="keywordtype">int</span> <a class="code" href="sockets_8h.html#a21">sbSockSend</a>(sbSockObj* pThis, <span class="keyword">const</span> <span class="keywordtype">char</span>* pszBuf, <span class="keywordtype">int</span> iLen);
-00172 
-00181 <span class="keywordtype">int</span> <a class="code" href="sockets_8c.html#a4">sbSockGetRcvChar</a>(sbSockObj *pThis);
-00182 
-00191 <span class="keywordtype">int</span> <a class="code" href="sockets_8c.html#a3">sbSockPeekRcvChar</a>(sbSockObj *pThis);
-00192 
-00196 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> <a class="code" href="socketsWin32_8c.html#a7">sbSockClosesocket</a>(sbSockObj *pThis);
-00197 
-00198 
-00203 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> <a class="code" href="sockets_8c.html#a7">sbSockWaitReceiveData</a>(<span class="keyword">struct</span> <a class="code" href="structsbSockObject.html">sbSockObject</a>* pThis);
-00204 
-<a name="l00208"></a><a class="code" href="sockets_8h.html#a12">00208</a> <span class="keyword">typedef</span> fd_set <a class="code" href="sockets_8h.html#a12">srSock_fd_set</a>;
-00209 
-<a name="l00216"></a><a class="code" href="sockets_8h.html#a6">00216</a> <span class="preprocessor">#define sbSockFD_ZERO(fdset) FD_ZERO(fdset)</span>
-00217 <span class="preprocessor"></span>
-<a name="l00223"></a><a class="code" href="sockets_8h.html#a7">00223</a> <span class="preprocessor">#define sbSockFD_SET(sock, fdset) FD_SET(sock, fdset)</span>
-00224 <span class="preprocessor"></span>
-<a name="l00230"></a><a class="code" href="sockets_8h.html#a8">00230</a> <span class="preprocessor">#define sbSockFD_ISSET(sock, fdset) FD_ISSET(sock, fdset)</span>
-00231 <span class="preprocessor"></span>
-00232 
-00242 <span class="preprocessor">#       ifdef SROS_WIN32</span>
-00243 <span class="preprocessor"></span>                <span class="keywordtype">int</span> <a class="code" href="socketsWin32_8c.html#a8">sbSockSelectMulti</a>(srSock_fd_set *fdsetRD, srSock_fd_set *fdsetWR, <span class="keywordtype">int</span> iTimOutSecs, <span class="keywordtype">int</span> iTimOutMSecs);
-00244 <span class="preprocessor">#       else</span>
-00245 <span class="preprocessor"></span>                <span class="keywordtype">int</span> <a class="code" href="socketsWin32_8c.html#a8">sbSockSelectMulti</a>(srSock_fd_set *fdsetRD, srSock_fd_set *fdsetWR, <span class="keywordtype">int</span> iTimOutSecs, <span class="keywordtype">int</span> iTimOutMSecs, <span class="keywordtype">int</span> iHighestDesc);
-00246 <span class="preprocessor">#       endif</span>
-00247 <span class="preprocessor"></span>
-00251 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> <a class="code" href="socketsWin32_8c.html#a6">sbSockListen</a>(sbSockObj*pThis);
-00252 
-00272 sbSockObj*      <a class="code" href="sockets_8c.html#a8">sbSockInitListenSock</a>(srRetVal *iRet, <span class="keywordtype">char</span> *szBindToAddress, <span class="keywordtype">unsigned</span> uBindToPort);
-00273 
-00278 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> <a class="code" href="sockets_8c.html#a9">sbSockAcceptConnection</a>(sbSockObj* pThis, sbSockObj** pNew);
-00279 
-00283 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> <a class="code" href="socketsWin32_8c.html#a4">sbSockSetNonblocking</a>(sbSockObj*pThis);
-00284 
-00289 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> <a class="code" href="sockets_8c.html#a10">sbSockGetRemoteHostIP</a>(sbSockObj *pThis, <span class="keywordtype">char</span> **ppszHost);
-00290 
-00300 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> <a class="code" href="socketsWin32_8c.html#a15">sbSock_gethostname</a>(<span class="keywordtype">char</span> **psz);
-00301 
-00321 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> <a class="code" href="sockets_8c.html#a11">sbSockGetIPusedForSending</a>(sbSockObj* pThis, <span class="keywordtype">char</span>**ppsz);
-00322 
-00323 
-00324 <span class="preprocessor">#ifdef SROS_WIN32</span>
-00325 <span class="preprocessor"></span><span class="preprocessor">#       define SBSOCK_EWOULDBLOCK WSAEWOULDBLOCK</span>
-00326 <span class="preprocessor"></span><span class="preprocessor">#else</span>
-00327 <span class="preprocessor"></span><span class="preprocessor">#       define SBSOCK_EWOULDBLOCK EWOULDBLOCK</span>
-00328 <span class="preprocessor"></span><span class="preprocessor">#       define SOCKET_ERROR -1</span>
-00329 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00330 <span class="preprocessor"></span>
-00331 <span class="preprocessor">#endif</span>
-</pre></div><hr size="1"><address style="align: right;"><small>Generated on Fri Sep 12 11:20:13 2003 for liblogging by
+00137 sbSockObj* <a class="code" href="socketsWin32_8c.html#a4">sbSockInitEx</a>(<span class="keywordtype">int</span> af, <span class="keywordtype">int</span> iSockType); 
+00139 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> <a class="code" href="sockets_8h.html#a17">sbSockExit</a>(sbSockObj*);        
+00140 <span class="keywordtype">int</span> <a class="code" href="sockets_8c.html#a2">sbSockGetLastSockError</a>(sbSockObj*); 
+00146 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> <a class="code" href="socketsWin32_8c.html#a13">sbSockConnectoToHost</a>(sbSockObj* pThis, <span class="keywordtype">char</span>* pszHost, <span class="keywordtype">int</span> iPort);
+00147 
+00154 <span class="keywordtype">int</span> <a class="code" href="sockets_8h.html#a20">sbSockHasReceiveData</a>(sbSockObj* pThis);
+00155 
+00164 <span class="keywordtype">int</span> <a class="code" href="sockets_8h.html#a21">sbSockReceive</a>(sbSockObj* pThis, <span class="keywordtype">char</span> * pszBuf, <span class="keywordtype">int</span> iLen);
+00165 
+00173 <span class="keywordtype">int</span> <a class="code" href="sockets_8h.html#a22">sbSockSend</a>(sbSockObj* pThis, <span class="keyword">const</span> <span class="keywordtype">char</span>* pszBuf, <span class="keywordtype">int</span> iLen);
+00174 
+00183 <span class="keywordtype">int</span> <a class="code" href="sockets_8c.html#a4">sbSockGetRcvChar</a>(sbSockObj *pThis);
+00184 
+00193 <span class="keywordtype">int</span> <a class="code" href="sockets_8c.html#a3">sbSockPeekRcvChar</a>(sbSockObj *pThis);
+00194 
+00198 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> <a class="code" href="socketsWin32_8c.html#a8">sbSockClosesocket</a>(sbSockObj *pThis);
+00199 
+00200 
+00205 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> <a class="code" href="sockets_8c.html#a7">sbSockWaitReceiveData</a>(<span class="keyword">struct</span> <a class="code" href="structsbSockObject.html">sbSockObject</a>* pThis);
+00206 
+<a name="l00210"></a><a class="code" href="sockets_8h.html#a12">00210</a> <span class="keyword">typedef</span> fd_set <a class="code" href="sockets_8h.html#a12">srSock_fd_set</a>;
+00211 
+<a name="l00218"></a><a class="code" href="sockets_8h.html#a6">00218</a> <span class="preprocessor">#define sbSockFD_ZERO(fdset) FD_ZERO(fdset)</span>
+00219 <span class="preprocessor"></span>
+<a name="l00225"></a><a class="code" href="sockets_8h.html#a7">00225</a> <span class="preprocessor">#define sbSockFD_SET(sock, fdset) FD_SET(sock, fdset)</span>
+00226 <span class="preprocessor"></span>
+<a name="l00232"></a><a class="code" href="sockets_8h.html#a8">00232</a> <span class="preprocessor">#define sbSockFD_ISSET(sock, fdset) FD_ISSET(sock, fdset)</span>
+00233 <span class="preprocessor"></span>
+00234 
+00244 <span class="preprocessor">#       ifdef SROS_WIN32</span>
+00245 <span class="preprocessor"></span>                <span class="keywordtype">int</span> <a class="code" href="socketsWin32_8c.html#a9">sbSockSelectMulti</a>(srSock_fd_set *fdsetRD, srSock_fd_set *fdsetWR, <span class="keywordtype">int</span> iTimOutSecs, <span class="keywordtype">int</span> iTimOutMSecs);
+00246 <span class="preprocessor">#       else</span>
+00247 <span class="preprocessor"></span>                <span class="keywordtype">int</span> <a class="code" href="socketsWin32_8c.html#a9">sbSockSelectMulti</a>(srSock_fd_set *fdsetRD, srSock_fd_set *fdsetWR, <span class="keywordtype">int</span> iTimOutSecs, <span class="keywordtype">int</span> iTimOutMSecs, <span class="keywordtype">int</span> iHighestDesc);
+00248 <span class="preprocessor">#       endif</span>
+00249 <span class="preprocessor"></span>
+00253 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> <a class="code" href="socketsWin32_8c.html#a7">sbSockListen</a>(sbSockObj*pThis);
+00254 
+00276 sbSockObj*      <a class="code" href="sockets_8c.html#a8">sbSockInitListenSock</a>(srRetVal *iRet, <span class="keywordtype">int</span> iType, <span class="keywordtype">char</span> *szBindToAddress, <span class="keywordtype">unsigned</span> uBindToPort);
+00277 
+00282 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> <a class="code" href="sockets_8c.html#a9">sbSockAcceptConnection</a>(sbSockObj* pThis, sbSockObj** pNew);
+00283 
+00287 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> <a class="code" href="socketsWin32_8c.html#a5">sbSockSetNonblocking</a>(sbSockObj*pThis);
+00288 
+00293 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> <a class="code" href="sockets_8c.html#a10">sbSockGetRemoteHostIP</a>(sbSockObj *pThis, <span class="keywordtype">char</span> **ppszHost);
+00294 
+00304 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> <a class="code" href="socketsWin32_8c.html#a16">sbSock_gethostname</a>(<span class="keywordtype">char</span> **psz);
+00305 
+00325 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> <a class="code" href="sockets_8c.html#a11">sbSockGetIPusedForSending</a>(sbSockObj* pThis, <span class="keywordtype">char</span>**ppsz);
+00326 
+00327 
+00338 <a class="code" href="liblogging_8h.html#a6">srRetVal</a> <a class="code" href="sockets_8c.html#a12">sbSockRecvFrom</a>(sbSockObj *pThis, <span class="keywordtype">char</span>* pRecvBuf, <span class="keywordtype">int</span> *piBufLen, <span class="keywordtype">char</span>** ppFrom);
+00339 
+00340 
+00341 <span class="preprocessor">#ifdef SROS_WIN32</span>
+00342 <span class="preprocessor"></span><span class="preprocessor">#       define SBSOCK_EWOULDBLOCK WSAEWOULDBLOCK</span>
+00343 <span class="preprocessor"></span><span class="preprocessor">#else</span>
+00344 <span class="preprocessor"></span><span class="preprocessor">#       define SBSOCK_EWOULDBLOCK EWOULDBLOCK</span>
+00345 <span class="preprocessor"></span><span class="preprocessor">#       define SOCKET_ERROR -1</span>
+00346 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00347 <span class="preprocessor"></span>
+00348 <span class="preprocessor">#endif</span>
+</pre></div><hr size="1"><address style="align: right;"><small>Generated on Mon Oct 3 12:29:55 2005 for liblogging by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 > 
 </a>1.3.2 </small></address>

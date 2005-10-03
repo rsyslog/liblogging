@@ -23,7 +23,7 @@
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Version of this library. </em> <a href="#a1"></a><em><br><br></td></tr>
 <tr><td class="memItemLeft" nowrap align=right valign=top><a name="a2" doxytag="liblogging.h::LIBLOGGING_VERSION_MINOR"></a>
-#define&nbsp;</td><td class="memItemRight" valign=bottom><b>LIBLOGGING_VERSION_MINOR</b>&nbsp;&nbsp;&nbsp;5</td></tr>
+#define&nbsp;</td><td class="memItemRight" valign=bottom><b>LIBLOGGING_VERSION_MINOR</b>&nbsp;&nbsp;&nbsp;6</td></tr>
 
 <tr><td class="memItemLeft" nowrap align=right valign=top><a name="a3" doxytag="liblogging.h::LIBLOGGING_VERSION_SUBMINOR"></a>
 #define&nbsp;</td><td class="memItemRight" valign=bottom><b>LIBLOGGING_VERSION_SUBMINOR</b>&nbsp;&nbsp;&nbsp;0</td></tr>
@@ -36,7 +36,7 @@
 
 <tr><td colspan=2><br><h2>Typedefs</h2></td></tr>
 <tr><td class="memItemLeft" nowrap align=right valign=top><a name="a6" doxytag="liblogging.h::srRetVal"></a>
-typedef enum <a class="el" href="liblogging_8h.html#a129">srRetVal_</a>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="liblogging_8h.html#a6">srRetVal</a></td></tr>
+typedef enum <a class="el" href="liblogging_8h.html#a138">srRetVal_</a>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="liblogging_8h.html#a6">srRetVal</a></td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">friendly type for global return value <br><br></td></tr>
 <tr><td class="memItemLeft" nowrap align=right valign=top><a name="a7" doxytag="liblogging.h::SBchannel"></a>
@@ -68,128 +68,132 @@ typedef unsigned&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" 
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">our own type for window sizes <br><br></td></tr>
 <tr><td class="memItemLeft" nowrap align=right valign=top><a name="a14" doxytag="liblogging.h::srObjID"></a>
-typedef enum <a class="el" href="liblogging_8h.html#a130">srObjectID</a>&nbsp;</td><td class="memItemRight" valign=bottom><b>srObjID</b></td></tr>
+typedef enum <a class="el" href="liblogging_8h.html#a139">srObjectID</a>&nbsp;</td><td class="memItemRight" valign=bottom><b>srObjID</b></td></tr>
 
 <tr><td class="memItemLeft" nowrap align=right valign=top><a name="a15" doxytag="liblogging.h::srOPTION3195Profiles"></a>
-typedef enum <a class="el" href="liblogging_8h.html#a131">srOPTION3195Profiles_</a>&nbsp;</td><td class="memItemRight" valign=bottom><b>srOPTION3195Profiles</b></td></tr>
+typedef enum <a class="el" href="liblogging_8h.html#a140">srOPTION3195Profiles_</a>&nbsp;</td><td class="memItemRight" valign=bottom><b>srOPTION3195Profiles</b></td></tr>
 
 <tr><td class="memItemLeft" nowrap align=right valign=top><a name="a16" doxytag="liblogging.h::SRoption"></a>
-typedef enum <a class="el" href="liblogging_8h.html#a132">srOPTION</a>&nbsp;</td><td class="memItemRight" valign=bottom><b>SRoption</b></td></tr>
+typedef enum <a class="el" href="liblogging_8h.html#a141">srOPTION</a>&nbsp;</td><td class="memItemRight" valign=bottom><b>SRoption</b></td></tr>
 
 <tr><td class="memItemLeft" nowrap align=right valign=top><a name="a17" doxytag="liblogging.h::BEEPHdrID"></a>
-typedef enum <a class="el" href="liblogging_8h.html#a133">BEEPHdrID_</a>&nbsp;</td><td class="memItemRight" valign=bottom><b>BEEPHdrID</b></td></tr>
+typedef enum <a class="el" href="liblogging_8h.html#a142">BEEPHdrID_</a>&nbsp;</td><td class="memItemRight" valign=bottom><b>BEEPHdrID</b></td></tr>
 
 <tr><td colspan=2><br><h2>Enumerations</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>enum &nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="liblogging_8h.html#a129">srRetVal_</a> { <br>
-&nbsp;&nbsp;<a class="el" href="liblogging_8h.html#a129a18">SR_RET_ERR</a> =  -1, 
-<a class="el" href="liblogging_8h.html#a129a19">SR_RET_REMAIN_WIN_TOO_SMALL</a> =  -2, 
-<a class="el" href="liblogging_8h.html#a129a20">SR_RET_INVALID_HANDLE</a> =  -3, 
-<a class="el" href="liblogging_8h.html#a129a21">SR_RET_INVALID_DESTRUCTOR</a> =  -4, 
+<tr><td class="memItemLeft" nowrap align=right valign=top>enum &nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="liblogging_8h.html#a138">srRetVal_</a> { <br>
+&nbsp;&nbsp;<a class="el" href="liblogging_8h.html#a138a18">SR_RET_ERR</a> =  -1, 
+<a class="el" href="liblogging_8h.html#a138a19">SR_RET_REMAIN_WIN_TOO_SMALL</a> =  -2, 
+<a class="el" href="liblogging_8h.html#a138a20">SR_RET_INVALID_HANDLE</a> =  -3, 
+<a class="el" href="liblogging_8h.html#a138a21">SR_RET_INVALID_DESTRUCTOR</a> =  -4, 
 <br>
-&nbsp;&nbsp;<a class="el" href="liblogging_8h.html#a129a22">SR_RET_NOT_FOUND</a> =  - 5, 
-<a class="el" href="liblogging_8h.html#a129a23">SR_RET_OUT_OF_MEMORY</a> =  -6, 
-<a class="el" href="liblogging_8h.html#a129a24">SR_RET_XML_INVALID_PARAMTAG</a> =  -7, 
-<a class="el" href="liblogging_8h.html#a129a25">SR_RET_XML_INVALID_TERMINATOR</a> =  -8, 
+&nbsp;&nbsp;<a class="el" href="liblogging_8h.html#a138a22">SR_RET_NOT_FOUND</a> =  - 5, 
+<a class="el" href="liblogging_8h.html#a138a23">SR_RET_OUT_OF_MEMORY</a> =  -6, 
+<a class="el" href="liblogging_8h.html#a138a24">SR_RET_XML_INVALID_PARAMTAG</a> =  -7, 
+<a class="el" href="liblogging_8h.html#a138a25">SR_RET_XML_INVALID_TERMINATOR</a> =  -8, 
 <br>
-&nbsp;&nbsp;<a class="el" href="liblogging_8h.html#a129a26">SR_RET_XML_MALFORMED</a> =  -9, 
-<a class="el" href="liblogging_8h.html#a129a27">SR_RET_MISSING_CLOSE_BRACE</a> =  -10, 
-<a class="el" href="liblogging_8h.html#a129a28">SR_RET_XML_MISSING_CLOSETAG</a> =  -11, 
-<a class="el" href="liblogging_8h.html#a129a29">SR_RET_XML_MISSING_OPENTAG</a> =  -12, 
+&nbsp;&nbsp;<a class="el" href="liblogging_8h.html#a138a26">SR_RET_XML_MALFORMED</a> =  -9, 
+<a class="el" href="liblogging_8h.html#a138a27">SR_RET_MISSING_CLOSE_BRACE</a> =  -10, 
+<a class="el" href="liblogging_8h.html#a138a28">SR_RET_XML_MISSING_CLOSETAG</a> =  -11, 
+<a class="el" href="liblogging_8h.html#a138a29">SR_RET_XML_MISSING_OPENTAG</a> =  -12, 
 <br>
-&nbsp;&nbsp;<a class="el" href="liblogging_8h.html#a129a30">SR_RET_XML_TAG_MISMATCH</a> =  -13, 
-<a class="el" href="liblogging_8h.html#a129a31">SR_RET_XML_INVALID_CDATA_HDR</a> =  -14, 
-<a class="el" href="liblogging_8h.html#a129a32">SR_RET_XML_INVALID_CDATA_TRAIL</a> =  -14, 
-<a class="el" href="liblogging_8h.html#a129a33">SR_RET_PEER_NONOK_RESPONSE</a> =  -15, 
+&nbsp;&nbsp;<a class="el" href="liblogging_8h.html#a138a30">SR_RET_XML_TAG_MISMATCH</a> =  -13, 
+<a class="el" href="liblogging_8h.html#a138a31">SR_RET_XML_INVALID_CDATA_HDR</a> =  -14, 
+<a class="el" href="liblogging_8h.html#a138a32">SR_RET_XML_INVALID_CDATA_TRAIL</a> =  -14, 
+<a class="el" href="liblogging_8h.html#a138a33">SR_RET_PEER_NONOK_RESPONSE</a> =  -15, 
 <br>
-&nbsp;&nbsp;<a class="el" href="liblogging_8h.html#a129a34">SR_RET_PEER_INVALID_PROFILE</a> =  -16, 
-<a class="el" href="liblogging_8h.html#a129a35">SR_RET_PEER_NO_URI</a> =  -17, 
-<a class="el" href="liblogging_8h.html#a129a36">SR_RET_PEER_NO_PROFILE</a> =  -18, 
-<a class="el" href="liblogging_8h.html#a129a37">SR_RET_PEER_NO_GREETING</a> =  -19, 
+&nbsp;&nbsp;<a class="el" href="liblogging_8h.html#a138a34">SR_RET_PEER_INVALID_PROFILE</a> =  -16, 
+<a class="el" href="liblogging_8h.html#a138a35">SR_RET_PEER_NO_URI</a> =  -17, 
+<a class="el" href="liblogging_8h.html#a138a36">SR_RET_PEER_NO_PROFILE</a> =  -18, 
+<a class="el" href="liblogging_8h.html#a138a37">SR_RET_PEER_NO_GREETING</a> =  -19, 
 <br>
-&nbsp;&nbsp;<a class="el" href="liblogging_8h.html#a129a38">SR_RET_PEER_DOESNT_SUPPORT_PROFILE</a> =  -20, 
-<a class="el" href="liblogging_8h.html#a129a39">SR_RET_INVALID_FRAME_STATE</a> =  -21, 
-<a class="el" href="liblogging_8h.html#a129a40">SR_RET_PROFILE_ALREADY_SET</a> =  -22, 
-<a class="el" href="liblogging_8h.html#a129a41">SR_RET_INVALID_CHAN_STATE</a> =  -23, 
+&nbsp;&nbsp;<a class="el" href="liblogging_8h.html#a138a38">SR_RET_PEER_DOESNT_SUPPORT_PROFILE</a> =  -20, 
+<a class="el" href="liblogging_8h.html#a138a39">SR_RET_INVALID_FRAME_STATE</a> =  -21, 
+<a class="el" href="liblogging_8h.html#a138a40">SR_RET_PROFILE_ALREADY_SET</a> =  -22, 
+<a class="el" href="liblogging_8h.html#a138a41">SR_RET_INVALID_CHAN_STATE</a> =  -23, 
 <br>
-&nbsp;&nbsp;<a class="el" href="liblogging_8h.html#a129a42">SR_RET_INVALID_GREETING</a> =  -24, 
-<a class="el" href="liblogging_8h.html#a129a43">SR_RET_INVALID_CHAN0_MESG</a> =  -25, 
-<a class="el" href="liblogging_8h.html#a129a44">SR_RET_START_MISSING_NUMBER</a> =  -26, 
-<a class="el" href="liblogging_8h.html#a129a45">SR_RET_START_INVALID_NUMBER</a> =  -27, 
+&nbsp;&nbsp;<a class="el" href="liblogging_8h.html#a138a42">SR_RET_INVALID_GREETING</a> =  -24, 
+<a class="el" href="liblogging_8h.html#a138a43">SR_RET_INVALID_CHAN0_MESG</a> =  -25, 
+<a class="el" href="liblogging_8h.html#a138a44">SR_RET_START_MISSING_NUMBER</a> =  -26, 
+<a class="el" href="liblogging_8h.html#a138a45">SR_RET_START_INVALID_NUMBER</a> =  -27, 
 <br>
-&nbsp;&nbsp;<a class="el" href="liblogging_8h.html#a129a46">SR_RET_START_EXISTING_NUMBER</a> =  -28, 
-<a class="el" href="liblogging_8h.html#a129a47">SR_RET_NO_VALUE</a> =  -29, 
-<a class="el" href="liblogging_8h.html#a129a48">SR_RET_START_EVEN_NUMBER</a> =  -30, 
-<a class="el" href="liblogging_8h.html#a129a49">SR_RET_NO_PROFILE_RQSTD</a> =  -31, 
+&nbsp;&nbsp;<a class="el" href="liblogging_8h.html#a138a46">SR_RET_START_EXISTING_NUMBER</a> =  -28, 
+<a class="el" href="liblogging_8h.html#a138a47">SR_RET_NO_VALUE</a> =  -29, 
+<a class="el" href="liblogging_8h.html#a138a48">SR_RET_START_EVEN_NUMBER</a> =  -30, 
+<a class="el" href="liblogging_8h.html#a138a49">SR_RET_NO_PROFILE_RQSTD</a> =  -31, 
 <br>
-&nbsp;&nbsp;<a class="el" href="liblogging_8h.html#a129a50">SR_RET_WARNING_START_NO_PROFMATCH</a> =  -32, 
-<a class="el" href="liblogging_8h.html#a129a51">SR_RET_ERR_EVENT_HANDLER_MISSING</a> =  -33, 
-<a class="el" href="liblogging_8h.html#a129a52">SR_RET_ACKNO_ZERO</a> =  -34, 
-<a class="el" href="liblogging_8h.html#a129a53">SR_RET_CHAN_DOESNT_EXIST</a> =  -35, 
+&nbsp;&nbsp;<a class="el" href="liblogging_8h.html#a138a50">SR_RET_WARNING_START_NO_PROFMATCH</a> =  -32, 
+<a class="el" href="liblogging_8h.html#a138a51">SR_RET_ERR_EVENT_HANDLER_MISSING</a> =  -33, 
+<a class="el" href="liblogging_8h.html#a138a52">SR_RET_ACKNO_ZERO</a> =  -34, 
+<a class="el" href="liblogging_8h.html#a138a53">SR_RET_CHAN_DOESNT_EXIST</a> =  -35, 
 <br>
-&nbsp;&nbsp;<a class="el" href="liblogging_8h.html#a129a54">SR_RET_ALREADY_LISTENING</a> =  -36, 
-<a class="el" href="liblogging_8h.html#a129a55">SR_RET_INVALID_OPTVAL</a> =  -37, 
-<a class="el" href="liblogging_8h.html#a129a56">SR_RET_INVALID_LIB_OPTION</a> =  -38, 
-<a class="el" href="liblogging_8h.html#a129a57">SR_RET_NULL_POINTER_PROVIDED</a> =  -39, 
+&nbsp;&nbsp;<a class="el" href="liblogging_8h.html#a138a54">SR_RET_ALREADY_LISTENING</a> =  -36, 
+<a class="el" href="liblogging_8h.html#a138a55">SR_RET_INVALID_OPTVAL</a> =  -37, 
+<a class="el" href="liblogging_8h.html#a138a56">SR_RET_INVALID_LIB_OPTION</a> =  -38, 
+<a class="el" href="liblogging_8h.html#a138a57">SR_RET_NULL_POINTER_PROVIDED</a> =  -39, 
 <br>
-&nbsp;&nbsp;<a class="el" href="liblogging_8h.html#a129a58">SR_RET_PROPERTY_NOT_AVAILABLE</a> =  -40, 
-<a class="el" href="liblogging_8h.html#a129a59">SR_RET_UNSUPPORTED_FORMAT</a> =  -41, 
-<a class="el" href="liblogging_8h.html#a129a60">SR_RET_UNALLOCATABLE_BUFFER</a> =  -42, 
-<a class="el" href="liblogging_8h.html#a129a61">SR_RET_PRIO_OUT_OF_RANGE</a> =  -43, 
+&nbsp;&nbsp;<a class="el" href="liblogging_8h.html#a138a58">SR_RET_PROPERTY_NOT_AVAILABLE</a> =  -40, 
+<a class="el" href="liblogging_8h.html#a138a59">SR_RET_UNSUPPORTED_FORMAT</a> =  -41, 
+<a class="el" href="liblogging_8h.html#a138a60">SR_RET_UNALLOCATABLE_BUFFER</a> =  -42, 
+<a class="el" href="liblogging_8h.html#a138a61">SR_RET_PRIO_OUT_OF_RANGE</a> =  -43, 
 <br>
-&nbsp;&nbsp;<a class="el" href="liblogging_8h.html#a129a62">SR_RET_FACIL_OUT_OF_RANGE</a> =  -44, 
-<a class="el" href="liblogging_8h.html#a129a63">SR_RET_INVALID_TAG</a> =  -45, 
-<a class="el" href="liblogging_8h.html#a129a64">SR_RET_NULL_MSG_PROVIDED</a> =  -46, 
-<a class="el" href="liblogging_8h.html#a129a65">SR_RET_ERR_RECEIVE</a> =  -47, 
+&nbsp;&nbsp;<a class="el" href="liblogging_8h.html#a138a62">SR_RET_FACIL_OUT_OF_RANGE</a> =  -44, 
+<a class="el" href="liblogging_8h.html#a138a63">SR_RET_INVALID_TAG</a> =  -45, 
+<a class="el" href="liblogging_8h.html#a138a64">SR_RET_NULL_MSG_PROVIDED</a> =  -46, 
+<a class="el" href="liblogging_8h.html#a138a65">SR_RET_ERR_RECEIVE</a> =  -47, 
 <br>
-&nbsp;&nbsp;<a class="el" href="liblogging_8h.html#a129a66">SR_RET_UNEXPECTED_HDRCMD</a> =  -48, 
-<a class="el" href="liblogging_8h.html#a129a67">SR_RET_PEER_INDICATED_ERROR</a> =  -49, 
-<a class="el" href="liblogging_8h.html#a129a68">SR_RET_PROVIDED_BUFFER_TOO_SMALL</a> =  -50, 
-<a class="el" href="liblogging_8h.html#a129a69">SR_RET_INVALID_PARAM</a> =  -51, 
+&nbsp;&nbsp;<a class="el" href="liblogging_8h.html#a138a66">SR_RET_UNEXPECTED_HDRCMD</a> =  -48, 
+<a class="el" href="liblogging_8h.html#a138a67">SR_RET_PEER_INDICATED_ERROR</a> =  -49, 
+<a class="el" href="liblogging_8h.html#a138a68">SR_RET_PROVIDED_BUFFER_TOO_SMALL</a> =  -50, 
+<a class="el" href="liblogging_8h.html#a138a69">SR_RET_INVALID_PARAM</a> =  -51, 
 <br>
-&nbsp;&nbsp;<a class="el" href="liblogging_8h.html#a129a70">SR_RET_SOCKET_ERR</a> =  -1001, 
-<a class="el" href="liblogging_8h.html#a129a71">SR_RET_CANT_BIND_SOCKET</a> =  -1002, 
-<a class="el" href="liblogging_8h.html#a129a72">SR_RET_INVALID_SOCKET</a> =  -1003, 
-<a class="el" href="liblogging_8h.html#a129a73">SR_RET_CONNECTION_CLOSED</a> =  -1004, 
+&nbsp;&nbsp;<a class="el" href="liblogging_8h.html#a138a70">SR_RET_SOCKET_ERR</a> =  -1001, 
+<a class="el" href="liblogging_8h.html#a138a71">SR_RET_CANT_BIND_SOCKET</a> =  -1002, 
+<a class="el" href="liblogging_8h.html#a138a72">SR_RET_INVALID_SOCKET</a> =  -1003, 
+<a class="el" href="liblogging_8h.html#a138a73">SR_RET_CONNECTION_CLOSED</a> =  -1004, 
 <br>
-&nbsp;&nbsp;<a class="el" href="liblogging_8h.html#a129a74">SR_RET_INVALID_OS_SOCKETS_VERSION</a> =  -1005, 
-<a class="el" href="liblogging_8h.html#a129a75">SR_RET_INVALID_HDRCMD</a> =  -2001, 
-<a class="el" href="liblogging_8h.html#a129a76">SR_RET_INVALID_WAITING_SP_CHAN</a> =  -2002, 
-<a class="el" href="liblogging_8h.html#a129a77">SR_RET_INVALID_CHANNO</a> =  -2003, 
+&nbsp;&nbsp;<a class="el" href="liblogging_8h.html#a138a74">SR_RET_INVALID_OS_SOCKETS_VERSION</a> =  -1005, 
+<a class="el" href="liblogging_8h.html#a138a75">SR_RET_CAN_NOT_INIT_SOCKET</a> =  -1006, 
+<a class="el" href="liblogging_8h.html#a138a76">SR_RET_UXDOMSOCK_CHMOD_ERR</a> =  -1007, 
+<a class="el" href="liblogging_8h.html#a138a77">SR_RET_INVALID_HDRCMD</a> =  -2001, 
 <br>
-&nbsp;&nbsp;<a class="el" href="liblogging_8h.html#a129a78">SR_RET_INVALID_WAITING_SP_MSGNO</a> =  -2004, 
-<a class="el" href="liblogging_8h.html#a129a79">SR_RET_INVALID_IN_MSGNO</a> =  -2005, 
-<a class="el" href="liblogging_8h.html#a129a80">SR_RET_INVALID_WAITING_SP_MORE</a> =  -2006, 
-<a class="el" href="liblogging_8h.html#a129a81">SR_RET_INVALID_IN_MORE</a> =  -2007, 
+&nbsp;&nbsp;<a class="el" href="liblogging_8h.html#a138a78">SR_RET_INVALID_WAITING_SP_CHAN</a> =  -2002, 
+<a class="el" href="liblogging_8h.html#a138a79">SR_RET_INVALID_CHANNO</a> =  -2003, 
+<a class="el" href="liblogging_8h.html#a138a80">SR_RET_INVALID_WAITING_SP_MSGNO</a> =  -2004, 
+<a class="el" href="liblogging_8h.html#a138a81">SR_RET_INVALID_IN_MSGNO</a> =  -2005, 
 <br>
-&nbsp;&nbsp;<a class="el" href="liblogging_8h.html#a129a82">SR_RET_INVALID_WAITING_SP_SEQNO</a> =  -2008, 
-<a class="el" href="liblogging_8h.html#a129a83">SR_RET_INVALID_IN_SEQNO</a> =  -2009, 
-<a class="el" href="liblogging_8h.html#a129a84">SR_RET_INVALID_WAITING_SP_SIZE</a> =  -2010, 
-<a class="el" href="liblogging_8h.html#a129a85">SR_RET_INVALID_IN_SIZE</a> =  -2011, 
+&nbsp;&nbsp;<a class="el" href="liblogging_8h.html#a138a82">SR_RET_INVALID_WAITING_SP_MORE</a> =  -2006, 
+<a class="el" href="liblogging_8h.html#a138a83">SR_RET_INVALID_IN_MORE</a> =  -2007, 
+<a class="el" href="liblogging_8h.html#a138a84">SR_RET_INVALID_WAITING_SP_SEQNO</a> =  -2008, 
+<a class="el" href="liblogging_8h.html#a138a85">SR_RET_INVALID_IN_SEQNO</a> =  -2009, 
 <br>
-&nbsp;&nbsp;<a class="el" href="liblogging_8h.html#a129a86">SR_RET_INVALID_WAITING_SP_ANSNO</a> =  -2012, 
-<a class="el" href="liblogging_8h.html#a129a87">SR_RET_INVALID_IN_ANSNO</a> =  -2013, 
-<a class="el" href="liblogging_8h.html#a129a88">SR_RET_INVALID_WAITING_HDRCR</a> =  -2014, 
-<a class="el" href="liblogging_8h.html#a129a89">SR_RET_INVALID_WAITING_HDRLF</a> =  -2015, 
+&nbsp;&nbsp;<a class="el" href="liblogging_8h.html#a138a86">SR_RET_INVALID_WAITING_SP_SIZE</a> =  -2010, 
+<a class="el" href="liblogging_8h.html#a138a87">SR_RET_INVALID_IN_SIZE</a> =  -2011, 
+<a class="el" href="liblogging_8h.html#a138a88">SR_RET_INVALID_WAITING_SP_ANSNO</a> =  -2012, 
+<a class="el" href="liblogging_8h.html#a138a89">SR_RET_INVALID_IN_ANSNO</a> =  -2013, 
 <br>
-&nbsp;&nbsp;<a class="el" href="liblogging_8h.html#a129a90">SR_RET_INVALID_IN_PAYLOAD</a> =  -2016, 
-<a class="el" href="liblogging_8h.html#a129a91">SR_RET_INVALID_WAITING_END1</a> =  -2017, 
-<a class="el" href="liblogging_8h.html#a129a92">SR_RET_INVALID_WAITING_END2</a> =  -2018, 
-<a class="el" href="liblogging_8h.html#a129a93">SR_RET_INVALID_WAITING_END3</a> =  -2019, 
+&nbsp;&nbsp;<a class="el" href="liblogging_8h.html#a138a90">SR_RET_INVALID_WAITING_HDRCR</a> =  -2014, 
+<a class="el" href="liblogging_8h.html#a138a91">SR_RET_INVALID_WAITING_HDRLF</a> =  -2015, 
+<a class="el" href="liblogging_8h.html#a138a92">SR_RET_INVALID_IN_PAYLOAD</a> =  -2016, 
+<a class="el" href="liblogging_8h.html#a138a93">SR_RET_INVALID_WAITING_END1</a> =  -2017, 
 <br>
-&nbsp;&nbsp;<a class="el" href="liblogging_8h.html#a129a94">SR_RET_INVALID_WAITING_END4</a> =  -2020, 
-<a class="el" href="liblogging_8h.html#a129a95">SR_RET_INVALID_WAITING_END5</a> =  -2021, 
-<a class="el" href="liblogging_8h.html#a129a96">SR_RET_INVALID_WAITING_SP_ACKNO</a> =  -2022, 
-<a class="el" href="liblogging_8h.html#a129a97">SR_RET_INVALID_WAITING_SP_WINDOW</a> =  -2023, 
+&nbsp;&nbsp;<a class="el" href="liblogging_8h.html#a138a94">SR_RET_INVALID_WAITING_END2</a> =  -2018, 
+<a class="el" href="liblogging_8h.html#a138a95">SR_RET_INVALID_WAITING_END3</a> =  -2019, 
+<a class="el" href="liblogging_8h.html#a138a96">SR_RET_INVALID_WAITING_END4</a> =  -2020, 
+<a class="el" href="liblogging_8h.html#a138a97">SR_RET_INVALID_WAITING_END5</a> =  -2021, 
 <br>
-&nbsp;&nbsp;<a class="el" href="liblogging_8h.html#a129a98">SR_RET_INAPROPRIATE_HDRCMD</a> =  -2024, 
-<a class="el" href="liblogging_8h.html#a129a99">SR_RET_OK</a> =  0
+&nbsp;&nbsp;<a class="el" href="liblogging_8h.html#a138a98">SR_RET_INVALID_WAITING_SP_ACKNO</a> =  -2022, 
+<a class="el" href="liblogging_8h.html#a138a99">SR_RET_INVALID_WAITING_SP_WINDOW</a> =  -2023, 
+<a class="el" href="liblogging_8h.html#a138a100">SR_RET_INAPROPRIATE_HDRCMD</a> =  -2024, 
+<a class="el" href="liblogging_8h.html#a138a101">SR_RET_OVERSIZED_FRAME</a> =  -2025, 
+<br>
+&nbsp;&nbsp;<a class="el" href="liblogging_8h.html#a138a102">SR_RET_OK</a> =  0
 <br>
  }</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">return value. </em> <a href="#a129">More...</a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>enum &nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="liblogging_8h.html#a130">srObjectID</a> { <br>
-&nbsp;&nbsp;<a class="el" href="liblogging_8h.html#a130a100">OID_Freed</a> =  -1, 
-<a class="el" href="liblogging_8h.html#a130a101">OID_Invalid</a> =  0, 
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">return value. </em> <a href="#a138">More...</a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>enum &nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="liblogging_8h.html#a139">srObjectID</a> { <br>
+&nbsp;&nbsp;<a class="el" href="liblogging_8h.html#a139a103">OID_Freed</a> =  -1, 
+<a class="el" href="liblogging_8h.html#a139a104">OID_Invalid</a> =  0, 
 <b>OIDsbFram</b> =  0xCDAB0001, 
 <b>OIDsbChan</b> =  0xCDAB0002, 
 <br>
@@ -210,20 +214,30 @@ typedef enum <a class="el" href="liblogging_8h.html#a133">BEEPHdrID_</a>&nbsp;</
 <br>
  }</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Object ID. </em> <a href="#a130">More...</a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>enum &nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="liblogging_8h.html#a131">srOPTION3195Profiles_</a> { <b>USE_3195_PROFILE_ANY</b> =  1, 
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Object ID. </em> <a href="#a139">More...</a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>enum &nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="liblogging_8h.html#a140">srOPTION3195Profiles_</a> { <b>USE_3195_PROFILE_ANY</b> =  1, 
 <b>USE_3195_PROFILE_RAW_ONLY</b> =  2, 
 <b>USE_3195_PROFILE_COOKED_ONLY</b> =  3
  }</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Allowed options for 3195 client profile selection. <br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>enum &nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="liblogging_8h.html#a132">srOPTION</a> { <a class="el" href="liblogging_8h.html#a132a119">srOPTION_INVALID</a> =  0, 
-<a class="el" href="liblogging_8h.html#a132a120">srOPTION_CALL_OS_SOCKET_INITIALIZER</a> =  1, 
-<a class="el" href="liblogging_8h.html#a132a121">srOPTION_3195_ALLOWED_CLIENT_PROFILES</a> =  2
+<tr><td class="memItemLeft" nowrap align=right valign=top>enum &nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="liblogging_8h.html#a141">srOPTION</a> { <br>
+&nbsp;&nbsp;<a class="el" href="liblogging_8h.html#a141a122">srOPTION_INVALID</a> =  0, 
+<a class="el" href="liblogging_8h.html#a141a123">srOPTION_CALL_OS_SOCKET_INITIALIZER</a> =  1, 
+<a class="el" href="liblogging_8h.html#a141a124">srOPTION_3195_ALLOWED_CLIENT_PROFILES</a> =  2, 
+<a class="el" href="liblogging_8h.html#a141a125">srOPTION_LISTEN_UDP</a> =  3, 
+<br>
+&nbsp;&nbsp;<a class="el" href="liblogging_8h.html#a141a126">srOPTION_UPD_LISTENPORT</a> =  4, 
+<a class="el" href="liblogging_8h.html#a141a127">srOPTION_LISTEN_UXDOMSOCK</a> =  5, 
+<a class="el" href="liblogging_8h.html#a141a128">srOPTION_UXDOMSOCK_LISTENAME</a> =  6, 
+<a class="el" href="liblogging_8h.html#a141a129">srOPTION_LISTEN_BEEP</a> =  7, 
+<br>
+&nbsp;&nbsp;<a class="el" href="liblogging_8h.html#a141a130">srOPTION_BEEP_LISTENPORT</a> =  8
+<br>
  }</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Library options. </em> <a href="#a132">More...</a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>enum &nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="liblogging_8h.html#a133">BEEPHdrID_</a> { <br>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Library options. </em> <a href="#a141">More...</a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>enum &nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="liblogging_8h.html#a142">BEEPHdrID_</a> { <br>
 &nbsp;&nbsp;<b>BEEPHDR_UNKNOWN</b> =  0, 
 <b>BEEPHDR_ANS</b>, 
 <b>BEEPHDR_ERR</b>, 
@@ -303,13 +317,13 @@ Microsoft VC automatically sets _DEBUG if compiling with debug settings. For oth
   </tr>
 </table>
 <hr><h2>Enumeration Type Documentation</h2>
-<a name="a130" doxytag="liblogging.h::srObjectID"></a><p>
+<a name="a139" doxytag="liblogging.h::srObjectID"></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top"> enum <a class="el" href="liblogging_8h.html#a130">srObjectID</a>
+          <td class="md" nowrap valign="top"> enum <a class="el" href="liblogging_8h.html#a139">srObjectID</a>
       </table>
     </td>
   </tr>
@@ -326,24 +340,24 @@ Object ID.
 <p>
 These are for internal checking. Each object is assigned a specific ID. This is contained in all Object structs (just like C++ RTTI). We can use this field to see if we have been passed a correct ID. Other than that, there is currently no other use for the object id. <dl compact><dt><b>Enumeration values: </b></dt><dd>
 <table border=0 cellspacing=2 cellpadding=0>
-<tr><td valign=top><em><a name="a130a100" doxytag="OID_Freed"></a><em>OID_Freed</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a139a103" doxytag="OID_Freed"></a><em>OID_Freed</em></em>&nbsp;</td><td>
 assigned, when an object is freed 
 <p>
 If this is seen during a method call, this is an invalid object pointer!</td></tr>
-<tr><td valign=top><em><a name="a130a101" doxytag="OID_Invalid"></a><em>OID_Invalid</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a139a104" doxytag="OID_Invalid"></a><em>OID_Invalid</em></em>&nbsp;</td><td>
 value created by calloc(), so do not use ;) </td></tr>
 </table>
 </dl>
     </td>
   </tr>
 </table>
-<a name="a132" doxytag="liblogging.h::srOPTION"></a><p>
+<a name="a141" doxytag="liblogging.h::srOPTION"></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top"> enum <a class="el" href="liblogging_8h.html#a132">srOPTION</a>
+          <td class="md" nowrap valign="top"> enum <a class="el" href="liblogging_8h.html#a141">srOPTION</a>
       </table>
     </td>
   </tr>
@@ -360,28 +374,52 @@ Library options.
 <p>
 Modify library behaviour. Currently, no options are defined. <dl compact><dt><b>Enumeration values: </b></dt><dd>
 <table border=0 cellspacing=2 cellpadding=0>
-<tr><td valign=top><em><a name="a132a119" doxytag="srOPTION_INVALID"></a><em>srOPTION_INVALID</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a141a122" doxytag="srOPTION_INVALID"></a><em>srOPTION_INVALID</em></em>&nbsp;</td><td>
 invalid option, if seen, caller made an error </td></tr>
-<tr><td valign=top><em><a name="a132a120" doxytag="srOPTION_CALL_OS_SOCKET_INITIALIZER"></a><em>srOPTION_CALL_OS_SOCKET_INITIALIZER</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a141a123" doxytag="srOPTION_CALL_OS_SOCKET_INITIALIZER"></a><em>srOPTION_CALL_OS_SOCKET_INITIALIZER</em></em>&nbsp;</td><td>
 This option tells the library if it should instruct the socket parts of it to call the OS socket initialiser. 
 <p>
 Under Win32, for example, this is only allowed once per process. So if the lib is integrated into a process that already uses sockets, the sockets initializer (WSAStartup() in this case) should not be called. This is a global setting that NEEDS TO BE SET BEFORE the API object is created!!!!</td></tr>
-<tr><td valign=top><em><a name="a132a121" doxytag="srOPTION_3195_ALLOWED_CLIENT_PROFILES"></a><em>srOPTION_3195_ALLOWED_CLIENT_PROFILES</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a141a124" doxytag="srOPTION_3195_ALLOWED_CLIENT_PROFILES"></a><em>srOPTION_3195_ALLOWED_CLIENT_PROFILES</em></em>&nbsp;</td><td>
 This option tells the library which RFC 3195 Profile should be used when talking to the remote peer. 
 <p>
 This option so far is only used in the client parts of liblogging. See <a class="el" href=""></a> for allowed values.</td></tr>
+<tr><td valign=top><em><a name="a141a125" doxytag="srOPTION_LISTEN_UDP"></a><em>srOPTION_LISTEN_UDP</em></em>&nbsp;</td><td>
+This options tells the lib if a UDP listener should be started. 
+<p>
+Option value must be TRUE or FALSE.</td></tr>
+<tr><td valign=top><em><a name="a141a126" doxytag="srOPTION_UPD_LISTENPORT"></a><em>srOPTION_UPD_LISTENPORT</em></em>&nbsp;</td><td>
+Sets the UDP listener port. 
+<p>
+Is only used if the UDP listener is activated.</td></tr>
+<tr><td valign=top><em><a name="a141a127" doxytag="srOPTION_LISTEN_UXDOMSOCK"></a><em>srOPTION_LISTEN_UXDOMSOCK</em></em>&nbsp;</td><td>
+This option tells the lib if a UNIX domain socket listener should be started. 
+<p>
+Supported values are TRUE and FALSE.</td></tr>
+<tr><td valign=top><em><a name="a141a128" doxytag="srOPTION_UXDOMSOCK_LISTENAME"></a><em>srOPTION_UXDOMSOCK_LISTENAME</em></em>&nbsp;</td><td>
+Provides a pointer to the UNIX domain socket that should be listened to (if listening is enabled). 
+<p>
+</td></tr>
+<tr><td valign=top><em><a name="a141a129" doxytag="srOPTION_LISTEN_BEEP"></a><em>srOPTION_LISTEN_BEEP</em></em>&nbsp;</td><td>
+This option tells the lib if a BEEP listener should be started. 
+<p>
+Supported values are TRUE and FALSE.</td></tr>
+<tr><td valign=top><em><a name="a141a130" doxytag="srOPTION_BEEP_LISTENPORT"></a><em>srOPTION_BEEP_LISTENPORT</em></em>&nbsp;</td><td>
+Sets the BEEP listener port. 
+<p>
+Is only used if the UDP listener is activated.</td></tr>
 </table>
 </dl>
     </td>
   </tr>
 </table>
-<a name="a129" doxytag="liblogging.h::srRetVal_"></a><p>
+<a name="a138" doxytag="liblogging.h::srRetVal_"></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top"> enum <a class="el" href="liblogging_8h.html#a129">srRetVal_</a>
+          <td class="md" nowrap valign="top"> enum <a class="el" href="liblogging_8h.html#a138">srRetVal_</a>
       </table>
     </td>
   </tr>
@@ -398,202 +436,210 @@ return value.
 <p>
 All methods return this if not specified otherwise <dl compact><dt><b>Enumeration values: </b></dt><dd>
 <table border=0 cellspacing=2 cellpadding=0>
-<tr><td valign=top><em><a name="a129a18" doxytag="SR_RET_ERR"></a><em>SR_RET_ERR</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a18" doxytag="SR_RET_ERR"></a><em>SR_RET_ERR</em></em>&nbsp;</td><td>
 error occured, call error handler for details </td></tr>
-<tr><td valign=top><em><a name="a129a19" doxytag="SR_RET_REMAIN_WIN_TOO_SMALL"></a><em>SR_RET_REMAIN_WIN_TOO_SMALL</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a19" doxytag="SR_RET_REMAIN_WIN_TOO_SMALL"></a><em>SR_RET_REMAIN_WIN_TOO_SMALL</em></em>&nbsp;</td><td>
 can't send, because not enough octets left in RFC3081 window --&gt; wait for SEQ </td></tr>
-<tr><td valign=top><em><a name="a129a20" doxytag="SR_RET_INVALID_HANDLE"></a><em>SR_RET_INVALID_HANDLE</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a20" doxytag="SR_RET_INVALID_HANDLE"></a><em>SR_RET_INVALID_HANDLE</em></em>&nbsp;</td><td>
 caller provided an invalid handle, e.g 
 <p>
 NULL pointer or pointer to wrong object. This is only checked on the API layer. Internally, all functions check this via assert(), so protection is only available during debugging. This is a performance decision.</td></tr>
-<tr><td valign=top><em><a name="a129a21" doxytag="SR_RET_INVALID_DESTRUCTOR"></a><em>SR_RET_INVALID_DESTRUCTOR</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a21" doxytag="SR_RET_INVALID_DESTRUCTOR"></a><em>SR_RET_INVALID_DESTRUCTOR</em></em>&nbsp;</td><td>
 used, when the caller must provide a pointer to a destructor function but does not </td></tr>
-<tr><td valign=top><em><a name="a129a22" doxytag="SR_RET_NOT_FOUND"></a><em>SR_RET_NOT_FOUND</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a22" doxytag="SR_RET_NOT_FOUND"></a><em>SR_RET_NOT_FOUND</em></em>&nbsp;</td><td>
 a requested element was not found 
 <p>
 May not be an error depending on what operation was to be carried out... </td></tr>
-<tr><td valign=top><em><a name="a129a23" doxytag="SR_RET_OUT_OF_MEMORY"></a><em>SR_RET_OUT_OF_MEMORY</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a23" doxytag="SR_RET_OUT_OF_MEMORY"></a><em>SR_RET_OUT_OF_MEMORY</em></em>&nbsp;</td><td>
 memory allocation failed </td></tr>
-<tr><td valign=top><em><a name="a129a24" doxytag="SR_RET_XML_INVALID_PARAMTAG"></a><em>SR_RET_XML_INVALID_PARAMTAG</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a24" doxytag="SR_RET_XML_INVALID_PARAMTAG"></a><em>SR_RET_XML_INVALID_PARAMTAG</em></em>&nbsp;</td><td>
 malformed tag parameter, most probably quotes are missing before value or intervening space </td></tr>
-<tr><td valign=top><em><a name="a129a25" doxytag="SR_RET_XML_INVALID_TERMINATOR"></a><em>SR_RET_XML_INVALID_TERMINATOR</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a25" doxytag="SR_RET_XML_INVALID_TERMINATOR"></a><em>SR_RET_XML_INVALID_TERMINATOR</em></em>&nbsp;</td><td>
 missing terminator sequence, e.g 
 <p>
 a "param='no_terminator" - notice the missing closing quote </td></tr>
-<tr><td valign=top><em><a name="a129a26" doxytag="SR_RET_XML_MALFORMED"></a><em>SR_RET_XML_MALFORMED</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a26" doxytag="SR_RET_XML_MALFORMED"></a><em>SR_RET_XML_MALFORMED</em></em>&nbsp;</td><td>
 the XML is malformed (no specific reason given) </td></tr>
-<tr><td valign=top><em><a name="a129a27" doxytag="SR_RET_MISSING_CLOSE_BRACE"></a><em>SR_RET_MISSING_CLOSE_BRACE</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a27" doxytag="SR_RET_MISSING_CLOSE_BRACE"></a><em>SR_RET_MISSING_CLOSE_BRACE</em></em>&nbsp;</td><td>
 closing brace in &lt;tag /&gt; missing </td></tr>
-<tr><td valign=top><em><a name="a129a28" doxytag="SR_RET_XML_MISSING_CLOSETAG"></a><em>SR_RET_XML_MISSING_CLOSETAG</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a28" doxytag="SR_RET_XML_MISSING_CLOSETAG"></a><em>SR_RET_XML_MISSING_CLOSETAG</em></em>&nbsp;</td><td>
 close tag is missing or syntax invalid ... </td></tr>
-<tr><td valign=top><em><a name="a129a29" doxytag="SR_RET_XML_MISSING_OPENTAG"></a><em>SR_RET_XML_MISSING_OPENTAG</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a29" doxytag="SR_RET_XML_MISSING_OPENTAG"></a><em>SR_RET_XML_MISSING_OPENTAG</em></em>&nbsp;</td><td>
 open tag is missing, e.g &lt;tag /&gt;othertag&gt; </td></tr>
-<tr><td valign=top><em><a name="a129a30" doxytag="SR_RET_XML_TAG_MISMATCH"></a><em>SR_RET_XML_TAG_MISMATCH</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a30" doxytag="SR_RET_XML_TAG_MISMATCH"></a><em>SR_RET_XML_TAG_MISMATCH</em></em>&nbsp;</td><td>
 start and close tag name do not match (...) </td></tr>
-<tr><td valign=top><em><a name="a129a31" doxytag="SR_RET_XML_INVALID_CDATA_HDR"></a><em>SR_RET_XML_INVALID_CDATA_HDR</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a31" doxytag="SR_RET_XML_INVALID_CDATA_HDR"></a><em>SR_RET_XML_INVALID_CDATA_HDR</em></em>&nbsp;</td><td>
 invalid start of CDATA, e.g 
 <p>
 &lt;![CDTA... </td></tr>
-<tr><td valign=top><em><a name="a129a32" doxytag="SR_RET_XML_INVALID_CDATA_TRAIL"></a><em>SR_RET_XML_INVALID_CDATA_TRAIL</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a32" doxytag="SR_RET_XML_INVALID_CDATA_TRAIL"></a><em>SR_RET_XML_INVALID_CDATA_TRAIL</em></em>&nbsp;</td><td>
 invalid CDATA trailer, , e.g 
 <p>
 "&lt;![CDATA[test]&gt;" (one ] missing) </td></tr>
-<tr><td valign=top><em><a name="a129a33" doxytag="SR_RET_PEER_NONOK_RESPONSE"></a><em>SR_RET_PEER_NONOK_RESPONSE</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a33" doxytag="SR_RET_PEER_NONOK_RESPONSE"></a><em>SR_RET_PEER_NONOK_RESPONSE</em></em>&nbsp;</td><td>
 was waiting for a BEEP peer to respond "ok", but received other response </td></tr>
-<tr><td valign=top><em><a name="a129a34" doxytag="SR_RET_PEER_INVALID_PROFILE"></a><em>SR_RET_PEER_INVALID_PROFILE</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a34" doxytag="SR_RET_PEER_INVALID_PROFILE"></a><em>SR_RET_PEER_INVALID_PROFILE</em></em>&nbsp;</td><td>
 BEEP Peer did either not support the profile or did not return the correct on in response to a start message. </td></tr>
-<tr><td valign=top><em><a name="a129a35" doxytag="SR_RET_PEER_NO_URI"></a><em>SR_RET_PEER_NO_URI</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a35" doxytag="SR_RET_PEER_NO_URI"></a><em>SR_RET_PEER_NO_URI</em></em>&nbsp;</td><td>
 BEEP peer did not inclulde a mandatory URI element in its xml response. </td></tr>
-<tr><td valign=top><em><a name="a129a36" doxytag="SR_RET_PEER_NO_PROFILE"></a><em>SR_RET_PEER_NO_PROFILE</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a36" doxytag="SR_RET_PEER_NO_PROFILE"></a><em>SR_RET_PEER_NO_PROFILE</em></em>&nbsp;</td><td>
 BEEP peer did not include a mandatory PROFILE element in its XML reponse. </td></tr>
-<tr><td valign=top><em><a name="a129a37" doxytag="SR_RET_PEER_NO_GREETING"></a><em>SR_RET_PEER_NO_GREETING</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a37" doxytag="SR_RET_PEER_NO_GREETING"></a><em>SR_RET_PEER_NO_GREETING</em></em>&nbsp;</td><td>
 BEEP peer did not send a (correctly formatted) greeting message. </td></tr>
-<tr><td valign=top><em><a name="a129a38" doxytag="SR_RET_PEER_DOESNT_SUPPORT_PROFILE"></a><em>SR_RET_PEER_DOESNT_SUPPORT_PROFILE</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a38" doxytag="SR_RET_PEER_DOESNT_SUPPORT_PROFILE"></a><em>SR_RET_PEER_DOESNT_SUPPORT_PROFILE</em></em>&nbsp;</td><td>
 the reqeusted profile is not part of the peers profile set (from greeting message) </td></tr>
-<tr><td valign=top><em><a name="a129a39" doxytag="SR_RET_INVALID_FRAME_STATE"></a><em>SR_RET_INVALID_FRAME_STATE</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a39" doxytag="SR_RET_INVALID_FRAME_STATE"></a><em>SR_RET_INVALID_FRAME_STATE</em></em>&nbsp;</td><td>
 a frame object has an invalid frame state (pFram-&gt;iState) </td></tr>
-<tr><td valign=top><em><a name="a129a40" doxytag="SR_RET_PROFILE_ALREADY_SET"></a><em>SR_RET_PROFILE_ALREADY_SET</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a40" doxytag="SR_RET_PROFILE_ALREADY_SET"></a><em>SR_RET_PROFILE_ALREADY_SET</em></em>&nbsp;</td><td>
 a profile should be assgined to a channel which already has one </td></tr>
-<tr><td valign=top><em><a name="a129a41" doxytag="SR_RET_INVALID_CHAN_STATE"></a><em>SR_RET_INVALID_CHAN_STATE</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a41" doxytag="SR_RET_INVALID_CHAN_STATE"></a><em>SR_RET_INVALID_CHAN_STATE</em></em>&nbsp;</td><td>
 a channel object has an invalid or unexpected (at this point) channel state </td></tr>
-<tr><td valign=top><em><a name="a129a42" doxytag="SR_RET_INVALID_GREETING"></a><em>SR_RET_INVALID_GREETING</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a42" doxytag="SR_RET_INVALID_GREETING"></a><em>SR_RET_INVALID_GREETING</em></em>&nbsp;</td><td>
 greeting message is (somehow) invalid, e.g 
 <p>
 does not start with RPY) </td></tr>
-<tr><td valign=top><em><a name="a129a43" doxytag="SR_RET_INVALID_CHAN0_MESG"></a><em>SR_RET_INVALID_CHAN0_MESG</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a43" doxytag="SR_RET_INVALID_CHAN0_MESG"></a><em>SR_RET_INVALID_CHAN0_MESG</em></em>&nbsp;</td><td>
 channel 0 received an invalid or out-of-sequence message </td></tr>
-<tr><td valign=top><em><a name="a129a44" doxytag="SR_RET_START_MISSING_NUMBER"></a><em>SR_RET_START_MISSING_NUMBER</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a44" doxytag="SR_RET_START_MISSING_NUMBER"></a><em>SR_RET_START_MISSING_NUMBER</em></em>&nbsp;</td><td>
 a start message is missing the "number=" parameter </td></tr>
-<tr><td valign=top><em><a name="a129a45" doxytag="SR_RET_START_INVALID_NUMBER"></a><em>SR_RET_START_INVALID_NUMBER</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a45" doxytag="SR_RET_START_INVALID_NUMBER"></a><em>SR_RET_START_INVALID_NUMBER</em></em>&nbsp;</td><td>
 a start message's "number=" parameter specifies an invalid number </td></tr>
-<tr><td valign=top><em><a name="a129a46" doxytag="SR_RET_START_EXISTING_NUMBER"></a><em>SR_RET_START_EXISTING_NUMBER</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a46" doxytag="SR_RET_START_EXISTING_NUMBER"></a><em>SR_RET_START_EXISTING_NUMBER</em></em>&nbsp;</td><td>
 a start message's "number=" parameter specifies a channel number which already exisits! </td></tr>
-<tr><td valign=top><em><a name="a129a47" doxytag="SR_RET_NO_VALUE"></a><em>SR_RET_NO_VALUE</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a47" doxytag="SR_RET_NO_VALUE"></a><em>SR_RET_NO_VALUE</em></em>&nbsp;</td><td>
 a linked list was asked to provide an uValue, but there was none 
 <p>
 Not necessarily an error, depends on caller's needs. </td></tr>
-<tr><td valign=top><em><a name="a129a48" doxytag="SR_RET_START_EVEN_NUMBER"></a><em>SR_RET_START_EVEN_NUMBER</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a48" doxytag="SR_RET_START_EVEN_NUMBER"></a><em>SR_RET_START_EVEN_NUMBER</em></em>&nbsp;</td><td>
 an initiator sent a even-numbered start number, which is invalid as of rfc 3080 2.3.1.2 </td></tr>
-<tr><td valign=top><em><a name="a129a49" doxytag="SR_RET_NO_PROFILE_RQSTD"></a><em>SR_RET_NO_PROFILE_RQSTD</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a49" doxytag="SR_RET_NO_PROFILE_RQSTD"></a><em>SR_RET_NO_PROFILE_RQSTD</em></em>&nbsp;</td><td>
 no profile at all was requested in a start message (may be caused by invalid format) </td></tr>
-<tr><td valign=top><em><a name="a129a50" doxytag="SR_RET_WARNING_START_NO_PROFMATCH"></a><em>SR_RET_WARNING_START_NO_PROFMATCH</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a50" doxytag="SR_RET_WARNING_START_NO_PROFMATCH"></a><em>SR_RET_WARNING_START_NO_PROFMATCH</em></em>&nbsp;</td><td>
 WARNING only (no error) - during a start, no matching profile was found and the beep peer has been sent such an ERR frame. </td></tr>
-<tr><td valign=top><em><a name="a129a51" doxytag="SR_RET_ERR_EVENT_HANDLER_MISSING"></a><em>SR_RET_ERR_EVENT_HANDLER_MISSING</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a51" doxytag="SR_RET_ERR_EVENT_HANDLER_MISSING"></a><em>SR_RET_ERR_EVENT_HANDLER_MISSING</em></em>&nbsp;</td><td>
 a required (profile) event handler is missing </td></tr>
-<tr><td valign=top><em><a name="a129a52" doxytag="SR_RET_ACKNO_ZERO"></a><em>SR_RET_ACKNO_ZERO</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a52" doxytag="SR_RET_ACKNO_ZERO"></a><em>SR_RET_ACKNO_ZERO</em></em>&nbsp;</td><td>
 caller-provided ackno is zero 
 <p>
 This can not be by design. </td></tr>
-<tr><td valign=top><em><a name="a129a53" doxytag="SR_RET_CHAN_DOESNT_EXIST"></a><em>SR_RET_CHAN_DOESNT_EXIST</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a53" doxytag="SR_RET_CHAN_DOESNT_EXIST"></a><em>SR_RET_CHAN_DOESNT_EXIST</em></em>&nbsp;</td><td>
 a chanel specified does not exist </td></tr>
-<tr><td valign=top><em><a name="a129a54" doxytag="SR_RET_ALREADY_LISTENING"></a><em>SR_RET_ALREADY_LISTENING</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a54" doxytag="SR_RET_ALREADY_LISTENING"></a><em>SR_RET_ALREADY_LISTENING</em></em>&nbsp;</td><td>
 caller tried to start an listener on the API object, but it is already one running </td></tr>
-<tr><td valign=top><em><a name="a129a55" doxytag="SR_RET_INVALID_OPTVAL"></a><em>SR_RET_INVALID_OPTVAL</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a55" doxytag="SR_RET_INVALID_OPTVAL"></a><em>SR_RET_INVALID_OPTVAL</em></em>&nbsp;</td><td>
 invalid option value was provided to <a class="el" href="srAPI_8c.html#a4">srAPISetOption()</a> (param 2) </td></tr>
-<tr><td valign=top><em><a name="a129a56" doxytag="SR_RET_INVALID_LIB_OPTION"></a><em>SR_RET_INVALID_LIB_OPTION</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a56" doxytag="SR_RET_INVALID_LIB_OPTION"></a><em>SR_RET_INVALID_LIB_OPTION</em></em>&nbsp;</td><td>
 invalid option was provided to <a class="el" href="srAPI_8c.html#a4">srAPISetOption()</a> (param 1) </td></tr>
-<tr><td valign=top><em><a name="a129a57" doxytag="SR_RET_NULL_POINTER_PROVIDED"></a><em>SR_RET_NULL_POINTER_PROVIDED</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a57" doxytag="SR_RET_NULL_POINTER_PROVIDED"></a><em>SR_RET_NULL_POINTER_PROVIDED</em></em>&nbsp;</td><td>
 the caller has provided a NULL-Pointer where none were expected/allowed </td></tr>
-<tr><td valign=top><em><a name="a129a58" doxytag="SR_RET_PROPERTY_NOT_AVAILABLE"></a><em>SR_RET_PROPERTY_NOT_AVAILABLE</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a58" doxytag="SR_RET_PROPERTY_NOT_AVAILABLE"></a><em>SR_RET_PROPERTY_NOT_AVAILABLE</em></em>&nbsp;</td><td>
 a property asked for is not available, e.g 
 <p>
 the TIMESTAMP in a not-wellformed message </td></tr>
-<tr><td valign=top><em><a name="a129a59" doxytag="SR_RET_UNSUPPORTED_FORMAT"></a><em>SR_RET_UNSUPPORTED_FORMAT</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a59" doxytag="SR_RET_UNSUPPORTED_FORMAT"></a><em>SR_RET_UNSUPPORTED_FORMAT</em></em>&nbsp;</td><td>
 a non-supported format was requested by the caller </td></tr>
-<tr><td valign=top><em><a name="a129a60" doxytag="SR_RET_UNALLOCATABLE_BUFFER"></a><em>SR_RET_UNALLOCATABLE_BUFFER</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a60" doxytag="SR_RET_UNALLOCATABLE_BUFFER"></a><em>SR_RET_UNALLOCATABLE_BUFFER</em></em>&nbsp;</td><td>
 the operation can not be completed because a buffer that is under user control would need to be deallocated </td></tr>
-<tr><td valign=top><em><a name="a129a61" doxytag="SR_RET_PRIO_OUT_OF_RANGE"></a><em>SR_RET_PRIO_OUT_OF_RANGE</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a61" doxytag="SR_RET_PRIO_OUT_OF_RANGE"></a><em>SR_RET_PRIO_OUT_OF_RANGE</em></em>&nbsp;</td><td>
 a priority value is outside the allowed range </td></tr>
-<tr><td valign=top><em><a name="a129a62" doxytag="SR_RET_FACIL_OUT_OF_RANGE"></a><em>SR_RET_FACIL_OUT_OF_RANGE</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a62" doxytag="SR_RET_FACIL_OUT_OF_RANGE"></a><em>SR_RET_FACIL_OUT_OF_RANGE</em></em>&nbsp;</td><td>
 a facility value is outside the allowed range </td></tr>
-<tr><td valign=top><em><a name="a129a63" doxytag="SR_RET_INVALID_TAG"></a><em>SR_RET_INVALID_TAG</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a63" doxytag="SR_RET_INVALID_TAG"></a><em>SR_RET_INVALID_TAG</em></em>&nbsp;</td><td>
 a syslog TAG value (string) provided was invalid, e.g 
 <p>
 over 32 chars or included invalid chars </td></tr>
-<tr><td valign=top><em><a name="a129a64" doxytag="SR_RET_NULL_MSG_PROVIDED"></a><em>SR_RET_NULL_MSG_PROVIDED</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a64" doxytag="SR_RET_NULL_MSG_PROVIDED"></a><em>SR_RET_NULL_MSG_PROVIDED</em></em>&nbsp;</td><td>
 caller provided a NULL pointer where a pointer to a MSG was expected </td></tr>
-<tr><td valign=top><em><a name="a129a65" doxytag="SR_RET_ERR_RECEIVE"></a><em>SR_RET_ERR_RECEIVE</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a65" doxytag="SR_RET_ERR_RECEIVE"></a><em>SR_RET_ERR_RECEIVE</em></em>&nbsp;</td><td>
 an error occured during message receive 
 <p>
 no more detail is available </td></tr>
-<tr><td valign=top><em><a name="a129a66" doxytag="SR_RET_UNEXPECTED_HDRCMD"></a><em>SR_RET_UNEXPECTED_HDRCMD</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a66" doxytag="SR_RET_UNEXPECTED_HDRCMD"></a><em>SR_RET_UNEXPECTED_HDRCMD</em></em>&nbsp;</td><td>
 an invalid HDR Command was received (e.g 
 <p>
 an "MSG" in response to another "MSG") </td></tr>
-<tr><td valign=top><em><a name="a129a67" doxytag="SR_RET_PEER_INDICATED_ERROR"></a><em>SR_RET_PEER_INDICATED_ERROR</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a67" doxytag="SR_RET_PEER_INDICATED_ERROR"></a><em>SR_RET_PEER_INDICATED_ERROR</em></em>&nbsp;</td><td>
 the PEER send an error response </td></tr>
-<tr><td valign=top><em><a name="a129a68" doxytag="SR_RET_PROVIDED_BUFFER_TOO_SMALL"></a><em>SR_RET_PROVIDED_BUFFER_TOO_SMALL</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a68" doxytag="SR_RET_PROVIDED_BUFFER_TOO_SMALL"></a><em>SR_RET_PROVIDED_BUFFER_TOO_SMALL</em></em>&nbsp;</td><td>
 the caller provided a buffer, but the called function sees the size of this buffer is too small - operation not carried out </td></tr>
-<tr><td valign=top><em><a name="a129a69" doxytag="SR_RET_INVALID_PARAM"></a><em>SR_RET_INVALID_PARAM</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a69" doxytag="SR_RET_INVALID_PARAM"></a><em>SR_RET_INVALID_PARAM</em></em>&nbsp;</td><td>
 an invalid parameter was provided to a method </td></tr>
-<tr><td valign=top><em><a name="a129a70" doxytag="SR_RET_SOCKET_ERR"></a><em>SR_RET_SOCKET_ERR</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a70" doxytag="SR_RET_SOCKET_ERR"></a><em>SR_RET_SOCKET_ERR</em></em>&nbsp;</td><td>
 generic error generated by socket subsystem </td></tr>
-<tr><td valign=top><em><a name="a129a71" doxytag="SR_RET_CANT_BIND_SOCKET"></a><em>SR_RET_CANT_BIND_SOCKET</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a71" doxytag="SR_RET_CANT_BIND_SOCKET"></a><em>SR_RET_CANT_BIND_SOCKET</em></em>&nbsp;</td><td>
 socket bind() operation failed </td></tr>
-<tr><td valign=top><em><a name="a129a72" doxytag="SR_RET_INVALID_SOCKET"></a><em>SR_RET_INVALID_SOCKET</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a72" doxytag="SR_RET_INVALID_SOCKET"></a><em>SR_RET_INVALID_SOCKET</em></em>&nbsp;</td><td>
 invalid socket </td></tr>
-<tr><td valign=top><em><a name="a129a73" doxytag="SR_RET_CONNECTION_CLOSED"></a><em>SR_RET_CONNECTION_CLOSED</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a73" doxytag="SR_RET_CONNECTION_CLOSED"></a><em>SR_RET_CONNECTION_CLOSED</em></em>&nbsp;</td><td>
 the remote peer closed the connection </td></tr>
-<tr><td valign=top><em><a name="a129a74" doxytag="SR_RET_INVALID_OS_SOCKETS_VERSION"></a><em>SR_RET_INVALID_OS_SOCKETS_VERSION</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a74" doxytag="SR_RET_INVALID_OS_SOCKETS_VERSION"></a><em>SR_RET_INVALID_OS_SOCKETS_VERSION</em></em>&nbsp;</td><td>
 the operating system socket subsystem version is inappropriate (this error will most probably occur under Win32, only) </td></tr>
-<tr><td valign=top><em><a name="a129a75" doxytag="SR_RET_INVALID_HDRCMD"></a><em>SR_RET_INVALID_HDRCMD</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a75" doxytag="SR_RET_CAN_NOT_INIT_SOCKET"></a><em>SR_RET_CAN_NOT_INIT_SOCKET</em></em>&nbsp;</td><td>
+socket() failed for whatever reason.. </td></tr>
+<tr><td valign=top><em><a name="a138a76" doxytag="SR_RET_UXDOMSOCK_CHMOD_ERR"></a><em>SR_RET_UXDOMSOCK_CHMOD_ERR</em></em>&nbsp;</td><td>
+chmod() failed on Unix Domain Socket </td></tr>
+<tr><td valign=top><em><a name="a138a77" doxytag="SR_RET_INVALID_HDRCMD"></a><em>SR_RET_INVALID_HDRCMD</em></em>&nbsp;</td><td>
 invalid HDRCMD (e.g 
 <p>
 "MSG", "RPY",...) </td></tr>
-<tr><td valign=top><em><a name="a129a76" doxytag="SR_RET_INVALID_WAITING_SP_CHAN"></a><em>SR_RET_INVALID_WAITING_SP_CHAN</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a78" doxytag="SR_RET_INVALID_WAITING_SP_CHAN"></a><em>SR_RET_INVALID_WAITING_SP_CHAN</em></em>&nbsp;</td><td>
 invalid SP before channo </td></tr>
-<tr><td valign=top><em><a name="a129a77" doxytag="SR_RET_INVALID_CHANNO"></a><em>SR_RET_INVALID_CHANNO</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a79" doxytag="SR_RET_INVALID_CHANNO"></a><em>SR_RET_INVALID_CHANNO</em></em>&nbsp;</td><td>
 invalid channo </td></tr>
-<tr><td valign=top><em><a name="a129a78" doxytag="SR_RET_INVALID_WAITING_SP_MSGNO"></a><em>SR_RET_INVALID_WAITING_SP_MSGNO</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a80" doxytag="SR_RET_INVALID_WAITING_SP_MSGNO"></a><em>SR_RET_INVALID_WAITING_SP_MSGNO</em></em>&nbsp;</td><td>
 now the space before the next header </td></tr>
-<tr><td valign=top><em><a name="a129a79" doxytag="SR_RET_INVALID_IN_MSGNO"></a><em>SR_RET_INVALID_IN_MSGNO</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a81" doxytag="SR_RET_INVALID_IN_MSGNO"></a><em>SR_RET_INVALID_IN_MSGNO</em></em>&nbsp;</td><td>
 and the next (numeric) header </td></tr>
-<tr><td valign=top><em><a name="a129a80" doxytag="SR_RET_INVALID_WAITING_SP_MORE"></a><em>SR_RET_INVALID_WAITING_SP_MORE</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a82" doxytag="SR_RET_INVALID_WAITING_SP_MORE"></a><em>SR_RET_INVALID_WAITING_SP_MORE</em></em>&nbsp;</td><td>
 now the space before the next header </td></tr>
-<tr><td valign=top><em><a name="a129a81" doxytag="SR_RET_INVALID_IN_MORE"></a><em>SR_RET_INVALID_IN_MORE</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a83" doxytag="SR_RET_INVALID_IN_MORE"></a><em>SR_RET_INVALID_IN_MORE</em></em>&nbsp;</td><td>
 and the next (char) header </td></tr>
-<tr><td valign=top><em><a name="a129a82" doxytag="SR_RET_INVALID_WAITING_SP_SEQNO"></a><em>SR_RET_INVALID_WAITING_SP_SEQNO</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a84" doxytag="SR_RET_INVALID_WAITING_SP_SEQNO"></a><em>SR_RET_INVALID_WAITING_SP_SEQNO</em></em>&nbsp;</td><td>
 now the space before the next header </td></tr>
-<tr><td valign=top><em><a name="a129a83" doxytag="SR_RET_INVALID_IN_SEQNO"></a><em>SR_RET_INVALID_IN_SEQNO</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a85" doxytag="SR_RET_INVALID_IN_SEQNO"></a><em>SR_RET_INVALID_IN_SEQNO</em></em>&nbsp;</td><td>
 and the next (numeric) header </td></tr>
-<tr><td valign=top><em><a name="a129a84" doxytag="SR_RET_INVALID_WAITING_SP_SIZE"></a><em>SR_RET_INVALID_WAITING_SP_SIZE</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a86" doxytag="SR_RET_INVALID_WAITING_SP_SIZE"></a><em>SR_RET_INVALID_WAITING_SP_SIZE</em></em>&nbsp;</td><td>
 now the space before the next header </td></tr>
-<tr><td valign=top><em><a name="a129a85" doxytag="SR_RET_INVALID_IN_SIZE"></a><em>SR_RET_INVALID_IN_SIZE</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a87" doxytag="SR_RET_INVALID_IN_SIZE"></a><em>SR_RET_INVALID_IN_SIZE</em></em>&nbsp;</td><td>
 and the next (numeric) header </td></tr>
-<tr><td valign=top><em><a name="a129a86" doxytag="SR_RET_INVALID_WAITING_SP_ANSNO"></a><em>SR_RET_INVALID_WAITING_SP_ANSNO</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a88" doxytag="SR_RET_INVALID_WAITING_SP_ANSNO"></a><em>SR_RET_INVALID_WAITING_SP_ANSNO</em></em>&nbsp;</td><td>
 now the space before the next header </td></tr>
-<tr><td valign=top><em><a name="a129a87" doxytag="SR_RET_INVALID_IN_ANSNO"></a><em>SR_RET_INVALID_IN_ANSNO</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a89" doxytag="SR_RET_INVALID_IN_ANSNO"></a><em>SR_RET_INVALID_IN_ANSNO</em></em>&nbsp;</td><td>
 and the next (numeric) header </td></tr>
-<tr><td valign=top><em><a name="a129a88" doxytag="SR_RET_INVALID_WAITING_HDRCR"></a><em>SR_RET_INVALID_WAITING_HDRCR</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a90" doxytag="SR_RET_INVALID_WAITING_HDRCR"></a><em>SR_RET_INVALID_WAITING_HDRCR</em></em>&nbsp;</td><td>
 awaiting the HDR's CR </td></tr>
-<tr><td valign=top><em><a name="a129a89" doxytag="SR_RET_INVALID_WAITING_HDRLF"></a><em>SR_RET_INVALID_WAITING_HDRLF</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a91" doxytag="SR_RET_INVALID_WAITING_HDRLF"></a><em>SR_RET_INVALID_WAITING_HDRLF</em></em>&nbsp;</td><td>
 awaiting the HDR's LF </td></tr>
-<tr><td valign=top><em><a name="a129a90" doxytag="SR_RET_INVALID_IN_PAYLOAD"></a><em>SR_RET_INVALID_IN_PAYLOAD</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a92" doxytag="SR_RET_INVALID_IN_PAYLOAD"></a><em>SR_RET_INVALID_IN_PAYLOAD</em></em>&nbsp;</td><td>
 reading payload area </td></tr>
-<tr><td valign=top><em><a name="a129a91" doxytag="SR_RET_INVALID_WAITING_END1"></a><em>SR_RET_INVALID_WAITING_END1</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a93" doxytag="SR_RET_INVALID_WAITING_END1"></a><em>SR_RET_INVALID_WAITING_END1</em></em>&nbsp;</td><td>
 waiting for the 1st HDR character </td></tr>
-<tr><td valign=top><em><a name="a129a92" doxytag="SR_RET_INVALID_WAITING_END2"></a><em>SR_RET_INVALID_WAITING_END2</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a94" doxytag="SR_RET_INVALID_WAITING_END2"></a><em>SR_RET_INVALID_WAITING_END2</em></em>&nbsp;</td><td>
 waiting for the 2nd HDR character </td></tr>
-<tr><td valign=top><em><a name="a129a93" doxytag="SR_RET_INVALID_WAITING_END3"></a><em>SR_RET_INVALID_WAITING_END3</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a95" doxytag="SR_RET_INVALID_WAITING_END3"></a><em>SR_RET_INVALID_WAITING_END3</em></em>&nbsp;</td><td>
 waiting for the 3rd HDR character </td></tr>
-<tr><td valign=top><em><a name="a129a94" doxytag="SR_RET_INVALID_WAITING_END4"></a><em>SR_RET_INVALID_WAITING_END4</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a96" doxytag="SR_RET_INVALID_WAITING_END4"></a><em>SR_RET_INVALID_WAITING_END4</em></em>&nbsp;</td><td>
 waiting for the 4th HDR character </td></tr>
-<tr><td valign=top><em><a name="a129a95" doxytag="SR_RET_INVALID_WAITING_END5"></a><em>SR_RET_INVALID_WAITING_END5</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a97" doxytag="SR_RET_INVALID_WAITING_END5"></a><em>SR_RET_INVALID_WAITING_END5</em></em>&nbsp;</td><td>
 waiting for the 5th HDR character </td></tr>
-<tr><td valign=top><em><a name="a129a96" doxytag="SR_RET_INVALID_WAITING_SP_ACKNO"></a><em>SR_RET_INVALID_WAITING_SP_ACKNO</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a98" doxytag="SR_RET_INVALID_WAITING_SP_ACKNO"></a><em>SR_RET_INVALID_WAITING_SP_ACKNO</em></em>&nbsp;</td><td>
 now the space before the next header </td></tr>
-<tr><td valign=top><em><a name="a129a97" doxytag="SR_RET_INVALID_WAITING_SP_WINDOW"></a><em>SR_RET_INVALID_WAITING_SP_WINDOW</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a99" doxytag="SR_RET_INVALID_WAITING_SP_WINDOW"></a><em>SR_RET_INVALID_WAITING_SP_WINDOW</em></em>&nbsp;</td><td>
 now the space before the next header </td></tr>
-<tr><td valign=top><em><a name="a129a98" doxytag="SR_RET_INAPROPRIATE_HDRCMD"></a><em>SR_RET_INAPROPRIATE_HDRCMD</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a100" doxytag="SR_RET_INAPROPRIATE_HDRCMD"></a><em>SR_RET_INAPROPRIATE_HDRCMD</em></em>&nbsp;</td><td>
 the beep header was syntactically correct, but could not be used semantically </td></tr>
-<tr><td valign=top><em><a name="a129a99" doxytag="SR_RET_OK"></a><em>SR_RET_OK</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a138a101" doxytag="SR_RET_OVERSIZED_FRAME"></a><em>SR_RET_OVERSIZED_FRAME</em></em>&nbsp;</td><td>
+the frame's "size" field specifies a size that does not fit into the current windows 
+<p>
+Eventually malicous. </td></tr>
+<tr><td valign=top><em><a name="a138a102" doxytag="SR_RET_OK"></a><em>SR_RET_OK</em></em>&nbsp;</td><td>
 operation successful </td></tr>
 </table>
 </dl>
     </td>
   </tr>
 </table>
-<hr size="1"><address style="align: right;"><small>Generated on Fri Sep 12 11:20:14 2003 for liblogging by
+<hr size="1"><address style="align: right;"><small>Generated on Mon Oct 3 12:29:56 2005 for liblogging by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 > 
 </a>1.3.2 </small></address>

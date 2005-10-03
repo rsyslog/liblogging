@@ -16,179 +16,188 @@
 00049 <span class="preprocessor">#endif</span>
 00050 <span class="preprocessor"></span>
 <a name="l00054"></a><a class="code" href="liblogging_8h.html#a1">00054</a> <span class="preprocessor">#define LIBLOGGING_VERSION_MAJOR 0</span>
-00055 <span class="preprocessor"></span><span class="preprocessor">#define LIBLOGGING_VERSION_MINOR 5</span>
+00055 <span class="preprocessor"></span><span class="preprocessor">#define LIBLOGGING_VERSION_MINOR 6</span>
 00056 <span class="preprocessor"></span><span class="preprocessor">#define LIBLOGGING_VERSION_SUBMINOR 0</span>
 00057 <span class="preprocessor"></span>
 00058 
-<a name="l00059"></a><a class="code" href="liblogging_8h.html#a129">00059</a> <span class="keyword">enum</span> <a class="code" href="liblogging_8h.html#a129">srRetVal_</a>                          
+<a name="l00059"></a><a class="code" href="liblogging_8h.html#a138">00059</a> <span class="keyword">enum</span> <a class="code" href="liblogging_8h.html#a138">srRetVal_</a>                          
 00060 {
-00061         <a class="code" href="liblogging_8h.html#a129a18">SR_RET_ERR</a> = -1,                
-00062         <a class="code" href="liblogging_8h.html#a129a19">SR_RET_REMAIN_WIN_TOO_SMALL</a> = -2,       
-00063         <a class="code" href="liblogging_8h.html#a129a20">SR_RET_INVALID_HANDLE</a> = -3,     
-00068         <a class="code" href="liblogging_8h.html#a129a21">SR_RET_INVALID_DESTRUCTOR</a> = -4, 
-00069         <a class="code" href="liblogging_8h.html#a129a22">SR_RET_NOT_FOUND</a> = - 5,         
-00071     <a class="code" href="liblogging_8h.html#a129a23">SR_RET_OUT_OF_MEMORY</a> = -6,  
-00072     <a class="code" href="liblogging_8h.html#a129a24">SR_RET_XML_INVALID_PARAMTAG</a> = -7,   
-00073     <a class="code" href="liblogging_8h.html#a129a25">SR_RET_XML_INVALID_TERMINATOR</a> = -8, 
-00074         <a class="code" href="liblogging_8h.html#a129a26">SR_RET_XML_MALFORMED</a> = -9,      
-00075         <a class="code" href="liblogging_8h.html#a129a27">SR_RET_MISSING_CLOSE_BRACE</a> = -10,       
-00076         <a class="code" href="liblogging_8h.html#a129a28">SR_RET_XML_MISSING_CLOSETAG</a> = -11,      
-00077         <a class="code" href="liblogging_8h.html#a129a29">SR_RET_XML_MISSING_OPENTAG</a> = -12,       
-00078         <a class="code" href="liblogging_8h.html#a129a30">SR_RET_XML_TAG_MISMATCH</a> = -13,  
-00079         <a class="code" href="liblogging_8h.html#a129a31">SR_RET_XML_INVALID_CDATA_HDR</a> = -14, 
-00080         <a class="code" href="liblogging_8h.html#a129a32">SR_RET_XML_INVALID_CDATA_TRAIL</a> = -14, 
-00081         <a class="code" href="liblogging_8h.html#a129a33">SR_RET_PEER_NONOK_RESPONSE</a> = -15, 
-00082         <a class="code" href="liblogging_8h.html#a129a34">SR_RET_PEER_INVALID_PROFILE</a> = -16, 
-00083         <a class="code" href="liblogging_8h.html#a129a35">SR_RET_PEER_NO_URI</a> = -17,       
-00084         <a class="code" href="liblogging_8h.html#a129a36">SR_RET_PEER_NO_PROFILE</a> = -18,
-00085         <a class="code" href="liblogging_8h.html#a129a37">SR_RET_PEER_NO_GREETING</a> = -19, 
-00086         <a class="code" href="liblogging_8h.html#a129a38">SR_RET_PEER_DOESNT_SUPPORT_PROFILE</a> = -20, 
-00087         <a class="code" href="liblogging_8h.html#a129a39">SR_RET_INVALID_FRAME_STATE</a> = -21,       
-00088         <a class="code" href="liblogging_8h.html#a129a40">SR_RET_PROFILE_ALREADY_SET</a> = -22,       
-00089         <a class="code" href="liblogging_8h.html#a129a41">SR_RET_INVALID_CHAN_STATE</a> = -23,        
-00090         <a class="code" href="liblogging_8h.html#a129a42">SR_RET_INVALID_GREETING</a> = -24,          
-00091         <a class="code" href="liblogging_8h.html#a129a43">SR_RET_INVALID_CHAN0_MESG</a> = -25,        
-00092         <a class="code" href="liblogging_8h.html#a129a44">SR_RET_START_MISSING_NUMBER</a> = -26,      
-00093         <a class="code" href="liblogging_8h.html#a129a45">SR_RET_START_INVALID_NUMBER</a> = -27,      
-00094         <a class="code" href="liblogging_8h.html#a129a46">SR_RET_START_EXISTING_NUMBER</a> = -28,     
-00095         <a class="code" href="liblogging_8h.html#a129a47">SR_RET_NO_VALUE</a> = -29,                          
-00096         <a class="code" href="liblogging_8h.html#a129a48">SR_RET_START_EVEN_NUMBER</a> = -30,         
-00097         <a class="code" href="liblogging_8h.html#a129a49">SR_RET_NO_PROFILE_RQSTD</a> = -31,          
-00098         <a class="code" href="liblogging_8h.html#a129a50">SR_RET_WARNING_START_NO_PROFMATCH</a> = -32,
-00099         <a class="code" href="liblogging_8h.html#a129a51">SR_RET_ERR_EVENT_HANDLER_MISSING</a> = -33,
-00100         <a class="code" href="liblogging_8h.html#a129a52">SR_RET_ACKNO_ZERO</a> = -34,                        
-00101         <a class="code" href="liblogging_8h.html#a129a53">SR_RET_CHAN_DOESNT_EXIST</a> = -35,         
-00102         <a class="code" href="liblogging_8h.html#a129a54">SR_RET_ALREADY_LISTENING</a> = -36,         
-00103         <a class="code" href="liblogging_8h.html#a129a55">SR_RET_INVALID_OPTVAL</a> = -37,            
-00104         <a class="code" href="liblogging_8h.html#a129a56">SR_RET_INVALID_LIB_OPTION</a> = -38,        
-00105         <a class="code" href="liblogging_8h.html#a129a57">SR_RET_NULL_POINTER_PROVIDED</a> = -39,     
-00106         <a class="code" href="liblogging_8h.html#a129a58">SR_RET_PROPERTY_NOT_AVAILABLE</a> = -40,
-00107         <a class="code" href="liblogging_8h.html#a129a59">SR_RET_UNSUPPORTED_FORMAT</a> = -41,        
-00108         <a class="code" href="liblogging_8h.html#a129a60">SR_RET_UNALLOCATABLE_BUFFER</a> = -42,      
-00109         <a class="code" href="liblogging_8h.html#a129a61">SR_RET_PRIO_OUT_OF_RANGE</a> = -43,         
-00110         <a class="code" href="liblogging_8h.html#a129a62">SR_RET_FACIL_OUT_OF_RANGE</a> = -44,        
-00111         <a class="code" href="liblogging_8h.html#a129a63">SR_RET_INVALID_TAG</a> = -45,                       
-00112         <a class="code" href="liblogging_8h.html#a129a64">SR_RET_NULL_MSG_PROVIDED</a> = -46,         
-00113         <a class="code" href="liblogging_8h.html#a129a65">SR_RET_ERR_RECEIVE</a> = -47,                       
-00114         <a class="code" href="liblogging_8h.html#a129a66">SR_RET_UNEXPECTED_HDRCMD</a> = -48,         
-00115         <a class="code" href="liblogging_8h.html#a129a67">SR_RET_PEER_INDICATED_ERROR</a> = -49,      
-00116         <a class="code" href="liblogging_8h.html#a129a68">SR_RET_PROVIDED_BUFFER_TOO_SMALL</a> = -50,
-00117         <a class="code" href="liblogging_8h.html#a129a69">SR_RET_INVALID_PARAM</a> = -51,                     
+00061         <a class="code" href="liblogging_8h.html#a138a18">SR_RET_ERR</a> = -1,                
+00062         <a class="code" href="liblogging_8h.html#a138a19">SR_RET_REMAIN_WIN_TOO_SMALL</a> = -2,       
+00063         <a class="code" href="liblogging_8h.html#a138a20">SR_RET_INVALID_HANDLE</a> = -3,     
+00068         <a class="code" href="liblogging_8h.html#a138a21">SR_RET_INVALID_DESTRUCTOR</a> = -4, 
+00069         <a class="code" href="liblogging_8h.html#a138a22">SR_RET_NOT_FOUND</a> = - 5,         
+00071     <a class="code" href="liblogging_8h.html#a138a23">SR_RET_OUT_OF_MEMORY</a> = -6,  
+00072     <a class="code" href="liblogging_8h.html#a138a24">SR_RET_XML_INVALID_PARAMTAG</a> = -7,   
+00073     <a class="code" href="liblogging_8h.html#a138a25">SR_RET_XML_INVALID_TERMINATOR</a> = -8, 
+00074         <a class="code" href="liblogging_8h.html#a138a26">SR_RET_XML_MALFORMED</a> = -9,      
+00075         <a class="code" href="liblogging_8h.html#a138a27">SR_RET_MISSING_CLOSE_BRACE</a> = -10,       
+00076         <a class="code" href="liblogging_8h.html#a138a28">SR_RET_XML_MISSING_CLOSETAG</a> = -11,      
+00077         <a class="code" href="liblogging_8h.html#a138a29">SR_RET_XML_MISSING_OPENTAG</a> = -12,       
+00078         <a class="code" href="liblogging_8h.html#a138a30">SR_RET_XML_TAG_MISMATCH</a> = -13,  
+00079         <a class="code" href="liblogging_8h.html#a138a31">SR_RET_XML_INVALID_CDATA_HDR</a> = -14, 
+00080         <a class="code" href="liblogging_8h.html#a138a32">SR_RET_XML_INVALID_CDATA_TRAIL</a> = -14, 
+00081         <a class="code" href="liblogging_8h.html#a138a33">SR_RET_PEER_NONOK_RESPONSE</a> = -15, 
+00082         <a class="code" href="liblogging_8h.html#a138a34">SR_RET_PEER_INVALID_PROFILE</a> = -16, 
+00083         <a class="code" href="liblogging_8h.html#a138a35">SR_RET_PEER_NO_URI</a> = -17,       
+00084         <a class="code" href="liblogging_8h.html#a138a36">SR_RET_PEER_NO_PROFILE</a> = -18,
+00085         <a class="code" href="liblogging_8h.html#a138a37">SR_RET_PEER_NO_GREETING</a> = -19, 
+00086         <a class="code" href="liblogging_8h.html#a138a38">SR_RET_PEER_DOESNT_SUPPORT_PROFILE</a> = -20, 
+00087         <a class="code" href="liblogging_8h.html#a138a39">SR_RET_INVALID_FRAME_STATE</a> = -21,       
+00088         <a class="code" href="liblogging_8h.html#a138a40">SR_RET_PROFILE_ALREADY_SET</a> = -22,       
+00089         <a class="code" href="liblogging_8h.html#a138a41">SR_RET_INVALID_CHAN_STATE</a> = -23,        
+00090         <a class="code" href="liblogging_8h.html#a138a42">SR_RET_INVALID_GREETING</a> = -24,          
+00091         <a class="code" href="liblogging_8h.html#a138a43">SR_RET_INVALID_CHAN0_MESG</a> = -25,        
+00092         <a class="code" href="liblogging_8h.html#a138a44">SR_RET_START_MISSING_NUMBER</a> = -26,      
+00093         <a class="code" href="liblogging_8h.html#a138a45">SR_RET_START_INVALID_NUMBER</a> = -27,      
+00094         <a class="code" href="liblogging_8h.html#a138a46">SR_RET_START_EXISTING_NUMBER</a> = -28,     
+00095         <a class="code" href="liblogging_8h.html#a138a47">SR_RET_NO_VALUE</a> = -29,                          
+00096         <a class="code" href="liblogging_8h.html#a138a48">SR_RET_START_EVEN_NUMBER</a> = -30,         
+00097         <a class="code" href="liblogging_8h.html#a138a49">SR_RET_NO_PROFILE_RQSTD</a> = -31,          
+00098         <a class="code" href="liblogging_8h.html#a138a50">SR_RET_WARNING_START_NO_PROFMATCH</a> = -32,
+00099         <a class="code" href="liblogging_8h.html#a138a51">SR_RET_ERR_EVENT_HANDLER_MISSING</a> = -33,
+00100         <a class="code" href="liblogging_8h.html#a138a52">SR_RET_ACKNO_ZERO</a> = -34,                        
+00101         <a class="code" href="liblogging_8h.html#a138a53">SR_RET_CHAN_DOESNT_EXIST</a> = -35,         
+00102         <a class="code" href="liblogging_8h.html#a138a54">SR_RET_ALREADY_LISTENING</a> = -36,         
+00103         <a class="code" href="liblogging_8h.html#a138a55">SR_RET_INVALID_OPTVAL</a> = -37,            
+00104         <a class="code" href="liblogging_8h.html#a138a56">SR_RET_INVALID_LIB_OPTION</a> = -38,        
+00105         <a class="code" href="liblogging_8h.html#a138a57">SR_RET_NULL_POINTER_PROVIDED</a> = -39,     
+00106         <a class="code" href="liblogging_8h.html#a138a58">SR_RET_PROPERTY_NOT_AVAILABLE</a> = -40,
+00107         <a class="code" href="liblogging_8h.html#a138a59">SR_RET_UNSUPPORTED_FORMAT</a> = -41,        
+00108         <a class="code" href="liblogging_8h.html#a138a60">SR_RET_UNALLOCATABLE_BUFFER</a> = -42,      
+00109         <a class="code" href="liblogging_8h.html#a138a61">SR_RET_PRIO_OUT_OF_RANGE</a> = -43,         
+00110         <a class="code" href="liblogging_8h.html#a138a62">SR_RET_FACIL_OUT_OF_RANGE</a> = -44,        
+00111         <a class="code" href="liblogging_8h.html#a138a63">SR_RET_INVALID_TAG</a> = -45,                       
+00112         <a class="code" href="liblogging_8h.html#a138a64">SR_RET_NULL_MSG_PROVIDED</a> = -46,         
+00113         <a class="code" href="liblogging_8h.html#a138a65">SR_RET_ERR_RECEIVE</a> = -47,                       
+00114         <a class="code" href="liblogging_8h.html#a138a66">SR_RET_UNEXPECTED_HDRCMD</a> = -48,         
+00115         <a class="code" href="liblogging_8h.html#a138a67">SR_RET_PEER_INDICATED_ERROR</a> = -49,      
+00116         <a class="code" href="liblogging_8h.html#a138a68">SR_RET_PROVIDED_BUFFER_TOO_SMALL</a> = -50,
+00117         <a class="code" href="liblogging_8h.html#a138a69">SR_RET_INVALID_PARAM</a> = -51,                     
 00119         <span class="comment">/* socket error codes */</span>
-00120         <a class="code" href="liblogging_8h.html#a129a70">SR_RET_SOCKET_ERR</a> = -1001,                      
-00121         <a class="code" href="liblogging_8h.html#a129a71">SR_RET_CANT_BIND_SOCKET</a> = -1002,        
-00122         <a class="code" href="liblogging_8h.html#a129a72">SR_RET_INVALID_SOCKET</a> = -1003,          
-00123         <a class="code" href="liblogging_8h.html#a129a73">SR_RET_CONNECTION_CLOSED</a> = -1004,       
-00124         <a class="code" href="liblogging_8h.html#a129a74">SR_RET_INVALID_OS_SOCKETS_VERSION</a> = -1005,
-00126         <span class="comment">/* BEEP frame format &amp; other errors */</span>
-00127         <a class="code" href="liblogging_8h.html#a129a75">SR_RET_INVALID_HDRCMD</a> = -2001,                  
-00128         <a class="code" href="liblogging_8h.html#a129a76">SR_RET_INVALID_WAITING_SP_CHAN</a> = -2002, 
-00129         <a class="code" href="liblogging_8h.html#a129a77">SR_RET_INVALID_CHANNO</a> = -2003,                  
-00130         <a class="code" href="liblogging_8h.html#a129a78">SR_RET_INVALID_WAITING_SP_MSGNO</a> = -2004,
-00131         <a class="code" href="liblogging_8h.html#a129a79">SR_RET_INVALID_IN_MSGNO</a> = -2005,                
-00132         <a class="code" href="liblogging_8h.html#a129a80">SR_RET_INVALID_WAITING_SP_MORE</a> = -2006, 
-00133         <a class="code" href="liblogging_8h.html#a129a81">SR_RET_INVALID_IN_MORE</a> = -2007,                 
-00134         <a class="code" href="liblogging_8h.html#a129a82">SR_RET_INVALID_WAITING_SP_SEQNO</a> = -2008,
-00135         <a class="code" href="liblogging_8h.html#a129a83">SR_RET_INVALID_IN_SEQNO</a> = -2009,                
-00136         <a class="code" href="liblogging_8h.html#a129a84">SR_RET_INVALID_WAITING_SP_SIZE</a> = -2010, 
-00137         <a class="code" href="liblogging_8h.html#a129a85">SR_RET_INVALID_IN_SIZE</a> = -2011,                 
-00138         <a class="code" href="liblogging_8h.html#a129a86">SR_RET_INVALID_WAITING_SP_ANSNO</a> = -2012,
-00139         <a class="code" href="liblogging_8h.html#a129a87">SR_RET_INVALID_IN_ANSNO</a> = -2013,                
-00140         <a class="code" href="liblogging_8h.html#a129a88">SR_RET_INVALID_WAITING_HDRCR</a> = -2014,   
-00141         <a class="code" href="liblogging_8h.html#a129a89">SR_RET_INVALID_WAITING_HDRLF</a> = -2015,   
-00142         <a class="code" href="liblogging_8h.html#a129a90">SR_RET_INVALID_IN_PAYLOAD</a> = -2016,              
-00143         <a class="code" href="liblogging_8h.html#a129a91">SR_RET_INVALID_WAITING_END1</a> = -2017,    
-00144         <a class="code" href="liblogging_8h.html#a129a92">SR_RET_INVALID_WAITING_END2</a> = -2018,    
-00145         <a class="code" href="liblogging_8h.html#a129a93">SR_RET_INVALID_WAITING_END3</a> = -2019,    
-00146         <a class="code" href="liblogging_8h.html#a129a94">SR_RET_INVALID_WAITING_END4</a> = -2020,    
-00147         <a class="code" href="liblogging_8h.html#a129a95">SR_RET_INVALID_WAITING_END5</a> = -2021,    
-00148         <a class="code" href="liblogging_8h.html#a129a96">SR_RET_INVALID_WAITING_SP_ACKNO</a> = -2022,
-00149         <a class="code" href="liblogging_8h.html#a129a97">SR_RET_INVALID_WAITING_SP_WINDOW</a> = -2023,
-00150         <a class="code" href="liblogging_8h.html#a129a98">SR_RET_INAPROPRIATE_HDRCMD</a> = -2024,             
-00152         <span class="comment">/* and finally the OK state... */</span>
-00153         <a class="code" href="liblogging_8h.html#a129a99">SR_RET_OK</a> = 0                   
-00154 };
-<a name="l00156"></a><a class="code" href="liblogging_8h.html#a6">00156</a> <span class="keyword">typedef</span> <span class="keyword">enum</span> <a class="code" href="liblogging_8h.html#a129">srRetVal_</a> <a class="code" href="liblogging_8h.html#a6">srRetVal</a>;
-00157 
-00158 
-<a name="l00159"></a><a class="code" href="liblogging_8h.html#a7">00159</a> <span class="keyword">typedef</span> <span class="keywordtype">unsigned</span> <a class="code" href="liblogging_8h.html#a7">SBchannel</a>; 
-<a name="l00160"></a><a class="code" href="liblogging_8h.html#a8">00160</a> <span class="keyword">typedef</span> <span class="keywordtype">unsigned</span> <a class="code" href="liblogging_8h.html#a8">SBseqno</a>; 
-<a name="l00161"></a><a class="code" href="liblogging_8h.html#a9">00161</a> <span class="keyword">typedef</span> <span class="keywordtype">unsigned</span> <a class="code" href="liblogging_8h.html#a9">SBansno</a>; 
-<a name="l00162"></a><a class="code" href="liblogging_8h.html#a10">00162</a> <span class="keyword">typedef</span> <span class="keywordtype">unsigned</span> <a class="code" href="liblogging_8h.html#a10">SBsize</a>; 
-<a name="l00163"></a><a class="code" href="liblogging_8h.html#a11">00163</a> <span class="keyword">typedef</span> <span class="keywordtype">unsigned</span> <a class="code" href="liblogging_8h.html#a11">SBmsgno</a>; 
-<a name="l00164"></a><a class="code" href="liblogging_8h.html#a12">00164</a> <span class="keyword">typedef</span> <span class="keywordtype">unsigned</span> <a class="code" href="liblogging_8h.html#a12">SBackno</a>; 
-<a name="l00165"></a><a class="code" href="liblogging_8h.html#a13">00165</a> <span class="keyword">typedef</span> <span class="keywordtype">unsigned</span> <a class="code" href="liblogging_8h.html#a13">SBwindow</a>; 
-<a name="l00175"></a><a class="code" href="liblogging_8h.html#a130">00175</a> <span class="keyword">enum</span> <a class="code" href="liblogging_8h.html#a130">srObjectID</a>
-00176 {
-00177         <a class="code" href="liblogging_8h.html#a130a100">OID_Freed</a> = -1,         
-00181         <a class="code" href="liblogging_8h.html#a130a101">OID_Invalid</a> = 0,        
-00182         <span class="comment">/* The 0xCDAB is a debug aid. It helps us find object IDs in memory</span>
-00183 <span class="comment">         * dumps (on X86, this is ABCD in the dump ;)</span>
-00184 <span class="comment">         * If you are on an embedded device and you would like to save space</span>
-00185 <span class="comment">         * make them 1 byte only.</span>
-00186 <span class="comment">         */</span>
-00187         OIDsbFram = 0xCDAB0001,
-00188         OIDsbChan = 0xCDAB0002,
-00189         OIDsbMesg = 0xCDAB0003,
-00190         OIDsbSess = 0xCDAB0004,
-00191         OIDsbSock = 0xCDAB0005,
-00192         OIDsbProf = 0xCDAB0006,
-00193         OIDsrAPI  = 0xCDAB0007,
-00194         OIDsrSLMG = 0xCDAB0008,
-00195         OIDsbNVTR = 0xCDAB0009,
-00196         OIDsbNVTE = 0xCDAB000A,
-00197         OIDsbStrB = 0xCDAB000B,
-00198         OIDsbLstn = 0xCDAB000C,
-00199         OIDsbPSSR = 0xCDAB000D,
-00200         OIDsbPSRC = 0xCDAB000E
-00201 };
-00202 <span class="keyword">typedef</span> <span class="keyword">enum</span> <a class="code" href="liblogging_8h.html#a130">srObjectID</a> srObjID;
-00203 
-00204 
-<a name="l00209"></a><a class="code" href="liblogging_8h.html#a131">00209</a> <span class="keyword">enum</span> <a class="code" href="liblogging_8h.html#a131">srOPTION3195Profiles_</a>
-00210 {
-00211         USE_3195_PROFILE_ANY = 1,
-00212         USE_3195_PROFILE_RAW_ONLY = 2,
-00213         USE_3195_PROFILE_COOKED_ONLY = 3
-00214 };
-00215 <span class="keyword">typedef</span> <span class="keyword">enum</span> <a class="code" href="liblogging_8h.html#a131">srOPTION3195Profiles_</a> srOPTION3195Profiles;
-00216 
-<a name="l00221"></a><a class="code" href="liblogging_8h.html#a132">00221</a> <span class="keyword">enum</span> <a class="code" href="liblogging_8h.html#a132">srOPTION</a>
-00222 {
-00223         <a class="code" href="liblogging_8h.html#a132a119">srOPTION_INVALID</a> = 0,           
-00234         <a class="code" href="liblogging_8h.html#a132a120">srOPTION_CALL_OS_SOCKET_INITIALIZER</a> = 1,
-00242          <a class="code" href="liblogging_8h.html#a132a121">srOPTION_3195_ALLOWED_CLIENT_PROFILES</a> = 2
-00243 };
-00244 <span class="keyword">typedef</span> <span class="keyword">enum</span> <a class="code" href="liblogging_8h.html#a132">srOPTION</a> SRoption;
-00245 
-00252 <span class="preprocessor">#if DEBUGLEVEL &gt; 0</span>
-<a name="l00253"></a><a class="code" href="liblogging_8h.html#a4">00253</a> <span class="preprocessor"></span><span class="preprocessor">#define SRFREEOBJ(x) {(x)-&gt;OID = OID_Freed; free(x);}</span>
-00254 <span class="preprocessor"></span><span class="preprocessor">#else</span>
-00255 <span class="preprocessor"></span><span class="preprocessor">#define SRFREEOBJ(x) free(x)</span>
-00256 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00257 <span class="preprocessor"></span>
-<a name="l00262"></a><a class="code" href="liblogging_8h.html#a133">00262</a> <span class="keyword">enum</span> <a class="code" href="liblogging_8h.html#a133">BEEPHdrID_</a> 
-00263 {
-00264         BEEPHDR_UNKNOWN = 0,
-00265         BEEPHDR_ANS,
-00266         BEEPHDR_ERR,
-00267     BEEPHDR_MSG,
-00268         BEEPHDR_NUL,
-00269         BEEPHDR_RPY,
-00270         BEEPHDR_SEQ
-00271 };
-00272 <span class="keyword">typedef</span> <span class="keyword">enum</span> <a class="code" href="liblogging_8h.html#a133">BEEPHdrID_</a> BEEPHdrID;
-00273 
-00274 
-00275 <span class="preprocessor">#define BEEP_DEFAULT_MIME_HDR "Content-type: application/beep+xml\r\n"</span>
-00276 <span class="preprocessor"></span>
-00277 <span class="preprocessor">#ifdef __cplusplus</span>
-00278 <span class="preprocessor"></span>}
-00279 <span class="preprocessor">#endif</span>
-00280 <span class="preprocessor"></span><span class="preprocessor">#include "<a class="code" href="srAPI_8h.html">srAPI.h</a>"</span>
-00281 
-00282 <span class="preprocessor">#endif</span>
-</pre></div><hr size="1"><address style="align: right;"><small>Generated on Fri Sep 12 11:20:13 2003 for liblogging by
+00120         <a class="code" href="liblogging_8h.html#a138a70">SR_RET_SOCKET_ERR</a> = -1001,                      
+00121         <a class="code" href="liblogging_8h.html#a138a71">SR_RET_CANT_BIND_SOCKET</a> = -1002,        
+00122         <a class="code" href="liblogging_8h.html#a138a72">SR_RET_INVALID_SOCKET</a> = -1003,          
+00123         <a class="code" href="liblogging_8h.html#a138a73">SR_RET_CONNECTION_CLOSED</a> = -1004,       
+00124         <a class="code" href="liblogging_8h.html#a138a74">SR_RET_INVALID_OS_SOCKETS_VERSION</a> = -1005,
+00125         <a class="code" href="liblogging_8h.html#a138a75">SR_RET_CAN_NOT_INIT_SOCKET</a> = -1006,     
+00126         <a class="code" href="liblogging_8h.html#a138a76">SR_RET_UXDOMSOCK_CHMOD_ERR</a> = -1007,     
+00128         <span class="comment">/* BEEP frame format &amp; other errors */</span>
+00129         <a class="code" href="liblogging_8h.html#a138a77">SR_RET_INVALID_HDRCMD</a> = -2001,                  
+00130         <a class="code" href="liblogging_8h.html#a138a78">SR_RET_INVALID_WAITING_SP_CHAN</a> = -2002, 
+00131         <a class="code" href="liblogging_8h.html#a138a79">SR_RET_INVALID_CHANNO</a> = -2003,                  
+00132         <a class="code" href="liblogging_8h.html#a138a80">SR_RET_INVALID_WAITING_SP_MSGNO</a> = -2004,
+00133         <a class="code" href="liblogging_8h.html#a138a81">SR_RET_INVALID_IN_MSGNO</a> = -2005,                
+00134         <a class="code" href="liblogging_8h.html#a138a82">SR_RET_INVALID_WAITING_SP_MORE</a> = -2006, 
+00135         <a class="code" href="liblogging_8h.html#a138a83">SR_RET_INVALID_IN_MORE</a> = -2007,                 
+00136         <a class="code" href="liblogging_8h.html#a138a84">SR_RET_INVALID_WAITING_SP_SEQNO</a> = -2008,
+00137         <a class="code" href="liblogging_8h.html#a138a85">SR_RET_INVALID_IN_SEQNO</a> = -2009,                
+00138         <a class="code" href="liblogging_8h.html#a138a86">SR_RET_INVALID_WAITING_SP_SIZE</a> = -2010, 
+00139         <a class="code" href="liblogging_8h.html#a138a87">SR_RET_INVALID_IN_SIZE</a> = -2011,                 
+00140         <a class="code" href="liblogging_8h.html#a138a88">SR_RET_INVALID_WAITING_SP_ANSNO</a> = -2012,
+00141         <a class="code" href="liblogging_8h.html#a138a89">SR_RET_INVALID_IN_ANSNO</a> = -2013,                
+00142         <a class="code" href="liblogging_8h.html#a138a90">SR_RET_INVALID_WAITING_HDRCR</a> = -2014,   
+00143         <a class="code" href="liblogging_8h.html#a138a91">SR_RET_INVALID_WAITING_HDRLF</a> = -2015,   
+00144         <a class="code" href="liblogging_8h.html#a138a92">SR_RET_INVALID_IN_PAYLOAD</a> = -2016,              
+00145         <a class="code" href="liblogging_8h.html#a138a93">SR_RET_INVALID_WAITING_END1</a> = -2017,    
+00146         <a class="code" href="liblogging_8h.html#a138a94">SR_RET_INVALID_WAITING_END2</a> = -2018,    
+00147         <a class="code" href="liblogging_8h.html#a138a95">SR_RET_INVALID_WAITING_END3</a> = -2019,    
+00148         <a class="code" href="liblogging_8h.html#a138a96">SR_RET_INVALID_WAITING_END4</a> = -2020,    
+00149         <a class="code" href="liblogging_8h.html#a138a97">SR_RET_INVALID_WAITING_END5</a> = -2021,    
+00150         <a class="code" href="liblogging_8h.html#a138a98">SR_RET_INVALID_WAITING_SP_ACKNO</a> = -2022,
+00151         <a class="code" href="liblogging_8h.html#a138a99">SR_RET_INVALID_WAITING_SP_WINDOW</a> = -2023,
+00152         <a class="code" href="liblogging_8h.html#a138a100">SR_RET_INAPROPRIATE_HDRCMD</a> = -2024,             
+00153         <a class="code" href="liblogging_8h.html#a138a101">SR_RET_OVERSIZED_FRAME</a> = -2025,                 
+00155         <span class="comment">/* and finally the OK state... */</span>
+00156         <a class="code" href="liblogging_8h.html#a138a102">SR_RET_OK</a> = 0                   
+00157 };
+<a name="l00159"></a><a class="code" href="liblogging_8h.html#a6">00159</a> <span class="keyword">typedef</span> <span class="keyword">enum</span> <a class="code" href="liblogging_8h.html#a138">srRetVal_</a> <a class="code" href="liblogging_8h.html#a6">srRetVal</a>;
+00160 
+00161 
+<a name="l00162"></a><a class="code" href="liblogging_8h.html#a7">00162</a> <span class="keyword">typedef</span> <span class="keywordtype">unsigned</span> <a class="code" href="liblogging_8h.html#a7">SBchannel</a>; 
+<a name="l00163"></a><a class="code" href="liblogging_8h.html#a8">00163</a> <span class="keyword">typedef</span> <span class="keywordtype">unsigned</span> <a class="code" href="liblogging_8h.html#a8">SBseqno</a>; 
+<a name="l00164"></a><a class="code" href="liblogging_8h.html#a9">00164</a> <span class="keyword">typedef</span> <span class="keywordtype">unsigned</span> <a class="code" href="liblogging_8h.html#a9">SBansno</a>; 
+<a name="l00165"></a><a class="code" href="liblogging_8h.html#a10">00165</a> <span class="keyword">typedef</span> <span class="keywordtype">unsigned</span> <a class="code" href="liblogging_8h.html#a10">SBsize</a>; 
+<a name="l00166"></a><a class="code" href="liblogging_8h.html#a11">00166</a> <span class="keyword">typedef</span> <span class="keywordtype">unsigned</span> <a class="code" href="liblogging_8h.html#a11">SBmsgno</a>; 
+<a name="l00167"></a><a class="code" href="liblogging_8h.html#a12">00167</a> <span class="keyword">typedef</span> <span class="keywordtype">unsigned</span> <a class="code" href="liblogging_8h.html#a12">SBackno</a>; 
+<a name="l00168"></a><a class="code" href="liblogging_8h.html#a13">00168</a> <span class="keyword">typedef</span> <span class="keywordtype">unsigned</span> <a class="code" href="liblogging_8h.html#a13">SBwindow</a>; 
+<a name="l00178"></a><a class="code" href="liblogging_8h.html#a139">00178</a> <span class="keyword">enum</span> <a class="code" href="liblogging_8h.html#a139">srObjectID</a>
+00179 {
+00180         <a class="code" href="liblogging_8h.html#a139a103">OID_Freed</a> = -1,         
+00184         <a class="code" href="liblogging_8h.html#a139a104">OID_Invalid</a> = 0,        
+00185         <span class="comment">/* The 0xCDAB is a debug aid. It helps us find object IDs in memory</span>
+00186 <span class="comment">         * dumps (on X86, this is ABCD in the dump ;)</span>
+00187 <span class="comment">         * If you are on an embedded device and you would like to save space</span>
+00188 <span class="comment">         * make them 1 byte only.</span>
+00189 <span class="comment">         */</span>
+00190         OIDsbFram = 0xCDAB0001,
+00191         OIDsbChan = 0xCDAB0002,
+00192         OIDsbMesg = 0xCDAB0003,
+00193         OIDsbSess = 0xCDAB0004,
+00194         OIDsbSock = 0xCDAB0005,
+00195         OIDsbProf = 0xCDAB0006,
+00196         OIDsrAPI  = 0xCDAB0007,
+00197         OIDsrSLMG = 0xCDAB0008,
+00198         OIDsbNVTR = 0xCDAB0009,
+00199         OIDsbNVTE = 0xCDAB000A,
+00200         OIDsbStrB = 0xCDAB000B,
+00201         OIDsbLstn = 0xCDAB000C,
+00202         OIDsbPSSR = 0xCDAB000D,
+00203         OIDsbPSRC = 0xCDAB000E
+00204 };
+00205 <span class="keyword">typedef</span> <span class="keyword">enum</span> <a class="code" href="liblogging_8h.html#a139">srObjectID</a> srObjID;
+00206 
+00207 
+<a name="l00212"></a><a class="code" href="liblogging_8h.html#a140">00212</a> <span class="keyword">enum</span> <a class="code" href="liblogging_8h.html#a140">srOPTION3195Profiles_</a>
+00213 {
+00214         USE_3195_PROFILE_ANY = 1,
+00215         USE_3195_PROFILE_RAW_ONLY = 2,
+00216         USE_3195_PROFILE_COOKED_ONLY = 3
+00217 };
+00218 <span class="keyword">typedef</span> <span class="keyword">enum</span> <a class="code" href="liblogging_8h.html#a140">srOPTION3195Profiles_</a> srOPTION3195Profiles;
+00219 
+<a name="l00224"></a><a class="code" href="liblogging_8h.html#a141">00224</a> <span class="keyword">enum</span> <a class="code" href="liblogging_8h.html#a141">srOPTION</a>
+00225 {
+00226         <a class="code" href="liblogging_8h.html#a141a122">srOPTION_INVALID</a> = 0,           
+00237         <a class="code" href="liblogging_8h.html#a141a123">srOPTION_CALL_OS_SOCKET_INITIALIZER</a> = 1,
+00245          <a class="code" href="liblogging_8h.html#a141a124">srOPTION_3195_ALLOWED_CLIENT_PROFILES</a> = 2,
+00250          <a class="code" href="liblogging_8h.html#a141a125">srOPTION_LISTEN_UDP</a> = 3,
+00255      <a class="code" href="liblogging_8h.html#a141a126">srOPTION_UPD_LISTENPORT</a> = 4,
+00261      <a class="code" href="liblogging_8h.html#a141a127">srOPTION_LISTEN_UXDOMSOCK</a> = 5,
+00266      <a class="code" href="liblogging_8h.html#a141a128">srOPTION_UXDOMSOCK_LISTENAME</a> = 6,
+00272      <a class="code" href="liblogging_8h.html#a141a129">srOPTION_LISTEN_BEEP</a> = 7,
+00277      <a class="code" href="liblogging_8h.html#a141a130">srOPTION_BEEP_LISTENPORT</a> = 8
+00278 };
+00279 <span class="keyword">typedef</span> <span class="keyword">enum</span> <a class="code" href="liblogging_8h.html#a141">srOPTION</a> SRoption;
+00280 
+00287 <span class="preprocessor">#if DEBUGLEVEL &gt; 0</span>
+<a name="l00288"></a><a class="code" href="liblogging_8h.html#a4">00288</a> <span class="preprocessor"></span><span class="preprocessor">#define SRFREEOBJ(x) {(x)-&gt;OID = OID_Freed; free(x);}</span>
+00289 <span class="preprocessor"></span><span class="preprocessor">#else</span>
+00290 <span class="preprocessor"></span><span class="preprocessor">#define SRFREEOBJ(x) free(x)</span>
+00291 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00292 <span class="preprocessor"></span>
+<a name="l00297"></a><a class="code" href="liblogging_8h.html#a142">00297</a> <span class="keyword">enum</span> <a class="code" href="liblogging_8h.html#a142">BEEPHdrID_</a> 
+00298 {
+00299         BEEPHDR_UNKNOWN = 0,
+00300         BEEPHDR_ANS,
+00301         BEEPHDR_ERR,
+00302     BEEPHDR_MSG,
+00303         BEEPHDR_NUL,
+00304         BEEPHDR_RPY,
+00305         BEEPHDR_SEQ
+00306 };
+00307 <span class="keyword">typedef</span> <span class="keyword">enum</span> <a class="code" href="liblogging_8h.html#a142">BEEPHdrID_</a> BEEPHdrID;
+00308 
+00309 
+00310 <span class="preprocessor">#define BEEP_DEFAULT_MIME_HDR "Content-type: application/beep+xml\r\n"</span>
+00311 <span class="preprocessor"></span>
+00312 <span class="preprocessor">#ifdef __cplusplus</span>
+00313 <span class="preprocessor"></span>}
+00314 <span class="preprocessor">#endif</span>
+00315 <span class="preprocessor"></span><span class="preprocessor">#include "<a class="code" href="srAPI_8h.html">srAPI.h</a>"</span>
+00316 
+00317 <span class="preprocessor">#endif</span>
+</pre></div><hr size="1"><address style="align: right;"><small>Generated on Mon Oct 3 12:29:55 2005 for liblogging by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 > 
 </a>1.3.2 </small></address>

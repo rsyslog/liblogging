@@ -80,66 +80,72 @@ typedef fd_set&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" hr
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Global Layer destructor. </em> <a href="#a14"></a><em><br><br></td></tr>
 <tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="structsbSockObject.html">sbSockObj</a> *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="sockets_8h.html#a15">sbSockInit</a> (void)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Constructor. </em> <a href="#a15"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top><a name="a16" doxytag="sockets.h::sbSockExit"></a>
-<a class="el" href="liblogging_8h.html#a6">srRetVal</a>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="sockets_8h.html#a16">sbSockExit</a> (<a class="el" href="structsbSockObject.html">sbSockObj</a> *)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Constructor for STREAM sockets, only. </em> <a href="#a15"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="structsbSockObject.html">sbSockObj</a> *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="sockets_8h.html#a16">sbSockInitEx</a> (int af, int iSockType)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Alternate Constructur. </em> <a href="#a16"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a name="a17" doxytag="sockets.h::sbSockExit"></a>
+<a class="el" href="liblogging_8h.html#a6">srRetVal</a>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="sockets_8h.html#a17">sbSockExit</a> (<a class="el" href="structsbSockObject.html">sbSockObj</a> *)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Destructor. <br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="sockets_8h.html#a17">sbSockGetLastSockError</a> (<a class="el" href="structsbSockObject.html">sbSockObj</a> *)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="sockets_8h.html#a18">sbSockGetLastSockError</a> (<a class="el" href="structsbSockObject.html">sbSockObj</a> *)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">get last error code </em> <a href="#a17"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="liblogging_8h.html#a6">srRetVal</a>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="sockets_8h.html#a18">sbSockConnectoToHost</a> (<a class="el" href="structsbSockObject.html">sbSockObj</a> *pThis, char *pszHost, int iPort)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">get last error code </em> <a href="#a18"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="liblogging_8h.html#a6">srRetVal</a>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="sockets_8h.html#a19">sbSockConnectoToHost</a> (<a class="el" href="structsbSockObject.html">sbSockObj</a> *pThis, char *pszHost, int iPort)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Connect a socket to a remote host. </em> <a href="#a18"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="sockets_8h.html#a19">sbSockHasReceiveData</a> (<a class="el" href="structsbSockObject.html">sbSockObj</a> *pThis)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Connect a socket to a remote host. </em> <a href="#a19"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="sockets_8h.html#a20">sbSockHasReceiveData</a> (<a class="el" href="structsbSockObject.html">sbSockObj</a> *pThis)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Check if the socket has data ready to be received. </em> <a href="#a19"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="sockets_8h.html#a20">sbSockReceive</a> (<a class="el" href="structsbSockObject.html">sbSockObj</a> *pThis, char *pszBuf, int iLen)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Check if the socket has data ready to be received. </em> <a href="#a20"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="sockets_8h.html#a21">sbSockReceive</a> (<a class="el" href="structsbSockObject.html">sbSockObj</a> *pThis, char *pszBuf, int iLen)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Receive data from the socket. </em> <a href="#a20"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="sockets_8h.html#a21">sbSockSend</a> (<a class="el" href="structsbSockObject.html">sbSockObj</a> *pThis, const char *pszBuf, int iLen)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Receive data from the socket. </em> <a href="#a21"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="sockets_8h.html#a22">sbSockSend</a> (<a class="el" href="structsbSockObject.html">sbSockObj</a> *pThis, const char *pszBuf, int iLen)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Send the supplied buffer. </em> <a href="#a21"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="sockets_8h.html#a22">sbSockGetRcvChar</a> (<a class="el" href="structsbSockObject.html">sbSockObj</a> *pThis)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Send the supplied buffer. </em> <a href="#a22"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="sockets_8h.html#a23">sbSockGetRcvChar</a> (<a class="el" href="structsbSockObject.html">sbSockObj</a> *pThis)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Read the next character from the stream. </em> <a href="#a22"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="sockets_8h.html#a23">sbSockPeekRcvChar</a> (<a class="el" href="structsbSockObject.html">sbSockObj</a> *pThis)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Read the next character from the stream. </em> <a href="#a23"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="sockets_8h.html#a24">sbSockPeekRcvChar</a> (<a class="el" href="structsbSockObject.html">sbSockObj</a> *pThis)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Peek at the next character from the stream. </em> <a href="#a23"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top><a name="a24" doxytag="sockets.h::sbSockClosesocket"></a>
-<a class="el" href="liblogging_8h.html#a6">srRetVal</a>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="sockets_8h.html#a24">sbSockClosesocket</a> (<a class="el" href="structsbSockObject.html">sbSockObj</a> *pThis)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Peek at the next character from the stream. </em> <a href="#a24"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a name="a25" doxytag="sockets.h::sbSockClosesocket"></a>
+<a class="el" href="liblogging_8h.html#a6">srRetVal</a>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="sockets_8h.html#a25">sbSockClosesocket</a> (<a class="el" href="structsbSockObject.html">sbSockObj</a> *pThis)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Close a socket. <br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="liblogging_8h.html#a6">srRetVal</a>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="sockets_8h.html#a25">sbSockWaitReceiveData</a> (struct <a class="el" href="structsbSockObject.html">sbSockObject</a> *pThis)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="liblogging_8h.html#a6">srRetVal</a>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="sockets_8h.html#a26">sbSockWaitReceiveData</a> (struct <a class="el" href="structsbSockObject.html">sbSockObject</a> *pThis)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Wait until the socket has some receive data. </em> <a href="#a25"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="sockets_8h.html#a26">sbSockSelectMulti</a> (<a class="el" href="sockets_8h.html#a12">srSock_fd_set</a> *fdsetRD, <a class="el" href="sockets_8h.html#a12">srSock_fd_set</a> *fdsetWR, int iTimOutSecs, int iTimOutMSecs, int iHighestDesc)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Wait until the socket has some receive data. </em> <a href="#a26"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="sockets_8h.html#a27">sbSockSelectMulti</a> (<a class="el" href="sockets_8h.html#a12">srSock_fd_set</a> *fdsetRD, <a class="el" href="sockets_8h.html#a12">srSock_fd_set</a> *fdsetWR, int iTimOutSecs, int iTimOutMSecs, int iHighestDesc)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Wrapper for the socket select call on a fd_set structure. </em> <a href="#a26"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top><a name="a27" doxytag="sockets.h::sbSockListen"></a>
-<a class="el" href="liblogging_8h.html#a6">srRetVal</a>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="sockets_8h.html#a27">sbSockListen</a> (<a class="el" href="structsbSockObject.html">sbSockObj</a> *pThis)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Wrapper for the socket select call on a fd_set structure. </em> <a href="#a27"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a name="a28" doxytag="sockets.h::sbSockListen"></a>
+<a class="el" href="liblogging_8h.html#a6">srRetVal</a>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="sockets_8h.html#a28">sbSockListen</a> (<a class="el" href="structsbSockObject.html">sbSockObj</a> *pThis)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Wrapper for the socket listen() call. <br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="structsbSockObject.html">sbSockObj</a> *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="sockets_8h.html#a28">sbSockInitListenSock</a> (<a class="el" href="liblogging_8h.html#a6">srRetVal</a> *iRet, char *szBindToAddress, unsigned uBindToPort)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="structsbSockObject.html">sbSockObj</a> *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="sockets_8h.html#a29">sbSockInitListenSock</a> (<a class="el" href="liblogging_8h.html#a6">srRetVal</a> *iRet, int iType, char *szBindToAddress, unsigned uBindToPort)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Initialize a listen socket. </em> <a href="#a28"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top><a name="a29" doxytag="sockets.h::sbSockAcceptConnection"></a>
-<a class="el" href="liblogging_8h.html#a6">srRetVal</a>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="sockets_8h.html#a29">sbSockAcceptConnection</a> (<a class="el" href="structsbSockObject.html">sbSockObj</a> *pThis, <a class="el" href="structsbSockObject.html">sbSockObj</a> **pNew)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Initialize a listen socket. </em> <a href="#a29"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a name="a30" doxytag="sockets.h::sbSockAcceptConnection"></a>
+<a class="el" href="liblogging_8h.html#a6">srRetVal</a>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="sockets_8h.html#a30">sbSockAcceptConnection</a> (<a class="el" href="structsbSockObject.html">sbSockObj</a> *pThis, <a class="el" href="structsbSockObject.html">sbSockObj</a> **pNew)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">This method accepts an incoming connection and creates a new socket object out of it. <br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top><a name="a30" doxytag="sockets.h::sbSockSetNonblocking"></a>
-<a class="el" href="liblogging_8h.html#a6">srRetVal</a>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="sockets_8h.html#a30">sbSockSetNonblocking</a> (<a class="el" href="structsbSockObject.html">sbSockObj</a> *pThis)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a name="a31" doxytag="sockets.h::sbSockSetNonblocking"></a>
+<a class="el" href="liblogging_8h.html#a6">srRetVal</a>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="sockets_8h.html#a31">sbSockSetNonblocking</a> (<a class="el" href="structsbSockObject.html">sbSockObj</a> *pThis)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Set the socket to nonblocking state. <br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="liblogging_8h.html#a6">srRetVal</a>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="sockets_8h.html#a31">sbSockGetRemoteHostIP</a> (<a class="el" href="structsbSockObject.html">sbSockObj</a> *pThis, char **ppszHost)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="liblogging_8h.html#a6">srRetVal</a>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="sockets_8h.html#a32">sbSockGetRemoteHostIP</a> (<a class="el" href="structsbSockObject.html">sbSockObj</a> *pThis, char **ppszHost)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Return the IP Address of the remote host as a string. </em> <a href="#a31"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="liblogging_8h.html#a6">srRetVal</a>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="sockets_8h.html#a32">sbSock_gethostname</a> (char **psz)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Return the IP Address of the remote host as a string. </em> <a href="#a32"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="liblogging_8h.html#a6">srRetVal</a>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="sockets_8h.html#a33">sbSock_gethostname</a> (char **psz)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Wrapper for gethostname(). </em> <a href="#a32"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="liblogging_8h.html#a6">srRetVal</a>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="sockets_8h.html#a33">sbSockGetIPusedForSending</a> (<a class="el" href="structsbSockObject.html">sbSockObj</a> *pThis, char **ppsz)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Wrapper for gethostname(). </em> <a href="#a33"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="liblogging_8h.html#a6">srRetVal</a>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="sockets_8h.html#a34">sbSockGetIPusedForSending</a> (<a class="el" href="structsbSockObject.html">sbSockObj</a> *pThis, char **ppsz)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Provide the (local) IP address this session is sending to the remote peer on as a string. </em> <a href="#a33"></a><em><br><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Provide the (local) IP address this session is sending to the remote peer on as a string. </em> <a href="#a34"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="liblogging_8h.html#a6">srRetVal</a>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="sockets_8h.html#a35">sbSockRecvFrom</a> (<a class="el" href="structsbSockObject.html">sbSockObj</a> *pThis, char *pRecvBuf, int *piBufLen, char **ppFrom)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Enhanced recvfrom() clone. </em> <a href="#a35"></a><em><br><br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 socket layer for slim beep 
@@ -249,7 +255,7 @@ This may not work on every exotic OS, but it gives at least a small hook to port
   </tr>
 </table>
 <hr><h2>Function Documentation</h2>
-<a name="a32" doxytag="sockets.h::sbSock_gethostname"></a><p>
+<a name="a33" doxytag="sockets.h::sbSock_gethostname"></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -286,7 +292,7 @@ Wrapper for gethostname().
     </td>
   </tr>
 </table>
-<a name="a18" doxytag="sockets.h::sbSockConnectoToHost"></a><p>
+<a name="a19" doxytag="sockets.h::sbSockConnectoToHost"></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -338,7 +344,7 @@ Connect a socket to a remote host.
     </td>
   </tr>
 </table>
-<a name="a33" doxytag="sockets.h::sbSockGetIPusedForSending"></a><p>
+<a name="a34" doxytag="sockets.h::sbSockGetIPusedForSending"></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -385,7 +391,7 @@ Please note: the socket MUST be connected before you can use this method! It sho
     </td>
   </tr>
 </table>
-<a name="a17" doxytag="sockets.h::sbSockGetLastSockError"></a><p>
+<a name="a18" doxytag="sockets.h::sbSockGetLastSockError"></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -421,7 +427,7 @@ get last error code
     </td>
   </tr>
 </table>
-<a name="a22" doxytag="sockets.h::sbSockGetRcvChar"></a><p>
+<a name="a23" doxytag="sockets.h::sbSockGetRcvChar"></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -458,7 +464,7 @@ The character is removed from the stream. If no data is ready on the stream, a b
     </td>
   </tr>
 </table>
-<a name="a31" doxytag="sockets.h::sbSockGetRemoteHostIP"></a><p>
+<a name="a32" doxytag="sockets.h::sbSockGetRemoteHostIP"></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -498,7 +504,7 @@ Return the IP Address of the remote host as a string.
 The caller must free the returned string.     </td>
   </tr>
 </table>
-<a name="a19" doxytag="sockets.h::sbSockHasReceiveData"></a><p>
+<a name="a20" doxytag="sockets.h::sbSockHasReceiveData"></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -560,7 +566,7 @@ Check if the socket has data ready to be received.
     <td>
 
 <p>
-Constructor. 
+Constructor for STREAM sockets, only. 
 <p>
 <dl compact><dt><b>Return values:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
@@ -570,7 +576,47 @@ Constructor.
     </td>
   </tr>
 </table>
-<a name="a28" doxytag="sockets.h::sbSockInitListenSock"></a><p>
+<a name="a16" doxytag="sockets.h::sbSockInitEx"></a><p>
+<table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> <a class="el" href="structsbSockObject.html">sbSockObj</a>* sbSockInitEx </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top">int&nbsp;</td>
+          <td class="mdname" nowrap> <em>af</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>int&nbsp;</td>
+          <td class="mdname" nowrap> <em>iSockType</em></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td class="md">)&nbsp;</td>
+          <td class="md" colspan="2"></td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Alternate Constructur. 
+<p>
+Socket TYPE (STREAM/DGRAM) can be specified     </td>
+  </tr>
+</table>
+<a name="a29" doxytag="sockets.h::sbSockInitListenSock"></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -580,6 +626,12 @@ Constructor.
           <td class="md" valign="top">(&nbsp;</td>
           <td class="md" nowrap valign="top"><a class="el" href="liblogging_8h.html#a6">srRetVal</a> *&nbsp;</td>
           <td class="mdname" nowrap> <em>iRet</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>int&nbsp;</td>
+          <td class="mdname" nowrap> <em>iType</em>, </td>
         </tr>
         <tr>
           <td></td>
@@ -617,6 +669,7 @@ This includes everything so that the next call can be listen().<p>
 <dl compact><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign=top><em>iRet</em>&nbsp;</td><td>[out] Pointer to a variable holding the return code of this operation. Has the error code if initialisation failed. </td></tr>
+    <tr><td valign=top><em>iType</em>&nbsp;</td><td>sockets type to be used. Must be either SOCK_STREAM or SOCK_DGRAM. </td></tr>
     <tr><td valign=top><em>szBindToAdresse</em>&nbsp;</td><td>string with IP address to which the socket should be bound. If NULL, do not bind to any specific address. </td></tr>
     <tr><td valign=top><em>iBindToPort</em>&nbsp;</td><td>Port the socket should be bound to. For listening sockets, this is the port that the remote peer will to connect to. </td></tr>
   </table>
@@ -703,7 +756,7 @@ Should be called only once per application. This will do all housekeeping necess
     </td>
   </tr>
 </table>
-<a name="a23" doxytag="sockets.h::sbSockPeekRcvChar"></a><p>
+<a name="a24" doxytag="sockets.h::sbSockPeekRcvChar"></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -740,7 +793,7 @@ The character is NOT removed from the stream. If no data is ready on the stream,
     </td>
   </tr>
 </table>
-<a name="a20" doxytag="sockets.h::sbSockReceive"></a><p>
+<a name="a21" doxytag="sockets.h::sbSockReceive"></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -783,7 +836,7 @@ The character is NOT removed from the stream. If no data is ready on the stream,
 <p>
 Receive data from the socket. 
 <p>
-This is done in a blocking way. If you would not like to block, call <a class="el" href="sockets_8h.html#a19">sbSockHasReceiveData</a> before calling this method.<p>
+This is done in a blocking way. If you would not like to block, call <a class="el" href="sockets_8h.html#a20">sbSockHasReceiveData</a> before calling this method.<p>
 <dl compact><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign=top><em>*pszBuf</em>&nbsp;</td><td>[in] - data to be send </td></tr>
@@ -798,7 +851,68 @@ This is done in a blocking way. If you would not like to block, call <a class="e
     </td>
   </tr>
 </table>
-<a name="a26" doxytag="sockets.h::sbSockSelectMulti"></a><p>
+<a name="a35" doxytag="sockets.h::sbSockRecvFrom"></a><p>
+<table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> <a class="el" href="liblogging_8h.html#a6">srRetVal</a> sbSockRecvFrom </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top"><a class="el" href="structsbSockObject.html">sbSockObj</a> *&nbsp;</td>
+          <td class="mdname" nowrap> <em>pThis</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>char *&nbsp;</td>
+          <td class="mdname" nowrap> <em>pRecvBuf</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>int *&nbsp;</td>
+          <td class="mdname" nowrap> <em>piBufLen</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>char **&nbsp;</td>
+          <td class="mdname" nowrap> <em>ppFrom</em></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td class="md">)&nbsp;</td>
+          <td class="md" colspan="2"></td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Enhanced recvfrom() clone. 
+<p>
+Will receive an C sz String. That is, any  received as part of the string will be replaced by ABNF SP (' ').<p>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign=top><em>pRecvBuf</em>&nbsp;</td><td>Pointer to buffer that will receive the incoming data. </td></tr>
+    <tr><td valign=top><em>piBufLen</em>&nbsp;</td><td>On entry, the size of the buffer pointed to by pRecvBuf. On exit, the number of bytes received </td></tr>
+    <tr><td valign=top><em>ppFrom</em>&nbsp;</td><td>Pointer to a char pointer that will receive a string with the senders' IP address. This buffer MUST be free()ed by the caller!</td></tr>
+  </table>
+</dl>
+<dl compact><dt><b><a class="el" href="todo.html#_todo000016">Todo:</a></b></dt><dd>handle the connection closed case (*piBuflen == 0)</dd></dl>
+    </td>
+  </tr>
+</table>
+<a name="a27" doxytag="sockets.h::sbSockSelectMulti"></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -868,7 +982,7 @@ Wrapper for the socket select call on a fd_set structure.
     </td>
   </tr>
 </table>
-<a name="a21" doxytag="sockets.h::sbSockSend"></a><p>
+<a name="a22" doxytag="sockets.h::sbSockSend"></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -925,7 +1039,7 @@ Send the supplied buffer.
     </td>
   </tr>
 </table>
-<a name="a25" doxytag="sockets.h::sbSockWaitReceiveData"></a><p>
+<a name="a26" doxytag="sockets.h::sbSockWaitReceiveData"></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -956,7 +1070,7 @@ Wait until the socket has some receive data.
 This is a blocking call.     </td>
   </tr>
 </table>
-<hr size="1"><address style="align: right;"><small>Generated on Fri Sep 12 11:20:14 2003 for liblogging by
+<hr size="1"><address style="align: right;"><small>Generated on Mon Oct 3 12:29:56 2005 for liblogging by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 > 
 </a>1.3.2 </small></address>
