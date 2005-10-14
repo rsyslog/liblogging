@@ -268,6 +268,8 @@ enum srOPTION
 	  * This option tells the lib if a BEEP
 	  * listener should be started. Supported values are
 	  * TRUE and FALSE.
+	  * TODO: The current version of the library *ALWAYS* starts
+	  * the BEEP listener, so this option is defunct currently!
 	  */
      srOPTION_LISTEN_BEEP = 7,
 	 /**

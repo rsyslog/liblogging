@@ -101,7 +101,6 @@ static srRetVal psrcOnMesgRecvDoEntry(sbProfObj *pThis, int* pbAbort, sbSessObj*
 	srRetVal iRet;
 	srSLMGObj *pSLMG;
 	char *pszRemHostIP;
-	char szErrMsg[1024];
 
 	sbProfCHECKVALIDOBJECT(pThis);
 	sbSessCHECKVALIDOBJECT(pSess);
@@ -178,8 +177,10 @@ static srRetVal psrcOnMesgRecvCallAPI(sbProfObj *pThis, int* pbAbort, sbSessObj*
 		sbChanSendErrResponse(pChan, 550, szErrMsg);
 		return iRet;
 	}
-    
-	sbNVTDebugPrintTree(pMsgXML, 0);
+
+#	if DEBUGLEVEL > 1
+		sbNVTDebugPrintTree(pMsgXML, 0);
+#	endif
 
 	/* In the next block, we do not return() if we detect an error
 	 * but we set iRet and run down below. This makes cleanup easier.
