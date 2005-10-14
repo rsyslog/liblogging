@@ -1,3 +1,9 @@
+0.?.?
+   2005-10-14 RGerhards
+   - There was a bug in the BEEP listeners which made them ignore the
+     listen port set by srAPISetOption(). The BEEP listeners always
+     listen to 601, no matter what was set.
+     
 0.6.0
    2005-09-06
    Unfortunately, when I stopped working on liblogging due to some higher
