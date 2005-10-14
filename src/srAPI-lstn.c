@@ -105,6 +105,7 @@ srRetVal srAPISetupListener(srAPIObj* pThis, void(*NewHandler)(srAPIObj*, srSLMG
 	/* please note: as of now, the BEEP listener will always be
 	 * started.
 	 */
+	pThis->pLstn->uListenPort = pThis->iBEEPListenPort;
 
 	/* now begin initializing the listeners */
 
