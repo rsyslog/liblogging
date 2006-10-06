@@ -1,103 +1,153 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="7.10"
+	Version="8,00"
 	Name="liblogging"
 	ProjectGUID="{FEF17E17-E510-448A-8E4C-E9DC58DFED85}"
-	Keyword="Win32Proj">
+	Keyword="Win32Proj"
+	>
 	<Platforms>
 		<Platform
-			Name="Win32"/>
+			Name="Win32"
+		/>
 	</Platforms>
+	<ToolFiles>
+	</ToolFiles>
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
 			OutputDirectory="Debug"
 			IntermediateDirectory="Debug"
 			ConfigurationType="4"
-			CharacterSet="2">
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
+			CharacterSet="2"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/we4133 /we4047"
 				Optimization="0"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
-				MinimalRebuild="TRUE"
+				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
-				BufferSecurityCheck="TRUE"
-				DisableLanguageExtensions="FALSE"
-				ForceConformanceInForLoopScope="FALSE"
+				BufferSecurityCheck="true"
+				DisableLanguageExtensions="false"
+				ForceConformanceInForLoopScope="false"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
-				Detect64BitPortabilityProblems="TRUE"
+				Detect64BitPortabilityProblems="true"
 				DebugInformationFormat="4"
-				CompileAs="1"/>
+				CompileAs="1"
+			/>
 			<Tool
-				Name="VCCustomBuildTool"/>
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)/liblogging.lib"/>
+				OutputFile="$(OutDir)/liblogging.lib"
+			/>
 			<Tool
-				Name="VCMIDLTool"/>
+				Name="VCALinkTool"
+			/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCXDCMakeTool"
+			/>
 			<Tool
-				Name="VCPreBuildEventTool"/>
+				Name="VCBscMakeTool"
+			/>
 			<Tool
-				Name="VCPreLinkEventTool"/>
+				Name="VCFxCopTool"
+			/>
 			<Tool
-				Name="VCResourceCompilerTool"/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"/>
-			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
-			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+				Name="VCPostBuildEventTool"
+			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="Release"
 			IntermediateDirectory="Release"
 			ConfigurationType="4"
-			CharacterSet="2">
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
+			CharacterSet="2"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				OmitFramePointers="TRUE"
+				OmitFramePointers="true"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
-				StringPooling="TRUE"
+				StringPooling="true"
 				RuntimeLibrary="0"
-				EnableFunctionLevelLinking="TRUE"
+				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
-				Detect64BitPortabilityProblems="TRUE"
-				DebugInformationFormat="3"/>
+				Detect64BitPortabilityProblems="true"
+				DebugInformationFormat="3"
+			/>
 			<Tool
-				Name="VCCustomBuildTool"/>
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)/liblogging.lib"/>
+				OutputFile="$(OutDir)/liblogging.lib"
+			/>
 			<Tool
-				Name="VCMIDLTool"/>
+				Name="VCALinkTool"
+			/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCXDCMakeTool"
+			/>
 			<Tool
-				Name="VCPreBuildEventTool"/>
+				Name="VCBscMakeTool"
+			/>
 			<Tool
-				Name="VCPreLinkEventTool"/>
+				Name="VCFxCopTool"
+			/>
 			<Tool
-				Name="VCResourceCompilerTool"/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"/>
-			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
-			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+				Name="VCPostBuildEventTool"
+			/>
 		</Configuration>
 	</Configurations>
 	<References>
@@ -105,208 +155,274 @@
 	<Files>
 		<Filter
 			Name="Source Files"
-			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm">
+			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm"
+			>
 			<File
-				RelativePath="..\architecture.c">
+				RelativePath="..\architecture.c"
+				>
 			</File>
 			<File
-				RelativePath="..\beepchannel.c">
+				RelativePath="..\beepchannel.c"
+				>
 			</File>
 			<File
-				RelativePath="..\beepframe.c">
+				RelativePath="..\beepframe.c"
+				>
 			</File>
 			<File
-				RelativePath="..\beeplisten.c">
+				RelativePath="..\beeplisten.c"
+				>
 			</File>
 			<File
-				RelativePath="..\beepmessage.c">
+				RelativePath="..\beepmessage.c"
+				>
 			</File>
 			<File
-				RelativePath="..\beepprofile.c">
+				RelativePath="..\beepprofile.c"
+				>
 			</File>
 			<File
-				RelativePath="..\beepsession-lstn.c">
+				RelativePath="..\beepsession-lstn.c"
+				>
 			</File>
 			<File
-				RelativePath="..\beepsession.c">
+				RelativePath="..\beepsession.c"
+				>
 			</File>
 			<File
-				RelativePath="..\clntprof-3195cooked.c">
+				RelativePath="..\clntprof-3195cooked.c"
+				>
 			</File>
 			<File
-				RelativePath="..\clntprof-3195raw.c">
+				RelativePath="..\clntprof-3195raw.c"
+				>
 			</File>
 			<File
-				RelativePath="..\lstnprof-3195cooked.c">
+				RelativePath="..\lstnprof-3195cooked.c"
+				>
 			</File>
 			<File
-				RelativePath="..\lstnprof-3195raw.c">
+				RelativePath="..\lstnprof-3195raw.c"
+				>
 			</File>
 			<File
-				RelativePath="..\namevaluetree.c">
+				RelativePath="..\namevaluetree.c"
+				>
 			</File>
 			<File
-				RelativePath="..\oscalls.c">
+				RelativePath="..\oscalls.c"
+				>
 			</File>
 			<File
-				RelativePath="..\sockets.c">
+				RelativePath="..\sockets.c"
+				>
 			</File>
 			<File
-				RelativePath="..\srAPI-lstn.c">
+				RelativePath="..\srAPI-lstn.c"
+				>
 			</File>
 			<File
-				RelativePath="..\srAPI.c">
+				RelativePath="..\srAPI.c"
+				>
 			</File>
 			<File
-				RelativePath="..\srUtils.c">
+				RelativePath="..\srUtils.c"
+				>
 			</File>
 			<File
-				RelativePath="..\stringbuf.c">
+				RelativePath="..\stringbuf.c"
+				>
 			</File>
 			<File
-				RelativePath="..\syslogmessage.c">
+				RelativePath="..\syslogmessage.c"
+				>
 			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
-			Filter="h;hpp;hxx;hm;inl;inc">
+			Filter="h;hpp;hxx;hm;inl;inc"
+			>
 			<File
-				RelativePath="..\beepchannel.h">
+				RelativePath="..\beepchannel.h"
+				>
 			</File>
 			<File
-				RelativePath="..\beepframe.h">
+				RelativePath="..\beepframe.h"
+				>
 			</File>
 			<File
-				RelativePath="..\beeplisten.h">
+				RelativePath="..\beeplisten.h"
+				>
 			</File>
 			<File
-				RelativePath="..\beepmessage.h">
+				RelativePath="..\beepmessage.h"
+				>
 			</File>
 			<File
-				RelativePath="..\beepprofile.h">
+				RelativePath="..\beepprofile.h"
+				>
 			</File>
 			<File
-				RelativePath="..\beepsession.h">
+				RelativePath="..\beepsession.h"
+				>
 			</File>
 			<File
-				RelativePath="..\clntprof-3195cooked.h">
+				RelativePath="..\clntprof-3195cooked.h"
+				>
 			</File>
 			<File
-				RelativePath="..\clntprof-3195raw.h">
+				RelativePath="..\clntprof-3195raw.h"
+				>
 			</File>
 			<File
-				RelativePath="..\config.h">
+				RelativePath="..\config.h"
+				>
 			</File>
 			<File
-				RelativePath="..\liblogging.h">
+				RelativePath="..\liblogging.h"
+				>
 			</File>
 			<File
-				RelativePath="..\lstnprof-3195cooked.h">
+				RelativePath="..\lstnprof-3195cooked.h"
+				>
 			</File>
 			<File
-				RelativePath="..\lstnprof-3195raw.h">
+				RelativePath="..\lstnprof-3195raw.h"
+				>
 			</File>
 			<File
-				RelativePath="..\namevaluetree.h">
+				RelativePath="..\namevaluetree.h"
+				>
 			</File>
 			<File
-				RelativePath="..\oscalls.h">
+				RelativePath="..\oscalls.h"
+				>
 			</File>
 			<File
-				RelativePath="..\resource.h">
+				RelativePath="..\resource.h"
+				>
 			</File>
 			<File
-				RelativePath="..\sockets.h">
+				RelativePath="..\sockets.h"
+				>
 			</File>
 			<File
-				RelativePath="..\srAPI.h">
+				RelativePath="..\srAPI.h"
+				>
 			</File>
 			<File
-				RelativePath="..\srUtils.h">
+				RelativePath="..\srUtils.h"
+				>
 			</File>
 			<File
-				RelativePath="..\stringbuf.h">
+				RelativePath="..\stringbuf.h"
+				>
 			</File>
 			<File
-				RelativePath="..\syslogmessage.h">
+				RelativePath="..\syslogmessage.h"
+				>
 			</File>
 		</Filter>
 		<Filter
 			Name="Included Sources"
-			Filter=""
-			SourceControlFiles="FALSE">
+			SourceControlFiles="false"
+			>
 			<File
-				RelativePath="..\oscallsUnix.c">
+				RelativePath="..\oscallsUnix.c"
+				>
 				<FileConfiguration
 					Name="Debug|Win32"
-					ExcludedFromBuild="TRUE">
+					ExcludedFromBuild="true"
+					>
 					<Tool
-						Name="VCCLCompilerTool"/>
+						Name="VCCLCompilerTool"
+					/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|Win32"
-					ExcludedFromBuild="TRUE">
+					ExcludedFromBuild="true"
+					>
 					<Tool
-						Name="VCCLCompilerTool"/>
+						Name="VCCLCompilerTool"
+					/>
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\oscallsWin32.c">
+				RelativePath="..\oscallsWin32.c"
+				>
 				<FileConfiguration
 					Name="Debug|Win32"
-					ExcludedFromBuild="TRUE">
+					ExcludedFromBuild="true"
+					>
 					<Tool
-						Name="VCCLCompilerTool"/>
+						Name="VCCLCompilerTool"
+					/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|Win32"
-					ExcludedFromBuild="TRUE">
+					ExcludedFromBuild="true"
+					>
 					<Tool
-						Name="VCCLCompilerTool"/>
+						Name="VCCLCompilerTool"
+					/>
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\socketsUnix.c">
+				RelativePath="..\socketsUnix.c"
+				>
 				<FileConfiguration
 					Name="Debug|Win32"
-					ExcludedFromBuild="TRUE">
+					ExcludedFromBuild="true"
+					>
 					<Tool
-						Name="VCCLCompilerTool"/>
+						Name="VCCLCompilerTool"
+					/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|Win32"
-					ExcludedFromBuild="TRUE">
+					ExcludedFromBuild="true"
+					>
 					<Tool
-						Name="VCCLCompilerTool"/>
+						Name="VCCLCompilerTool"
+					/>
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\socketsWin32.c">
+				RelativePath="..\socketsWin32.c"
+				>
 				<FileConfiguration
 					Name="Debug|Win32"
-					ExcludedFromBuild="TRUE">
+					ExcludedFromBuild="true"
+					>
 					<Tool
-						Name="VCCLCompilerTool"/>
+						Name="VCCLCompilerTool"
+					/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|Win32"
-					ExcludedFromBuild="TRUE">
+					ExcludedFromBuild="true"
+					>
 					<Tool
-						Name="VCCLCompilerTool"/>
+						Name="VCCLCompilerTool"
+					/>
 				</FileConfiguration>
 			</File>
 		</Filter>
 		<File
-			RelativePath="..\..\AUTHORS">
+			RelativePath="..\..\AUTHORS"
+			>
 		</File>
 		<File
-			RelativePath="..\..\ChangeLog">
+			RelativePath="..\..\ChangeLog"
+			>
 		</File>
 		<File
-			RelativePath="..\..\COPYING">
+			RelativePath="..\..\COPYING"
+			>
 		</File>
 		<File
-			RelativePath="..\..\README">
+			RelativePath="..\..\README"
+			>
 		</File>
 	</Files>
 	<Globals>

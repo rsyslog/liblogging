@@ -150,24 +150,29 @@ srRetVal sbMIMEExtract(char *pszInBuf, int iInBufLen, char **pszMIMEHdr, char** 
 	int iPayloadLen;
 
 	/* detect end of MIME Header */
-	/** \todo handle empty string */
-	for(psz = pszInBuf ; *(psz+1) != '\0' ; ++psz)
+	/* we now handle empty strings, but this fix needs further testing. I just
+	 * added the "if(*psz)" and now I wonder why this wasn't done in the first
+	 * place. However, this was 3 years ago and my memory has vanished... -- rger, 2006-10-06 */
+	if(*psz)
 	{
-		if(*psz == '\r' && *(psz+1) == '\n')
+		for(psz = pszInBuf ; *(psz+1) != '\0' ; ++psz)
 		{
-			if(iCurrCol == 0)
+			if(*psz == '\r' && *(psz+1) == '\n')
 			{
-                pPayload = psz + 2;
-				break;
+				if(iCurrCol == 0)
+				{
+					pPayload = psz + 2;
+					break;
+				}
+				else
+				{
+					iCurrCol = 0;
+					++psz;
+				}
 			}
 			else
-			{
-				iCurrCol = 0;
-				++psz;
-			}
+				++iCurrCol;
 		}
-		else
-            ++iCurrCol;
 	}
 
 	if(pPayload == NULL)	/* MIME Header missing? */
