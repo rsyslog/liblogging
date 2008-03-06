@@ -43,7 +43,7 @@
 #define __LIB3195_LIBLOGGING_H_INCLUDED__ 1
 #include <stdio.h> /* debug only */
 
-#include "config.h"
+#include "settings.h"
 #ifdef __cplusplus
 extern "C" {
 #endif

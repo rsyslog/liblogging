@@ -3,7 +3,7 @@
  *
  */
 
-#include "config.h"
+#include "settings.h"
 #include "lib3195.h"
 #include <assert.h>
 

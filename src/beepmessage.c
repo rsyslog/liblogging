@@ -38,7 +38,7 @@
  */
 
 #include <assert.h>
-#include "config.h"
+#include "settings.h"
 #include "liblogging.h"
 #include "beepmessage.h"
 #include "beepframe.h"

@@ -44,7 +44,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
+#include "settings.h"
 #include "liblogging.h"
 #include "oscalls.h"
 #include "assert.h"

@@ -44,7 +44,7 @@
  */
 
 #include <assert.h>
-#include "config.h"
+#include "settings.h"
 #include "liblogging.h"
 #include "srAPI.h"
 #include "beepsession.h"

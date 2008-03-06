@@ -50,7 +50,7 @@
 #ifndef __LIB3195_SOCKETS_H_INCLUDED__
 #define __LIB3195_SOCKETS_H_INCLUDED__ 1
 
-#include "config.h"
+#include "settings.h"
 #ifdef SROS_WIN32
 #  include <winsock2.h>
 #else

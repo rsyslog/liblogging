@@ -40,7 +40,7 @@
 
 #include <ctype.h>
 #include <assert.h>
-#include "config.h"
+#include "settings.h"
 #include "liblogging.h"
 #include "srAPI.h"
 #include "syslogmessage.h"

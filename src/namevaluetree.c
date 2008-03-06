@@ -41,7 +41,7 @@
 
 #include <assert.h>
 #include <ctype.h>
-#include "config.h"
+#include "settings.h"
 #include "liblogging.h"
 #include "namevaluetree.h"
 #include "stringbuf.h"

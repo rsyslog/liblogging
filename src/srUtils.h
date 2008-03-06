@@ -40,7 +40,7 @@
 #ifndef __LIB3195_SRUTILS_H_INCLUDED__
 #define __LIB3195_SRUTILS_H_INCLUDED__ 1
 
-#include "config.h"
+#include "settings.h"
 
 /**
  * A reimplementation of itoa(), as this is not available

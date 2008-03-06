@@ -45,6 +45,7 @@ noinst_HEADERS = \
 	lstnprof-3195raw.h \
 	namevaluetree.h \
 	oscalls.h \
+	settings.h \
 	sockets.h \
 	srUtils.h \
 	stringbuf.h

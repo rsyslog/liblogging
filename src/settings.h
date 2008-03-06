@@ -1,4 +1,4 @@
-/*! \file config.h
+/*! \file settings.h
  *  \brief configuration settings for liblogging.
  *
  * This file includes all global defines as well as configuration settings.

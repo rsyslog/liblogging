@@ -40,7 +40,7 @@
 #ifndef __LIB3195_OSCALLS_H_INCLUDED__
 #define __LIB3195_OSCALLS_H_INCLUDED__ 1
 
-#include "config.h"
+#include "settings.h"
 
 /**
  * Get the current date/time in the best resolution the operating

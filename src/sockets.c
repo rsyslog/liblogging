@@ -17,7 +17,7 @@
  * \date    2003-08-05
  *          Created this file as upper-layer and general entry point
  *          to the socket object. It includes the necessry lower
- *          layer according to the config.h OS defines.
+ *          layer according to the settings.h OS defines.
  *
  * Copyright 2002-2003 
  *     Rainer Gerhards and Adiscon GmbH. All Rights Reserved.
@@ -52,7 +52,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
+#include "settings.h"
 #include "liblogging.h"
 #include "sockets.h"
 #include "assert.h"
