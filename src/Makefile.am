@@ -17,7 +17,7 @@ liblogging_la_SOURCES = \
 	sockets.c \
 	srAPI.c \
 	srAPI-lstn.c \
-	srUtils.c
+	srUtils.c \
 	stringbuf.c \
 	syslogmessage.c
 
