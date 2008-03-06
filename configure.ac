@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.61)
-AC_INIT(liblogging, 1.0, rgerhards@hq.adiscon.com)
+AC_INIT([liblogging], [1.0], [rgerhards@hq.adiscon.com])
 AM_INIT_AUTOMAKE
 AC_CONFIG_SRCDIR([src/beepchannel.c])
 AC_CONFIG_HEADER([config.h])
@@ -13,8 +13,6 @@ AC_PROG_CC
 AC_PROG_LIBTOOL
 
 # Checks for libraries.
-# FIXME: Replace `main' with a function in `-llogging':
-#AC_CHECK_LIB([logging], [main])
 # FIXME: Replace `main' with a function in `-lnsl':
 #AC_CHECK_LIB([nsl], [main])
 # FIXME: Replace `main' with a function in `-lsocket':

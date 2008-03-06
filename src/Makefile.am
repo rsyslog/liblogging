@@ -21,6 +21,12 @@ liblogging_la_SOURCES = \
 	stringbuf.c \
 	syslogmessage.c
 
+os_sources = \
+	oscallsUnix.c \
+	oscallsWin32.c \
+	socketsUnix.c \
+	socketsWin32.c
+
 include_HEADERS = \
 	liblogging.h \
 	srAPI.h \
@@ -50,3 +56,5 @@ testsrvr_LDADD = liblogging.la
 
 testdrvr_SOURCES = testdrvr.c
 testdrvr_LDADD = liblogging.la
+
+EXTRA_DIST = $(os_sources)
