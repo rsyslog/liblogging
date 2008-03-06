@@ -16,9 +16,9 @@ AC_PROG_LIBTOOL
 # FIXME: Replace `main' with a function in `-llogging':
 #AC_CHECK_LIB([logging], [main])
 # FIXME: Replace `main' with a function in `-lnsl':
-AC_CHECK_LIB([nsl], [main])
+#AC_CHECK_LIB([nsl], [main])
 # FIXME: Replace `main' with a function in `-lsocket':
-AC_CHECK_LIB([socket], [main])
+#AC_CHECK_LIB([socket], [main])
 
 # Checks for header files.
 AC_HEADER_STDC
