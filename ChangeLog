@@ -1,4 +1,8 @@
-0.?.?
+0.7.0
+   2008-04-15 RGerhards
+   - added pkg-config support
+   2008-03    Michael Biebl
+   - converted to autotools
    2005-10-14 RGerhards
    - There was a bug in the BEEP listeners which made them ignore the
      listen port set by srAPISetOption(). The BEEP listeners always

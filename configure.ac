@@ -2,21 +2,22 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.61)
-AC_INIT([liblogging], [1.0], [rgerhards@hq.adiscon.com])
+AC_INIT([liblogging], [0.7.0], [rgerhards@hq.adiscon.com])
 AM_INIT_AUTOMAKE
 AC_CONFIG_SRCDIR([src/beepchannel.c])
 AC_CONFIG_HEADER([config.h])
 
 # Checks for programs.
 AC_PROG_CC
-
 AC_PROG_LIBTOOL
 
-# Checks for libraries.
-# FIXME: Replace `main' with a function in `-lnsl':
-#AC_CHECK_LIB([nsl], [main])
-# FIXME: Replace `main' with a function in `-lsocket':
-#AC_CHECK_LIB([socket], [main])
+save_LIBS=$LIBS
+LIBS=
+#AC_SEARCH_LIBS(clock_gettime, rt)
+rt_libs=$LIBS
+LIBS=$save_LIBS
+
+AC_SUBST(rt_libs)
 
 # Checks for header files.
 AC_HEADER_STDC
@@ -34,8 +35,9 @@ AC_FUNC_SELECT_ARGTYPES
 AC_TYPE_SIGNAL
 AC_CHECK_FUNCS([gethostbyname gethostname gettimeofday inet_ntoa memset select socket])
 
-AC_CONFIG_FILES([Makefile
-                 doc/Makefile
-                 doc/html/Makefile
+AC_CONFIG_FILES([Makefile \
+                 liblogging.pc \
+                 doc/Makefile \
+                 doc/html/Makefile \
                  src/Makefile])
 AC_OUTPUT
