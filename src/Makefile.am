@@ -27,9 +27,10 @@ os_sources = \
 	socketsUnix.c \
 	socketsWin32.c
 
-include_HEADERS = \
+pkginclude_HEADERS = \
 	liblogging.h \
 	srAPI.h \
+	settings.h \
 	syslogmessage.h
 
 noinst_HEADERS = \
@@ -45,7 +46,6 @@ noinst_HEADERS = \
 	lstnprof-3195raw.h \
 	namevaluetree.h \
 	oscalls.h \
-	settings.h \
 	sockets.h \
 	srUtils.h \
 	stringbuf.h

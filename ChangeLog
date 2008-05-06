@@ -1,3 +1,7 @@
+0.7.1
+   2008-05-06 RGerhards
+   - changed include files (now in liblogging subdirectory)
+   - pc file contained wrong package name
 0.7.0
    2008-04-15 RGerhards
    - added pkg-config support
