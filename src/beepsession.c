@@ -95,7 +95,7 @@ srRetVal sbSessProcessGreeting(sbSessObj *pThis, sbMesgObj *pMesg)
 	sbNVTEObj* pEntryGreeting;
 	sbNVTRObj* pProfileRoot;
 	sbNVTEObj* pProfileEntry;
-	sbNVTRObj* pProfileList;
+	sbNVTRObj* pProfileList = NULL;
 	sbNVTEObj* pProfileListEntry;
 	sbNVTEObj* pEntryURI;
 	srRetVal iRet;
@@ -110,7 +110,7 @@ srRetVal sbSessProcessGreeting(sbSessObj *pThis, sbMesgObj *pMesg)
 	 */
 	pMesgXML = sbNVTRConstruct();
 
-	if((iRet = sbNVTRParseXML(pMesgXML, pMesg->szActualPayload)) == SR_RET_OK)
+	if((iRet = sbNVTRParseXML(pMesgXML, pMesg->szActualPayload)) == SR_RET_OK) {
 		if((pEntryGreeting = sbNVTRHasElement(pMesgXML, "greeting", TRUE)) == NULL)
 			iRet = SR_RET_PEER_NO_GREETING;
 		else
@@ -154,6 +154,7 @@ srRetVal sbSessProcessGreeting(sbSessObj *pThis, sbMesgObj *pMesg)
 				}
 			}
 		}
+	}
 
 	pThis->pRemoteProfiles = pProfileList;
 	sbNVTRDestroy(pMesgXML);
@@ -473,12 +474,14 @@ sbChanObj* sbSessOpenChan(sbSessObj* pThis)
 	 */
 	pReplyXML = sbNVTRConstruct();
 
-	if((iRet = sbNVTRParseXML(pReplyXML, pReply->szActualPayload)) == SR_RET_OK)
-		if((pEntryProfile = sbNVTRHasElement(pReplyXML, "profile", TRUE)) == NULL)
+	if((iRet = sbNVTRParseXML(pReplyXML, pReply->szActualPayload)) == SR_RET_OK) {
+		if((pEntryProfile = sbNVTRHasElement(pReplyXML, "profile", TRUE)) == NULL) {
 			iRet = SR_RET_PEER_NO_PROFILE;
-		else
+		} else {
 			if((pEntryURI = sbNVTRHasElement(pEntryProfile->pXMLProps, "uri", TRUE)) == NULL)
 				iRet = SR_RET_PEER_NO_URI;
+		}
+	}
 
 	if(iRet == SR_RET_OK)
 	{

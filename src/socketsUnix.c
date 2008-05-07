@@ -61,6 +61,7 @@
 #include <sys/fcntl.h>
 #include <sys/types.h>
 #include <sys/time.h>
+#include <sys/stat.h>
 #include <sys/socket.h>
 #if FEATURE_UNIX_DOMAIN_SOCKETS
 #	include <sys/un.h>
@@ -68,9 +69,9 @@
 #include <sys/select.h>
 #include <unistd.h>
 #include <netinet/in.h>
+#include <arpa/inet.h>
 #include <netdb.h>
 #include <errno.h>
-
 
 
 /* ################################################################# */
@@ -82,12 +83,12 @@
 /* public members                                                    */
 /* ################################################################# */
 
-srRetVal sbSockLayerInit(int bInitOSStack)
+srRetVal sbSockLayerInit(int __attribute__((unused)) bInitOSStack)
 {
 	return SR_RET_OK;
 }
 
-srRetVal sbSockLayerExit(int bExitOSStack)
+srRetVal sbSockLayerExit(int __attribute__((unused)) bExitOSStack)
 {
 	return SR_RET_OK;
 }
@@ -231,7 +232,6 @@ int sbSockSend(struct sbSockObject* pThis, const char* pszBuf, int iLen)
 srRetVal sbSockConnectoToHost(sbSockObj* pThis, char* pszHost, int iPort)
 {
 	struct sockaddr_in remoteaddr;
-	int	remoteaddrlen = sizeof(remoteaddr);
 	struct hostent *hstent;
 	struct sockaddr_in srv_addr;
 	char* pIpAddr;
@@ -445,7 +445,7 @@ static int sbSock_recvfrom(sbSockObj *pThis, char* buf, int len, int flags, stru
 	assert(buf != NULL);
 	assert(len > 0);
 	assert(from != NULL);
-	assert(fromlen > 0);
+	assert(*fromlen > 0);
 
 	return recvfrom(pThis->sock, buf, len, flags, from, fromlen);
 }

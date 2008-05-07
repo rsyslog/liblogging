@@ -153,7 +153,7 @@ srRetVal sbMIMEExtract(char *pszInBuf, int iInBufLen, char **pszMIMEHdr, char** 
 	/* we now handle empty strings, but this fix needs further testing. I just
 	 * added the "if(*psz)" and now I wonder why this wasn't done in the first
 	 * place. However, this was 3 years ago and my memory has vanished... -- rger, 2006-10-06 */
-	if(*psz)
+	if(*pszInBuf)
 	{
 		for(psz = pszInBuf ; *(psz+1) != '\0' ; ++psz)
 		{

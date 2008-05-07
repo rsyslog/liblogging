@@ -53,6 +53,7 @@
  */
 
 #include <assert.h>
+#include <ctype.h>
 #include "settings.h"
 #include "liblogging.h"
 #include "sockets.h"
@@ -876,7 +877,7 @@ srRetVal sbLstnServerLoop(sbLstnObj* pThis)
 		 */
 		if(sbSockFD_ISSET(pThis->pSockListening->sock, &fdsetRD))
 		{
-			if((iRet = sbLstnNewSess(pThis)) != SR_RET_OK)
+			if((iRet = sbLstnNewSess(pThis)) != SR_RET_OK) {
 				/* empty by intention */;
 				/** \todo log this once we have a logging subsystem */
 				/* let me elaborate: if we broke the loop in this case, we
@@ -889,6 +890,7 @@ srRetVal sbLstnServerLoop(sbLstnObj* pThis)
 				 * are drop, memory becomes available and so the server could
 				 * continue to operate... (at least in this sample case).
 				 */
+			}
 		}
 
 		/* We then go through all sessions and check which ones

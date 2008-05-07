@@ -38,6 +38,7 @@
  */
 
 #include <assert.h>
+#include <ctype.h>
 #include "settings.h"
 #include "liblogging.h"
 #include "sockets.h"

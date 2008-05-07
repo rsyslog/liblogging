@@ -1,3 +1,7 @@
+0.7.2
+   2008-05-07 RGerhards
+   - cleaned up some warnings; fixed some potentially bad errors
+     thanks to darix for pointing this out
 0.7.1
    2008-05-06 RGerhards
    - changed include files (now in liblogging subdirectory)
