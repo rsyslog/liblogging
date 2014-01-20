@@ -1,0 +1,10 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: libstdlog
+Description: standard logging library for C
+Version: @VERSION@
+Libs: -L${libdir} -lstdlog
+Cflags: -I${includedir}

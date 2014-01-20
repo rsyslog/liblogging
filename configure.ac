@@ -7,6 +7,9 @@ AM_INIT_AUTOMAKE
 AC_CONFIG_SRCDIR([src/beepchannel.c])
 AC_CONFIG_HEADER([config.h])
 
+m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
+AC_CONFIG_MACRO_DIR([m4])
+
 # Checks for programs.
 AC_PROG_CC
 AC_PROG_LIBTOOL
@@ -38,9 +41,31 @@ AC_FUNC_SELECT_ARGTYPES
 AC_TYPE_SIGNAL
 AC_CHECK_FUNCS([gethostbyname gethostname gettimeofday inet_ntoa memset select socket])
 
+AC_ARG_ENABLE(stdlog,
+        [AS_HELP_STRING([--enable-stdlog],[Enable stdlog support @<:@default=yes@:>@])],
+        [case "${enableval}" in
+         yes) enable_stdlog="yes" ;;
+          no) enable_stdlog="no" ;;
+           *) AC_MSG_ERROR(bad value ${enableval} for --enable-stdlog) ;;
+         esac],
+        [enable_stdlog="yes"]
+)
+AM_CONDITIONAL(ENABLE_STDLOG, test x$enable_stdlog = xyes)
+if test "$enable_stdlog" = "yes"; then
+        AC_DEFINE(LIBLOGGING_STDLOG, 1, [stdlog support is integrated.])
+fi
+
+
 AC_CONFIG_FILES([Makefile \
                  liblogging.pc \
                  doc/Makefile \
                  doc/html/Makefile \
-                 src/Makefile])
+                 src/Makefile \
+                 stdlog/libstdlog.pc \
+		 stdlog/Makefile])
 AC_OUTPUT
+
+echo "********************************************************"
+echo "liblogging will be compiled with the following settings:"
+echo
+echo "stdlog support enabled:               $enable_stdlog"
