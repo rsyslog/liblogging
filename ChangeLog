@@ -1,3 +1,9 @@
+v1.0.0 2014-01-??
+- made rfc3195 library (the original liblogging) an optional component
+- add libstdlog component; used for standard logging (syslog replacement)
+  purposes via multiple channels (driver support is planned)
+  This is the initial bare revision of this library component.
+----------------------------------------------------------------------------
 0.7.2
    2008-05-07 RGerhards
    - cleaned up some warnings; fixed some potentially bad errors

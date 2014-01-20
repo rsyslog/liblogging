@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.61)
-AC_INIT([liblogging], [0.7.1], [rgerhards@hq.adiscon.com])
+AC_INIT([liblogging], [1.0.0], [rgerhards@hq.adiscon.com])
 AM_INIT_AUTOMAKE
 AC_CONFIG_SRCDIR([src/beepchannel.c])
 AC_CONFIG_HEADER([config.h])
@@ -41,6 +41,24 @@ AC_FUNC_SELECT_ARGTYPES
 AC_TYPE_SIGNAL
 AC_CHECK_FUNCS([gethostbyname gethostname gettimeofday inet_ntoa memset select socket])
 
+
+# rfc3105 component
+AC_ARG_ENABLE(rfc3195,
+        [AS_HELP_STRING([--enable-rfc3195],[Enable rfc3195 support @<:@default=no@:>@])],
+        [case "${enableval}" in
+         yes) enable_rfc3195="yes" ;;
+          no) enable_rfc3195="no" ;;
+           *) AC_MSG_ERROR(bad value ${enableval} for --enable-rfc3195) ;;
+         esac],
+        [enable_rfc3195="no"]
+)
+AM_CONDITIONAL(ENABLE_RFC3195, test x$enable_rfc3195 = xyes)
+if test "$enable_rfc3195" = "yes"; then
+        AC_DEFINE(LIBLOGGING_STDLOG, 1, [rfc3195 support is integrated.])
+fi
+
+
+## stdlog component
 AC_ARG_ENABLE(stdlog,
         [AS_HELP_STRING([--enable-stdlog],[Enable stdlog support @<:@default=yes@:>@])],
         [case "${enableval}" in
@@ -69,3 +87,4 @@ echo "********************************************************"
 echo "liblogging will be compiled with the following settings:"
 echo
 echo "stdlog support enabled:               $enable_stdlog"
+echo "rfc3195 support enabled:              $enable_rfc3195"
