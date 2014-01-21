@@ -1,4 +1,4 @@
-v1.0.0 2014-01-??
+v1.0.0 2014-01-21
 - made rfc3195 library (the original liblogging) an optional component
 - add libstdlog component; used for standard logging (syslog replacement)
   purposes via multiple channels (driver support is planned)
