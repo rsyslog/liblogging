@@ -6,7 +6,9 @@
 #ifndef LIBSTDLOG_H_INCLUDED
 #define LIBSTDLOG_H_INCLUDED
 
+typedef struct stdlog_channel *stdlog_channel_t;
+
 int
-stdlog_log(int channel, const int severity, const char *fmt, ...) __attribute__((format(printf, 3, 4)));
+stdlog_log(stdlog_channel_t channel, const int severity, const char *fmt, ...) __attribute__((format(printf, 3, 4)));
 
 #endif /* multi-include protection */

@@ -12,7 +12,8 @@
 
 /* returns 0 on success or a standard (negative) error code */
 int
-stdlog_log(int channel, const int severity, const char *fmt, ...)
+stdlog_log(stdlog_channel_t __attribute((unused)) channel,
+	const int severity, const char *fmt, ...)
 {
 	char msg[4096];
 	va_list ap;
