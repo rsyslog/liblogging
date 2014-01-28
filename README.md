@@ -14,6 +14,7 @@ API replacement. Right now, it actually does more or less what syslog() did.
 In the future, however, it will support different log destinations, like
 
 * syslog()
+* systemd journal native API
 * unix domain socket
 * files
 
