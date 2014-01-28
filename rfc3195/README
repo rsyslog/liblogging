@@ -1,3 +1,16 @@
+**This is documentation for liblogging's rfc3195 component**
+
+Note that it is unlikely that you actually want to use this
+component in a new program. RFC3195 has failed, and almost
+nobody supports it. However, if you actually need to implement
+rfc3195 inside a new program, this library is for you.
+
+NOTE: for historical reasons, this component's library files
+are called "liblogging". Again, you do NOT need this component
+for anything other than rfc3195 processing!
+
+
+With that said:
 See doc/index.html for the full documentation.
 
 IMPORTANT: if you intend to just USE the library
