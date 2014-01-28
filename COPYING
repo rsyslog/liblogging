@@ -1,1 +1,16 @@
-See the COPYING files in the relevant submodules.
+Liblogging currently is forced to use diffrent licenses for different
+components.
+
+COMPONENT  LICENSE
+rfc3195    3-clause BSD
+stdlog     2-clause BSD
+
+Please note that you do *NOT* need to use the rfc3195 component if
+you just want to use stdlog.
+
+The different licenses are due to the fact that we cannot change the
+license of the RFC3195 component without agreement from the
+contributors. We are trying hard to make this possible.
+
+To learn about the progress, please visit
+   https://github.com/rsyslog/liblogging/issues/2
