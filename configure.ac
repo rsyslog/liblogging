@@ -4,7 +4,7 @@
 AC_PREREQ(2.61)
 AC_INIT([liblogging], [1.0.0], [rgerhards@hq.adiscon.com])
 AM_INIT_AUTOMAKE
-AC_CONFIG_SRCDIR([src/beepchannel.c])
+AC_CONFIG_SRCDIR([rfc3195/src/beepchannel.c])
 AC_CONFIG_HEADER([config.h])
 
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
@@ -42,7 +42,7 @@ AC_TYPE_SIGNAL
 AC_CHECK_FUNCS([gethostbyname gethostname gettimeofday inet_ntoa memset select socket])
 
 
-# rfc3105 component
+# rfc3195 component
 AC_ARG_ENABLE(rfc3195,
         [AS_HELP_STRING([--enable-rfc3195],[Enable rfc3195 support @<:@default=no@:>@])],
         [case "${enableval}" in
@@ -75,10 +75,10 @@ fi
 
 
 AC_CONFIG_FILES([Makefile \
-                 liblogging.pc \
-                 doc/Makefile \
-                 doc/html/Makefile \
-                 src/Makefile \
+                 rfc3195/liblogging.pc \
+                 rfc3195/doc/Makefile \
+                 rfc3195/doc/html/Makefile \
+                 rfc3195/src/Makefile \
                  stdlog/libstdlog.pc \
 		 stdlog/Makefile])
 AC_OUTPUT
