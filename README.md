@@ -1,6 +1,5 @@
 What?
 =====
-
 Liblogging is an easy to use library for logging. It offers an enhanced
 replacement for the syslog() call, but retains its ease of use.
 
@@ -42,3 +41,9 @@ logging would be taken over by rfc3195 and thus we begun working on a
 library -liblogging- that makes this easy. While the lib is there, rfc3195
 has turned out to be a big failure. This component is no longer enhanced,
 but it is still available for those apps that need it.
+
+History
+=======
+Liblogging is around since 2002. See [HISTORY](HISTORY.md) file for some
+background information on how it evolved and why it is structured like
+it currently is.
