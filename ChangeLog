@@ -1,5 +1,5 @@
 ----------------------------------------------------------------------------
-v1.0.1 2014-01-21
+v1.0.1 2014-002-04
 - rfc3195 component now 2-clause BSD licensed
 - new component names:
   * liblogging-stdlog
