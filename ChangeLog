@@ -1,3 +1,11 @@
+----------------------------------------------------------------------------
+v1.0.1 2014-01-21
+- rfc3195 component now 2-clause BSD licensed
+- new component names:
+  * liblogging-stdlog
+  * liblogging-rfc3195
+  made some necessary name adjustments
+----------------------------------------------------------------------------
 v1.0.0 2014-01-21
 - made rfc3195 library (the original liblogging) an optional component
 - add libstdlog component; used for standard logging (syslog replacement)

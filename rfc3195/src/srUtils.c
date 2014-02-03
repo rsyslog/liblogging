@@ -7,7 +7,7 @@
  * \date    2003-09-09
  *          Coding begun.
  *
- * Copyright 2002-2003 
+ * Copyright 2002-2014 
  *     Rainer Gerhards and Adiscon GmbH. All Rights Reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -21,11 +21,6 @@
  *       notice, this list of conditions and the following disclaimer in
  *       the documentation and/or other materials provided with the
  *       distribution.
- * 
- *     * Neither the name of Adiscon GmbH or Rainer Gerhards
- *       nor the names of its contributors may be used to
- *       endorse or promote products derived from this software without
- *       specific prior written permission.
  * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
  * IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
