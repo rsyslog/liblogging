@@ -79,7 +79,7 @@ AC_CONFIG_FILES([Makefile \
                  rfc3195/doc/Makefile \
                  rfc3195/doc/html/Makefile \
                  rfc3195/src/Makefile \
-                 stdlog/libstdlog.pc \
+                 stdlog/liblogging-stdlog.pc \
 		 stdlog/Makefile])
 AC_OUTPUT
 

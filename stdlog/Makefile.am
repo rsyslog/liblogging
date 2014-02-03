@@ -1,4 +1,4 @@
-lib_LTLIBRARIES = liblogging_stdlog.la
+lib_LTLIBRARIES = liblogging-stdlog.la
 
 liblogging_stdlog_la_SOURCES = \
 	stdlog.c

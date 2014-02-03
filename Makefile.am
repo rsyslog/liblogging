@@ -3,7 +3,7 @@ SUBDIRS =
 pkgconfigdir = $(libdir)/pkgconfig
 
 if ENABLE_STDLOG
-pkgconfig_DATA = stdlog/libstdlog.pc
+pkgconfig_DATA = stdlog/liblogging-stdlog.pc
 SUBDIRS += stdlog
 endif
 
