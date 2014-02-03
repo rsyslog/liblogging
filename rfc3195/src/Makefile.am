@@ -1,6 +1,6 @@
-lib_LTLIBRARIES = liblogging.la
+lib_LTLIBRARIES = liblogging-rfc3195.la
 
-liblogging_la_SOURCES = \
+liblogging_rfc3195_la_SOURCES = \
 	beepchannel.c \
 	beepframe.c \
 	beeplisten.c \
@@ -53,9 +53,9 @@ noinst_HEADERS = \
 noinst_PROGRAMS = testsrvr testdrvr
 
 testsrvr_SOURCES = testsrvr.c
-testsrvr_LDADD = liblogging.la
+testsrvr_LDADD = liblogging-rfc3195.la
 
 testdrvr_SOURCES = testdrvr.c
-testdrvr_LDADD = liblogging.la
+testdrvr_LDADD = liblogging-rfc3195.la
 
 EXTRA_DIST = $(os_sources)

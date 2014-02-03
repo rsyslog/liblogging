@@ -75,7 +75,7 @@ fi
 
 
 AC_CONFIG_FILES([Makefile \
-                 rfc3195/liblogging.pc \
+                 rfc3195/liblogging-rfc3195.pc \
                  rfc3195/doc/Makefile \
                  rfc3195/doc/html/Makefile \
                  rfc3195/src/Makefile \

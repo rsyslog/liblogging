@@ -8,7 +8,7 @@ SUBDIRS += stdlog
 endif
 
 if ENABLE_RFC3195
-pkgconfig_DATA = rfc3195/liblogging.pc
+pkgconfig_DATA = rfc3195/liblogging-rfc3195.pc
 SUBDIRS += rfc3195/doc rfc3195/src
 endif
 

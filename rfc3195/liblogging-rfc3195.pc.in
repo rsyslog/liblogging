@@ -3,8 +3,8 @@ exec_prefix=@exec_prefix@
 libdir=@libdir@
 includedir=@includedir@
 
-Name: liblogging
+Name: liblogging-rfc3195
 Description: RFC 3195 logging library
 Version: @VERSION@
-Libs: -L${libdir} -llogging @rt_libs@
+Libs: -L${libdir} -llogging-rfc3195 @rt_libs@
 Cflags: -I${includedir}
