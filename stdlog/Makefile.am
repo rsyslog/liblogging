@@ -1,6 +1,6 @@
-lib_LTLIBRARIES = libstdlog.la
+lib_LTLIBRARIES = liblogging_stdlog.la
 
-libstdlog_la_SOURCES = \
+liblogging_stdlog_la_SOURCES = \
 	stdlog.c
 
 pkginclude_HEADERS = \

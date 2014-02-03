@@ -3,8 +3,8 @@ exec_prefix=@exec_prefix@
 libdir=@libdir@
 includedir=@includedir@
 
-Name: libstdlog
+Name: liblogging-stdlog
 Description: standard logging library for C
 Version: @VERSION@
-Libs: -L${libdir} -lstdlog
+Libs: -L${libdir} -llogging-stdlog
 Cflags: -I${includedir}
