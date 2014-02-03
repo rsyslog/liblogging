@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.61)
-AC_INIT([liblogging], [1.0.0], [rgerhards@hq.adiscon.com])
+AC_INIT([liblogging], [1.0.1], [rgerhards@hq.adiscon.com])
 AM_INIT_AUTOMAKE
 AC_CONFIG_SRCDIR([rfc3195/src/beepchannel.c])
 AC_CONFIG_HEADER([config.h])

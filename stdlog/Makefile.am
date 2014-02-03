@@ -4,7 +4,7 @@ liblogging_stdlog_la_SOURCES = \
 	stdlog.c
 
 pkginclude_HEADERS = \
-	libstdlog.h
+	stdlog.h
 
 noinst_HEADERS =
 noinst_PROGRAMS =

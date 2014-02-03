@@ -30,7 +30,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <syslog.h>
-#include "libstdlog.h"
+#include "stdlog.h"
 
 /* Log a message to the specified channel. If channel is NULL,
  * use the default channel (which always exists).
