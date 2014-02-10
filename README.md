@@ -57,13 +57,13 @@ The syslog(3) API is the de-facto standard for application logging on Linux
 and Unix. While very simplistic, this is exactly the main feature the app
 developer wants. We want to keep this but improve it to
 
-* provide separation of concerns as describe above under the stdlog component
-* support reentrency
+* provide separation of concerns as described above under the stdlog component
+* support reentrancy
 * provide multiple concurrent log channels to different destinations
-* provide an interface for structured loggig - but only if there
+* provide an interface for structured logging - but only if there
   is a real demand for it (to be seen based on feedback)
 
-Libloging's goald is also to be a very slim library without any notable memory
+Libloging's goal is also to be a very slim library without any notable memory
 or performance footprint (and also simple and small code).
 
 Note to packagers
@@ -72,8 +72,8 @@ We recommend to create three different packages for this library, one for
 each component. As we do not anticipate new applications to use the
 rfc3195 component, we do not suggest building a package for it. On systems
 where systemd journal is present, there is hardly a point in packaging
-the journalemu component. So in esscence, the stdlog component is the only
-one we suggest to be packaged on many platforms.
+the journalemu component. So *in esscence, the stdlog component is the only
+one we suggest to be packaged on many platforms*.
 
 Depending on distro policies, package names like *liblogging1-stdlog* are 
 suggested. This prevents confusion with liblogging v0, which only supported
