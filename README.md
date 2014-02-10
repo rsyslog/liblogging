@@ -8,9 +8,9 @@ different needs.
 
 stdlog
 ------
-This is the core component. Think of it as a the next version of the
-syslog(3) API. We retain the easy semantics, but make it more sophisticated
-"behind the scenese" with better support for multiple threads and flexibility
+This is the core component. **Think of it as a the next version of the
+syslog(3) API.** We retain the easy semantics, but make it more sophisticated
+"behind the scenes" with better support for multiple threads and flexibility
 for different log destinations.
 
 Right now, it actually does more or less what syslog() did.  In the next couple
