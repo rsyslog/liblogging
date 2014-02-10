@@ -1,6 +1,7 @@
 ----------------------------------------------------------------------------
-v1.0.1 2014-002-04
+v1.0.1 2014-02-10
 - rfc3195 component now 2-clause BSD licensed
+  This means the complete liblogging is now under 2-clause BSD
 - new component names:
   * liblogging-stdlog
   * liblogging-rfc3195
