@@ -30,7 +30,8 @@
 
 typedef struct stdlog_channel *stdlog_channel_t;
 
-int
-stdlog_log(stdlog_channel_t channel, const int severity, const char *fmt, ...) __attribute__((format(printf, 3, 4)));
+stdlog_channel_t stdlog_open(const char *ident, int option, int facility, const char *channelspec);
+int stdlog_log(stdlog_channel_t channel, const int severity, const char *fmt, ...) __attribute__((format(printf, 3, 4)));
+void stdlog_close(stdlog_channel_t channel);
 
 #endif /* multi-include protection */

@@ -28,9 +28,141 @@
  */
 #include "config.h"
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <stdarg.h>
+#include <stdint.h>
 #include <syslog.h>
+#include <errno.h>
+#include "stdlog-intern.h"
 #include "stdlog.h"
+
+
+static stdlog_channel_t dflt_channel = NULL;
+
+stdlog_channel_t
+stdlog_open(const char *ident, int option, int facility, const char *channelspec)
+{
+	stdlog_channel_t channel;
+
+	if((channel = calloc(1, sizeof(struct stdlog_channel))) == NULL) {
+		errno = ENOMEM;
+		goto done;
+	}
+	if((channel->spec = strdup(channelspec)) == NULL) {
+		free(channel);
+		channel = NULL;
+		errno = ENOMEM;
+		goto done;
+	}
+	if((channel->ident = strdup(ident)) == NULL) {
+		free((char*)channel->spec);
+		free(channel);
+		channel = NULL;
+		errno = ENOMEM;
+		goto done;
+	}
+	channel->options = option;
+	channel->facility = facility;
+done:
+	return channel;
+}
+
+void
+stdlog_close(stdlog_channel_t channel)
+{
+	free(channel);
+}
+
+
+static void
+print_int (char *__restrict__ const buf, const size_t lenbuf, size_t *idx, int64_t nbr)
+{
+	size_t i;
+	int j;
+	char numbuf[21];
+
+	if (nbr == 0) {
+		buf[(*idx)++] = '0';
+		goto done;
+	}
+	j = 0;
+	while(nbr != 0) {
+		numbuf[j++] = nbr % 10 + '0';
+		nbr /= 10;
+	}
+	for(i = *idx, --j; i < lenbuf && j >= 0 ; ++i, --j)
+		buf[i] = numbuf[j];
+	*idx = i;
+
+done:	return;
+}
+
+
+static void
+my_printf(char *buf, size_t lenbuf, const char *fmt, va_list ap)
+{
+	char *s;
+	int d;
+	unsigned i = 0;
+
+	--lenbuf; /* reserve for terminal \0 */
+	while(*fmt && i < lenbuf) {
+		printf("to process: '%c'\n", *fmt);
+		switch(*fmt) {
+		case '\\':
+			if(*++fmt == '\0') goto done;
+			switch(*fmt) {
+			case 'n':
+				buf[i++] = '\n';
+				break;
+			case 'r':
+				buf[i++] = '\r';
+				break;
+			case 't':
+				buf[i++] = '\t';
+				break;
+			case '\\':
+				buf[i++] = '\\';
+				break;
+			// TODO: implement others
+			default:
+				buf[i++] = *fmt;
+				break;
+			}
+			break;
+		case '%':
+			if(*++fmt == '\0') goto done;
+			switch(*fmt) {
+			case 's':
+				s = va_arg(ap, char *);
+				memcpy(buf+i, s, strlen(s));
+				// TODO: optimize, check limits!
+				i += strlen(s);
+				break;
+			case 'd':
+				d = va_arg(ap, int);
+				print_int(buf, lenbuf, &i, (int64_t) d); 
+				break;
+			case 'c':
+				buf[i++] = (char) va_arg(ap, int);
+				break;
+			// TODO: implement others
+			default:
+				buf[i++] = '?';
+				break;
+			}
+			break;
+		default:
+			buf[i++] = *fmt;
+			break;
+		}
+		++fmt;
+	}
+done:
+	buf[i] = '\0'; /* we reserved space for this! */
+	va_end(ap);
+}
 
 /* Log a message to the specified channel. If channel is NULL,
  * use the default channel (which always exists).
@@ -38,18 +170,19 @@
  * Otherwise the semantics are equivalent to syslog().
  */
 int
-stdlog_log(stdlog_channel_t __attribute((unused)) channel,
+stdlog_log(stdlog_channel_t channel,
 	const int severity, const char *fmt, ...)
 {
 	char msg[4096];
 	va_list ap;
-	int r;
+	int r = 0;
 
+	if(channel == NULL)
+		channel = dflt_channel;
+	// TODO: handle channel open if NULL
 	va_start(ap, fmt);
-	r = vsnprintf(msg, sizeof(msg), fmt, ap);
-	va_end (ap);
-	if(r < 0) goto done;
-		r = 0;
+	my_printf(msg, sizeof(msg), fmt, ap);
+	printf("outputting: >%s<\n", msg);
 
 	syslog(severity, "%s", msg);
 
