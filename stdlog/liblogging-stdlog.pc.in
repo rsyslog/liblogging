@@ -4,7 +4,7 @@ libdir=@libdir@
 includedir=@includedir@
 
 Name: liblogging-stdlog
-Description: standard logging library for C
+Description: an enhanced replacement for the syslog() API with admin-configurable destinations
 Version: @VERSION@
 Libs: -L${libdir} -llogging-stdlog
 Cflags: -I${includedir}
