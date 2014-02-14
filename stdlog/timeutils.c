@@ -73,17 +73,6 @@ increment_overflow(int *const ip, int j)
 	*ip += j;
 	return FALSE;
 }
-#if 0
-static int
-increment_overflow(int * number, int delta)
-{
-  int number0;
-
-  number0 = *number;
-  *number += delta;
-  return (*number < number0) != (delta < 0);
-}
-#endif
 
 static const int	mon_lengths[2][MONSPERYEAR] = {
 	{ 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 },
