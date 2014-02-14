@@ -64,6 +64,8 @@ stdlog_open(const char *ident, int option, int facility, const char *channelspec
 	}
 	channel->options = option;
 	channel->facility = facility;
+
+	channel->d.uxs.sock = -1;
 done:
 	return channel;
 }
@@ -170,21 +172,27 @@ done:
  * Otherwise the semantics are equivalent to syslog().
  */
 int
-stdlog_log(stdlog_channel_t channel,
+stdlog_log(stdlog_channel_t ch,
 	const int severity, const char *fmt, ...)
 {
 	char msg[4096];
 	va_list ap;
 	int r = 0;
 
-	if(channel == NULL)
-		channel = dflt_channel;
-	// TODO: handle channel open if NULL
+	if(ch == NULL) {
+		if (dflt_channel == NULL) {
+			if((dflt_channel = 
+			      stdlog_open("TEST", 0, 3, "...")) == NULL)
+				goto done;
+		}
+		ch = dflt_channel;
+	}
 	va_start(ap, fmt);
 	my_printf(msg, sizeof(msg), fmt, ap);
 	printf("outputting: >%s<\n", msg);
 
-	syslog(severity, "%s", msg);
+	__stdlog_uxs_log(ch, msg);
+	//syslog(severity, "%s", msg);
 
 done:	return r;
 }
