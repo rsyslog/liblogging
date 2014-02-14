@@ -2,7 +2,8 @@ lib_LTLIBRARIES = liblogging-stdlog.la
 
 liblogging_stdlog_la_SOURCES = \
 	stdlog.c \
-	syslog.c
+	uxsock.c \
+	timeutils.c
 
 pkginclude_HEADERS = \
 	stdlog.h

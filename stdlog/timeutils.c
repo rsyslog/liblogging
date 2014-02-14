@@ -1,10 +1,33 @@
-#include <stdio.h>
-#include <time.h>
-#include <stdint.h>
-#include <limits.h>
-
-#define TRUE 1
-#define FALSE 0
+/* signal-safe helper routines for time handling
+ *
+ * Based on code originally placed in the public domain by
+ * Arthur David Olson (please see note after this comment here).
+ *
+ * Modifications for liblogging-stdlog are
+ * Copyright (C) 2014 Rainer Gerhards
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY RAINER GERHARDS AND CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED.  IN NO EVENT SHALL ADISCON OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
+ */
 /* Large parts of this code are taken from BSD sources, which
  * is in the public domain, as said in their sources. The
  * respective statement is reproduced below.
@@ -17,7 +40,14 @@
 ** This file is in the public domain, so clarified as of
 ** 1996-06-05 by Arthur David Olson.
 */
+#include "config.h"
+#include <stdio.h>
+#include <time.h>
+#include <stdint.h>
+#include <limits.h>
 
+#define TRUE 1
+#define FALSE 0
 
 #define SECSPERMIN	60
 #define MINSPERHOUR	60
@@ -89,20 +119,17 @@ static const int	year_lengths[2] = {
 */
 
 static int
-leaps_thru_end_of(y)
-register const int	y;
+leaps_thru_end_of(const int y)
 {
 	return (y >= 0) ? (y / 4 - y / 100 + y / 400) :
 		-(leaps_thru_end_of(-(y + 1)) + 1);
 }
 
-static struct tm *
-timesub(timep, offset, tmp)
-const time_t * const			timep;
-const long				offset;
-struct tm * const		tmp;
+struct tm *
+__stdlog_timesub(const time_t *__restrict__ const timep,
+	const long offset,
+	struct tm *__restrict__ const tmp)
 {
-	const struct lsinfo *	lp;
 	time_t			tdays;
 	int			idays;	/* unsigned would be so 2003 */
 	long			rem;
@@ -110,7 +137,6 @@ struct tm * const		tmp;
 	const int *		ip;
 	long			corr;
 	int			hit;
-	int			i;
 
 	corr = 0;
 	hit = 0;
