@@ -35,7 +35,6 @@
 #include <syslog.h>
 #include <errno.h>
 #include "stdlog-intern.h"
-#include "stdlog.h"
 
 
 static stdlog_channel_t dflt_channel = NULL;
@@ -78,14 +77,15 @@ stdlog_close(stdlog_channel_t channel)
 
 
 static void
-print_int (char *__restrict__ const buf, const size_t lenbuf, size_t *idx, int64_t nbr)
+print_int (char *__restrict__ const buf, const size_t lenbuf, int *idx, int64_t nbr)
 {
 	size_t i;
 	int j;
 	char numbuf[21];
 
 	if (nbr == 0) {
-		buf[(*idx)++] = '0';
+		buf[*idx] = '0';
+		(*idx)++;
 		goto done;
 	}
 	j = 0;
@@ -95,21 +95,30 @@ print_int (char *__restrict__ const buf, const size_t lenbuf, size_t *idx, int64
 	}
 	for(i = *idx, --j; i < lenbuf && j >= 0 ; ++i, --j)
 		buf[i] = numbuf[j];
+
 	*idx = i;
 
 done:	return;
 }
 
+static void
+print_str (char *__restrict__ const buf, const size_t lenbuf, int *idx, const char *const str)
+{
+	size_t lenstr = strlen(str);
+	memcpy(buf+(*idx), str, lenstr);
+	// TODO: check limits!
+	*idx += lenstr;
+}
 
 static void
 my_printf(char *buf, size_t lenbuf, const char *fmt, va_list ap)
 {
 	char *s;
 	int d;
-	unsigned i = 0;
+	int i = 0;
 
 	--lenbuf; /* reserve for terminal \0 */
-	while(*fmt && i < lenbuf) {
+	while(*fmt && i < (int) lenbuf) {
 		printf("to process: '%c'\n", *fmt);
 		switch(*fmt) {
 		case '\\':
@@ -138,9 +147,7 @@ my_printf(char *buf, size_t lenbuf, const char *fmt, va_list ap)
 			switch(*fmt) {
 			case 's':
 				s = va_arg(ap, char *);
-				memcpy(buf+i, s, strlen(s));
-				// TODO: optimize, check limits!
-				i += strlen(s);
+				print_str(buf, lenbuf, &i, s);
 				break;
 			case 'd':
 				d = va_arg(ap, int);
@@ -166,6 +173,33 @@ done:
 	va_end(ap);
 }
 
+
+/* TODO: move to driver layer */
+static void
+format_syslog(stdlog_channel_t ch,
+	const int severity,
+	const char *__restrict__ const fmt,
+	va_list ap)
+{
+	char *msg = ch->msgbuf;
+	size_t lenmsg = sizeof(ch->msgbuf);
+	int i = 0;
+	struct tm tm;
+	time_t t = time(NULL);
+
+	__stdlog_timesub(&t, 0, &tm);
+	msg[i++] = '<';
+	print_int(msg, lenmsg-i, &i, (int64_t) severity); 
+	msg[i++] = '>';
+	i += __stdlog_formatTimestamp3164(&tm, msg+i);
+	msg[i++] = ' ';
+	print_str(msg, lenmsg-i, &i, ch->ident);
+	msg[i++] = ':';
+	msg[i++] = ' ';
+	my_printf(msg+i, lenmsg-i, fmt, ap);
+}
+	
+
 /* Log a message to the specified channel. If channel is NULL,
  * use the default channel (which always exists).
  * Returns 0 on success or a standard (negative) error code.
@@ -175,7 +209,6 @@ int
 stdlog_log(stdlog_channel_t ch,
 	const int severity, const char *fmt, ...)
 {
-	char msg[4096];
 	va_list ap;
 	int r = 0;
 
@@ -188,11 +221,10 @@ stdlog_log(stdlog_channel_t ch,
 		ch = dflt_channel;
 	}
 	va_start(ap, fmt);
-	my_printf(msg, sizeof(msg), fmt, ap);
-	printf("outputting: >%s<\n", msg);
+	format_syslog(ch, severity, fmt, ap);
+	printf("outputting: '%s'\n", ch->msgbuf);
 
-	__stdlog_uxs_log(ch, msg);
-	//syslog(severity, "%s", msg);
+	__stdlog_uxs_log(ch);
 
 done:	return r;
 }

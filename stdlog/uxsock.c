@@ -63,18 +63,18 @@ __stdlog_uxs_close(stdlog_channel_t ch)
 
 
 void
-__stdlog_uxs_log(stdlog_channel_t ch, const char *__restrict__ const msg)
+__stdlog_uxs_log(stdlog_channel_t ch)
 {
-	const size_t lenmsg = strlen(msg);
+	const size_t lenmsg = strlen(ch->msgbuf);
 	ssize_t lsent;
-	printf("syslog got: '%s'\n", msg);
+	printf("syslog got: '%s'\n", ch->msgbuf);
 
 	if(ch->d.uxs.sock < 0)
 		__stdlog_uxs_open(ch);
 	if(ch->d.uxs.sock < 0)
 		return;
 	// TODO: error handling!!!
-	lsent = sendto(ch->d.uxs.sock, msg, lenmsg, 0,
+	lsent = sendto(ch->d.uxs.sock, ch->msgbuf, lenmsg, 0,
 		(struct sockaddr*) &ch->d.uxs.addr, sizeof(ch->d.uxs.addr));
 	printf("sock: %d, lsent: %d\n", ch->d.uxs.sock, lsent);
 	perror("send");

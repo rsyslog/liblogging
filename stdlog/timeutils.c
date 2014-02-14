@@ -1,9 +1,5 @@
 /* signal-safe helper routines for time handling
  *
- * Based on code originally placed in the public domain by
- * Arthur David Olson (please see note after this comment here).
- *
- * Modifications for liblogging-stdlog are
  * Copyright (C) 2014 Rainer Gerhards
  * All rights reserved.
  *
@@ -28,6 +24,51 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  */
+#include "config.h"
+#include <stdio.h>
+#include <time.h>
+#include <stdint.h>
+#include <limits.h>
+
+
+/**
+ * Format a syslogTimestamp to a RFC3164 timestamp sring.
+ * The caller must provide the timestamp as well as a character
+ * buffer that will receive the resulting string. The function
+ * returns the size of the timestamp written in bytes (without
+ * the string termnator). If 0 is returned, an error occured.
+ */
+int
+__stdlog_formatTimestamp3164(const struct tm *__restrict__ const tm,
+	char *__restrict__ const  buf)
+{
+	static char* monthNames[12] = { "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+					"Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
+	int iDay;
+	
+	buf[0] = monthNames[tm->tm_mon][0];
+	buf[1] = monthNames[tm->tm_mon][1];
+	buf[2] = monthNames[tm->tm_mon][2];
+	buf[3] = ' ';
+	iDay = (tm->tm_wday / 10) % 10; /* we need to write a space if the first digit is 0 */
+	buf[4] = (iDay > 0) ? iDay + '0' : ' ';
+	buf[5] = tm->tm_wday % 10 + '0';
+	buf[6] = ' ';
+	buf[7] = (tm->tm_hour / 10) % 10 + '0';
+	buf[8] = tm->tm_hour % 10 + '0';
+	buf[9] = ':';
+	buf[10] = (tm->tm_min / 10) % 10 + '0';
+	buf[11] = tm->tm_min % 10 + '0';
+	buf[12] = ':';
+	buf[13] = (tm->tm_sec / 10) % 10 + '0';
+	buf[14] = tm->tm_sec % 10 + '0';
+	buf[15] = '\0';
+	return 15;	/* traditional: number of bytes written */
+}
+
+/* ==================================================================================== *
+ * The following code is taken from BSD sources, as described below.
+ * ==================================================================================== */
 /* Large parts of this code are taken from BSD sources, which
  * is in the public domain, as said in their sources. The
  * respective statement is reproduced below.
@@ -40,11 +81,6 @@
 ** This file is in the public domain, so clarified as of
 ** 1996-06-05 by Arthur David Olson.
 */
-#include "config.h"
-#include <stdio.h>
-#include <time.h>
-#include <stdint.h>
-#include <limits.h>
 
 #define TRUE 1
 #define FALSE 0
@@ -228,3 +264,6 @@ __stdlog_timesub(const time_t *__restrict__ const timep,
 #endif /* defined TM_GMTOFF */
 	return tmp;
 }
+/* ==================================================================================== *
+ * End code taken from BSD sources.
+ * ==================================================================================== */
