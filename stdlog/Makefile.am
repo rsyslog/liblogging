@@ -1,15 +1,16 @@
 lib_LTLIBRARIES = liblogging-stdlog.la
 
 liblogging_stdlog_la_SOURCES = \
-	stdlog.c
+	stdlog.c \
+	syslog.c
 
 pkginclude_HEADERS = \
 	stdlog.h
 
 noinst_HEADERS =
-noinst_PROGRAMS =
+noinst_PROGRAMS = tester
 
-#testsrvr_SOURCES = testsrvr.c
-#testsrvr_LDADD = liblogging.la
+tester_SOURCES = tester.c
+tester_LDADD = liblogging-stdlog.la
 
 EXTRA_DIST = 
