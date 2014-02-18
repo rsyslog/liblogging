@@ -11,11 +11,11 @@ stdlog
 This is the core component. **Think of it as a the next version of the
 syslog(3) API.** We retain the easy semantics, but make it more sophisticated
 "behind the scenes" with better support for multiple threads and flexibility
-for different log destinations.
+for different log destinations. It also is signal-safe and thus can be used
+from within signal handlers.
 
 Right now, it actually does more or less what syslog() did.  In the next couple
-of weeks, this will change. In the future, it will support different log
-destinations, like
+of weeks, this will change. It supports different log destionations:
 
 * syslog()
 * systemd journal native API
@@ -25,7 +25,7 @@ destinations, like
 The key point here is that we provide a **separation of concerns**: the
 application developer will do the logging calls, but the sysadmin will
 be able to configure where log messages actually are send to. We will
-use a pluggable driver layer to do so.
+use a driver layer to do so.
 
 This follows much the successful log4j paradigm. However, we have a
 focus on simplicity. No app developer likes logging, and so we really
