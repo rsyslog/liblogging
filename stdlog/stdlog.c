@@ -38,35 +38,101 @@
 
 
 static stdlog_channel_t dflt_channel = NULL;
+static char *dflt_chanspec = NULL;
+
+
+/* can be called before any other library call. If so, initializes
+ * some library strucutres.
+ * NOTE: this API may change in the final version
+ * returns 0 on success, -1 on error with errno set
+ */
+int
+stdlog_init(void)
+{
+	char *chanspec;
+
+printf("ini init, dch %p\n", dflt_channel);
+	if (dflt_channel != NULL) {
+		errno = EINVAL;
+		return -1;
+	}
+
+printf("in2 init\n");
+	chanspec = getenv("LIBLOGGING_STDLOG_DFLT_LOG_DESTINATION");
+	if (chanspec == NULL)
+		chanspec = "syslog:";
+	if ((dflt_chanspec = strdup(chanspec)) == NULL)
+		return -1;
+
+	if((dflt_channel = 
+	      stdlog_open("TEST", 0, 3, NULL)) == NULL)
+		return -1;
+printf("out init\n");
+
+	return 0;
+}
+
+/* may be called to free stdlog ressources
+ * (e.g. to prevent valgrind mem leaks at shutdown)
+ */
+void
+stdlog_deinit (void)
+{
+	free(dflt_chanspec);
+}
+
+/* interprets a driver chanspec and sets the channel accordingly
+ */
+static int
+__stdlog_set_driver(stdlog_channel_t ch, const char *__restrict__ chanspec)
+{
+	ch->driver = 0;
+	if (chanspec == NULL)
+		chanspec = dflt_chanspec;
+printf("chanspec: '%s'\n", chanspec);
+
+	if((ch->spec = strdup(chanspec)) == NULL) {
+		errno = ENOMEM;
+		return -1;
+	}
+
+	if (!strcmp(chanspec, "journal:"))
+		ch->driver = 1;
+	printf("driver %d set\n", ch->driver);
+	return 0;
+}
 
 stdlog_channel_t
-stdlog_open(const char *ident, int option, int facility, const char *channelspec)
+stdlog_open(const char *ident, int option, int facility, const char *chanspec)
 {
-	stdlog_channel_t channel;
+	stdlog_channel_t ch;
 
-	if((channel = calloc(1, sizeof(struct stdlog_channel))) == NULL) {
+	if((ch = calloc(1, sizeof(struct stdlog_channel))) == NULL) {
 		errno = ENOMEM;
 		goto done;
 	}
-	if((channel->spec = strdup(channelspec)) == NULL) {
-		free(channel);
-		channel = NULL;
+	if((ch->ident = strdup(ident)) == NULL) {
+		free(ch);
+		ch = NULL;
 		errno = ENOMEM;
 		goto done;
 	}
-	if((channel->ident = strdup(ident)) == NULL) {
-		free((char*)channel->spec);
-		free(channel);
-		channel = NULL;
-		errno = ENOMEM;
-		goto done;
-	}
-	channel->options = option;
-	channel->facility = facility;
+	ch->options = option;
+	ch->facility = facility;
 
-	channel->d.uxs.sock = -1;
+	if(__stdlog_set_driver(ch, chanspec) != 0) {
+		int errnosv = errno;
+		free((char*)ch->ident);
+		free((char*)ch->spec);
+		free(ch);
+		ch = NULL;
+		errno = errnosv;
+		goto done;
+	}
+
+	ch->d.uxs.sock = -1;
 done:
-	return channel;
+	return ch;
 }
 
 void
@@ -226,15 +292,13 @@ stdlog_log(stdlog_channel_t ch,
 	int r = 0;
 
 	if(ch == NULL) {
-		if (dflt_channel == NULL) {
-			if((dflt_channel = 
-			      stdlog_open("TEST", 0, 3, "...")) == NULL)
+		if (dflt_channel == NULL)
+			if((r = stdlog_init()) != 0)
 				goto done;
-		}
 		ch = dflt_channel;
 	}
 	va_start(ap, fmt);
-	if(1) {
+	if(ch->driver == 1) {
 		format_jrnl(ch, severity, fmt, ap);
 		__stdlog_jrnl_log(ch, severity);
 	} else {

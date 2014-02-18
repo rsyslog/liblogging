@@ -36,6 +36,7 @@ struct stdlog_channel {
 	int options;
 	int facility;
 	char *fmtbuf;
+	int driver; /* driver to be used, 0-syslog, 1-journal TODO: real driver interface! */
 	union {
 		struct {
 			int sock;
