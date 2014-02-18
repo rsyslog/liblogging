@@ -25,8 +25,19 @@
  * SUCH DAMAGE.
  */
 #include "config.h"
+#include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
 #include <errno.h>
+#include <systemd/sd-journal.h>
 #include "stdlog-intern.h"
 #include "stdlog.h"
+
+void
+__stdlog_jrnl_log(stdlog_channel_t ch, const int severity)
+{
+	// TODO: error handling!!!
+	sd_journal_send("MESSAGE=%s", ch->msgbuf,
+                "PRIORITY=%d", severity,
+                NULL);
+}

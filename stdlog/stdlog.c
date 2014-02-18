@@ -197,6 +197,7 @@ format_syslog(stdlog_channel_t ch,
 	msg[i++] = ':';
 	msg[i++] = ' ';
 	my_printf(msg+i, lenmsg-i, fmt, ap);
+	ch->lenmsg = strlen(msg); // TODO: replace with index update <--> signal-safeness!!
 }
 	
 
@@ -223,8 +224,9 @@ stdlog_log(stdlog_channel_t ch,
 	va_start(ap, fmt);
 	format_syslog(ch, severity, fmt, ap);
 	printf("outputting: '%s'\n", ch->msgbuf);
+	__stdlog_jrnl_log(ch, severity);
 
-	__stdlog_uxs_log(ch);
+//	__stdlog_uxs_log(ch);
 
 done:	return r;
 }

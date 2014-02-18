@@ -42,6 +42,7 @@ struct stdlog_channel {
 			struct sockaddr_un addr;
 		} uxs;	/* unix socket (including syslog) */
 	} d;	/* driver-specific data */
+	size_t lenmsg;	/* size of formatted msg in msgbuf */
 	char msgbuf[4096]; /* message buffer (TODO: dynmic size!) */
 };
 
@@ -51,5 +52,8 @@ struct tm * __stdlog_timesub(const time_t * timep, const long offset, struct tm 
 
 /* uxsock driver */
 void __stdlog_uxs_log(stdlog_channel_t ch);
+
+/* systemd journal driver */
+void __stdlog_jrnl_log(stdlog_channel_t ch, const int severity);
 
 #endif /* STDLOG_INTERN_H_INCLUDED */
