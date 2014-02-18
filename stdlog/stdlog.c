@@ -110,7 +110,7 @@ print_str (char *__restrict__ const buf, const size_t lenbuf, int *idx, const ch
 	*idx += lenstr;
 }
 
-static void
+static size_t
 my_printf(char *buf, size_t lenbuf, const char *fmt, va_list ap)
 {
 	char *s;
@@ -171,6 +171,7 @@ my_printf(char *buf, size_t lenbuf, const char *fmt, va_list ap)
 done:
 	buf[i] = '\0'; /* we reserved space for this! */
 	va_end(ap);
+	return i;
 }
 
 
@@ -196,8 +197,19 @@ format_syslog(stdlog_channel_t ch,
 	print_str(msg, lenmsg-i, &i, ch->ident);
 	msg[i++] = ':';
 	msg[i++] = ' ';
-	my_printf(msg+i, lenmsg-i, fmt, ap);
-	ch->lenmsg = strlen(msg); // TODO: replace with index update <--> signal-safeness!!
+	i += my_printf(msg+i, lenmsg-i, fmt, ap);
+	ch->lenmsg = i;
+}
+
+/* TODO: move to driver layer */
+static void
+format_jrnl(stdlog_channel_t ch,
+	const int severity,
+	const char *__restrict__ const fmt,
+	va_list ap)
+{
+
+	ch->lenmsg = my_printf(ch->msgbuf, sizeof(ch->msgbuf), fmt, ap);
 }
 	
 
@@ -222,11 +234,13 @@ stdlog_log(stdlog_channel_t ch,
 		ch = dflt_channel;
 	}
 	va_start(ap, fmt);
-	format_syslog(ch, severity, fmt, ap);
-	printf("outputting: '%s'\n", ch->msgbuf);
-	__stdlog_jrnl_log(ch, severity);
-
-//	__stdlog_uxs_log(ch);
+	if(1) {
+		format_jrnl(ch, severity, fmt, ap);
+		__stdlog_jrnl_log(ch, severity);
+	} else {
+		format_syslog(ch, severity, fmt, ap);
+		__stdlog_uxs_log(ch);
+	}
 
 done:	return r;
 }
