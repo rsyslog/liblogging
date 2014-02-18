@@ -33,11 +33,30 @@
 #include "stdlog-intern.h"
 #include "stdlog.h"
 
-void
-__stdlog_jrnl_log(stdlog_channel_t ch, const int severity)
+/* dummy just needed for driver interface */
+static void
+jrnl_open(stdlog_channel_t __attribute__((unused)) ch)
+{
+}
+/* dummy just needed for driver interface */
+static void
+jrnl_close(stdlog_channel_t __attribute__((unused)) ch)
+{
+}
+
+static void
+jrnl_log(stdlog_channel_t ch, const int severity)
 {
 	// TODO: error handling!!!
 	sd_journal_send("MESSAGE=%s", ch->msgbuf,
                 "PRIORITY=%d", severity,
                 NULL);
+}
+
+void
+__stdlog_set_jrnl_drvr(stdlog_channel_t ch)
+{
+	ch->drvr.open = jrnl_open;
+	ch->drvr.close = jrnl_close;
+	ch->drvr.log = jrnl_log;
 }

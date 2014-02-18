@@ -37,7 +37,11 @@ struct stdlog_channel {
 	int options;
 	int facility;
 	char *fmtbuf;
-	int driver; /* driver to be used, 0-syslog, 1-journal TODO: real driver interface! */
+	struct {
+		void (*open)(stdlog_channel_t ch);
+		void (*close)(stdlog_channel_t ch);
+		void (*log)(stdlog_channel_t ch, const int severity);
+	} drvr;
 	union {
 		struct {
 			int sock;
@@ -53,11 +57,8 @@ struct stdlog_channel {
 int __stdlog_formatTimestamp3164(const struct tm *const tm, char *const  buf);
 struct tm * __stdlog_timesub(const time_t * timep, const long offset, struct tm *tmp);
 
-/* uxsock driver */
-void __stdlog_uxs_log(stdlog_channel_t ch, int severity);
-
-/* systemd journal driver */
-void __stdlog_jrnl_log(stdlog_channel_t ch, const int severity);
+void __stdlog_set_uxs_drvr(stdlog_channel_t ch); /* uxsock driver */
+void __stdlog_set_jrnl_drvr(stdlog_channel_t ch); /* systemd journal driver */
 
 /* formatter "library" routines */
 void __stdlog_fmt_print_int (char *__restrict__ const buf, const size_t lenbuf, int *idx, int64_t nbr);

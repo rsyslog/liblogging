@@ -81,7 +81,6 @@ stdlog_deinit (void)
 static int
 __stdlog_set_driver(stdlog_channel_t ch, const char *__restrict__ chanspec)
 {
-	ch->driver = 0;
 	if (chanspec == NULL)
 		chanspec = dflt_chanspec;
 
@@ -91,7 +90,9 @@ __stdlog_set_driver(stdlog_channel_t ch, const char *__restrict__ chanspec)
 	}
 
 	if (!strcmp(chanspec, "journal:"))
-		ch->driver = 1;
+		__stdlog_set_jrnl_drvr(ch);
+	else
+		__stdlog_set_uxs_drvr(ch);
 	return 0;
 }
 
@@ -155,11 +156,7 @@ stdlog_log(stdlog_channel_t ch,
 	va_start(ap, fmt);
 	ch->lenmsg = __stdlog_fmt_printf(ch->msgbuf, sizeof(ch->msgbuf), fmt, ap);
 printf("formatter returned msg: '%s'\n", ch->msgbuf);
-	if(ch->driver == 1) {
-		__stdlog_jrnl_log(ch, severity);
-	} else {
-		__stdlog_uxs_log(ch, severity);
-	}
+	ch->drvr.log(ch, severity);
 
 done:	return r;
 }

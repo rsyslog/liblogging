@@ -65,7 +65,7 @@ build_syslog_frame(stdlog_channel_t ch, const int severity)
 
 
 static void
-__stdlog_uxs_open(stdlog_channel_t ch)
+uxs_open(stdlog_channel_t ch)
 {
 	if (ch->d.uxs.sock == -1) {
 		if((ch->d.uxs.sock = socket(AF_UNIX, SOCK_DGRAM, 0)) < 0)
@@ -78,7 +78,7 @@ __stdlog_uxs_open(stdlog_channel_t ch)
 }
 
 static void
-__stdlog_uxs_close(stdlog_channel_t ch)
+uxs_close(stdlog_channel_t ch)
 {
 	if (ch->d.uxs.sock >= 0) {
 		close(ch->d.uxs.sock);
@@ -87,15 +87,15 @@ __stdlog_uxs_close(stdlog_channel_t ch)
 }
 
 
-void
-__stdlog_uxs_log(stdlog_channel_t ch, int severity)
+static void
+uxs_log(stdlog_channel_t ch, int severity)
 {
 	size_t lenframe;
 	ssize_t lsent;
 	printf("syslog got: '%s'\n", ch->msgbuf);
 
 	if(ch->d.uxs.sock < 0)
-		__stdlog_uxs_open(ch);
+		uxs_open(ch);
 	if(ch->d.uxs.sock < 0)
 		return;
 	lenframe = build_syslog_frame(ch, severity);
@@ -105,4 +105,12 @@ printf("syslog frame: '%s'\n", ch->d.uxs.framebuf);
 		(struct sockaddr*) &ch->d.uxs.addr, sizeof(ch->d.uxs.addr));
 	printf("sock: %d, lsent: %d\n", ch->d.uxs.sock, lsent);
 	perror("send");
+}
+
+void
+__stdlog_set_uxs_drvr(stdlog_channel_t ch)
+{
+	ch->drvr.open = uxs_open;
+	ch->drvr.close = uxs_close;
+	ch->drvr.log = uxs_log;
 }
