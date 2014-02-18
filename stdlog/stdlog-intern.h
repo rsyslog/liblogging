@@ -38,6 +38,7 @@ struct stdlog_channel {
 	int facility;
 	char *fmtbuf;
 	struct {
+		void (*init)(stdlog_channel_t ch); /* initialize driver */
 		void (*open)(stdlog_channel_t ch);
 		void (*close)(stdlog_channel_t ch);
 		void (*log)(stdlog_channel_t ch, const int severity);

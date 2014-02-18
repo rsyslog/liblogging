@@ -33,16 +33,10 @@
 #include "stdlog-intern.h"
 #include "stdlog.h"
 
-/* dummy just needed for driver interface */
-static void
-jrnl_open(stdlog_channel_t __attribute__((unused)) ch)
-{
-}
-/* dummy just needed for driver interface */
-static void
-jrnl_close(stdlog_channel_t __attribute__((unused)) ch)
-{
-}
+/* dummies just needed for driver interface */
+static void jrnl_init(stdlog_channel_t __attribute__((unused)) ch) { }
+static void jrnl_open(stdlog_channel_t __attribute__((unused)) ch) { }
+static void jrnl_close(stdlog_channel_t __attribute__((unused)) ch) { }
 
 static void
 jrnl_log(stdlog_channel_t ch, const int severity)
@@ -56,6 +50,7 @@ jrnl_log(stdlog_channel_t ch, const int severity)
 void
 __stdlog_set_jrnl_drvr(stdlog_channel_t ch)
 {
+	ch->drvr.init = jrnl_init;
 	ch->drvr.open = jrnl_open;
 	ch->drvr.close = jrnl_close;
 	ch->drvr.log = jrnl_log;

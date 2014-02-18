@@ -63,6 +63,11 @@ build_syslog_frame(stdlog_channel_t ch, const int severity)
 	return i;
 }
 
+static void
+uxs_init(stdlog_channel_t ch)
+{
+	ch->d.uxs.sock = -1;
+}
 
 static void
 uxs_open(stdlog_channel_t ch)
@@ -110,6 +115,7 @@ printf("syslog frame: '%s'\n", ch->d.uxs.framebuf);
 void
 __stdlog_set_uxs_drvr(stdlog_channel_t ch)
 {
+	ch->drvr.init = uxs_init;
 	ch->drvr.open = uxs_open;
 	ch->drvr.close = uxs_close;
 	ch->drvr.log = uxs_log;

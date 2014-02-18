@@ -124,15 +124,16 @@ stdlog_open(const char *ident, int option, int facility, const char *chanspec)
 		goto done;
 	}
 
-	ch->d.uxs.sock = -1;
+	ch->drvr.init(ch);
 done:
 	return ch;
 }
 
 void
-stdlog_close(stdlog_channel_t channel)
+stdlog_close(stdlog_channel_t ch)
 {
-	free(channel);
+	ch->drvr.close(ch);
+	free(ch);
 }
 
 /* Log a message to the specified channel. If channel is NULL,
