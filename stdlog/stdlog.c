@@ -91,6 +91,8 @@ __stdlog_set_driver(stdlog_channel_t ch, const char *__restrict__ chanspec)
 
 	if (!strcmp(chanspec, "journal:"))
 		__stdlog_set_jrnl_drvr(ch);
+	else if (!strncmp(chanspec, "file:", 5))
+		__stdlog_set_file_drvr(ch);
 	else
 		__stdlog_set_uxs_drvr(ch);
 	return 0;

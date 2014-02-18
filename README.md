@@ -17,10 +17,10 @@ Right now, it actually does more or less what syslog() did.  In the next couple
 of weeks, this will change. In the future, it will support different log
 destinations, like
 
-* syslog()  [initial target]
-* systemd journal native API  [initial target]
-* unix domain socket [somewhat later]
-* files [somewhat later]
+* syslog()
+* systemd journal native API
+* unix domain socket [very soon]
+* files
 
 The key point here is that we provide a **separation of concerns**: the
 application developer will do the logging calls, but the sysadmin will

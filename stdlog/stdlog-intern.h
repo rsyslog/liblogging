@@ -49,6 +49,11 @@ struct stdlog_channel {
 			struct sockaddr_un addr;
 			char framebuf[__STDLOG_MSGBUF_SIZE+64]; /* must fit one frame incl. header */
 		} uxs;	/* unix socket (including syslog) */
+		struct {
+			int fd;
+			char *name;
+			char lnbuf[__STDLOG_MSGBUF_SIZE+64]; /* must fit one frame incl. header */
+		} file;
 	} d;	/* driver-specific data */
 	size_t lenmsg;	/* size of formatted msg in msgbuf */
 	char msgbuf[__STDLOG_MSGBUF_SIZE]; /* message buffer (TODO: dynmic size!) */
@@ -58,8 +63,9 @@ struct stdlog_channel {
 int __stdlog_formatTimestamp3164(const struct tm *const tm, char *const  buf);
 struct tm * __stdlog_timesub(const time_t * timep, const long offset, struct tm *tmp);
 
-void __stdlog_set_uxs_drvr(stdlog_channel_t ch); /* uxsock driver */
-void __stdlog_set_jrnl_drvr(stdlog_channel_t ch); /* systemd journal driver */
+void __stdlog_set_uxs_drvr(stdlog_channel_t ch);
+void __stdlog_set_jrnl_drvr(stdlog_channel_t ch);
+void __stdlog_set_file_drvr(stdlog_channel_t ch);
 
 /* formatter "library" routines */
 void __stdlog_fmt_print_int (char *__restrict__ const buf, const size_t lenbuf, int *idx, int64_t nbr);
