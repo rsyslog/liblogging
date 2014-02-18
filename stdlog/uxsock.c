@@ -1,4 +1,5 @@
-/* The stdlog unix socket driver
+/* The stdlog unix socket driver. Syslog protocol is spoken on
+ * all unix sockets.
  *
  * Copyright (C) 2014 Adiscon GmbH
  * All rights reserved.
@@ -39,6 +40,30 @@
 
 #define _PATH_LOG "/dev/log" // default syslog socket on Linux
 
+static int
+build_syslog_frame(stdlog_channel_t ch, const int severity)
+{
+	char *f = ch->d.uxs.framebuf;
+	size_t lenframe = sizeof(ch->d.uxs.framebuf);
+	int i = 0;
+	struct tm tm;
+	const time_t t = time(NULL);
+
+	__stdlog_timesub(&t, 0, &tm);
+	f[i++] = '<';
+	__stdlog_fmt_print_int(f, lenframe-i, &i, (int64_t) severity); 
+	f[i++] = '>';
+	i += __stdlog_formatTimestamp3164(&tm, f+i);
+	f[i++] = ' ';
+	__stdlog_fmt_print_str(f, lenframe-i, &i, ch->ident);
+	f[i++] = ':';
+	f[i++] = ' ';
+	__stdlog_sigsafe_memcpy(f+i, ch->msgbuf, ch->lenmsg);
+	i += ch->lenmsg;
+	return i;
+}
+
+
 static void
 __stdlog_uxs_open(stdlog_channel_t ch)
 {
@@ -63,8 +88,9 @@ __stdlog_uxs_close(stdlog_channel_t ch)
 
 
 void
-__stdlog_uxs_log(stdlog_channel_t ch)
+__stdlog_uxs_log(stdlog_channel_t ch, int severity)
 {
+	size_t lenframe;
 	ssize_t lsent;
 	printf("syslog got: '%s'\n", ch->msgbuf);
 
@@ -72,8 +98,10 @@ __stdlog_uxs_log(stdlog_channel_t ch)
 		__stdlog_uxs_open(ch);
 	if(ch->d.uxs.sock < 0)
 		return;
+	lenframe = build_syslog_frame(ch, severity);
+printf("syslog frame: '%s'\n", ch->d.uxs.framebuf);
 	// TODO: error handling!!!
-	lsent = sendto(ch->d.uxs.sock, ch->msgbuf, ch->lenmsg, 0,
+	lsent = sendto(ch->d.uxs.sock, ch->d.uxs.framebuf, lenframe, 0,
 		(struct sockaddr*) &ch->d.uxs.addr, sizeof(ch->d.uxs.addr));
 	printf("sock: %d, lsent: %d\n", ch->d.uxs.sock, lsent);
 	perror("send");

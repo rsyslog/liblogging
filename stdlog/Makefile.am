@@ -4,6 +4,7 @@ liblogging_stdlog_la_CPPFLAGS =
 liblogging_stdlog_la_SOURCES = \
 	stdlog.c \
 	uxsock.c \
+	formatter.c \
 	timeutils.c
 
 pkginclude_HEADERS = \

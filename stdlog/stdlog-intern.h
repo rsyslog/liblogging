@@ -28,6 +28,7 @@
 #include <sys/un.h>
 #include "stdlog.h"
 
+#define __STDLOG_MSGBUF_SIZE 4096
 #ifndef STDLOG_INTERN_H_INCLUDED
 #define STDLOG_INTERN_H_INCLUDED
 struct stdlog_channel {
@@ -41,10 +42,11 @@ struct stdlog_channel {
 		struct {
 			int sock;
 			struct sockaddr_un addr;
+			char framebuf[__STDLOG_MSGBUF_SIZE+64]; /* must fit one frame incl. header */
 		} uxs;	/* unix socket (including syslog) */
 	} d;	/* driver-specific data */
 	size_t lenmsg;	/* size of formatted msg in msgbuf */
-	char msgbuf[4096]; /* message buffer (TODO: dynmic size!) */
+	char msgbuf[__STDLOG_MSGBUF_SIZE]; /* message buffer (TODO: dynmic size!) */
 };
 
 
@@ -52,9 +54,15 @@ int __stdlog_formatTimestamp3164(const struct tm *const tm, char *const  buf);
 struct tm * __stdlog_timesub(const time_t * timep, const long offset, struct tm *tmp);
 
 /* uxsock driver */
-void __stdlog_uxs_log(stdlog_channel_t ch);
+void __stdlog_uxs_log(stdlog_channel_t ch, int severity);
 
 /* systemd journal driver */
 void __stdlog_jrnl_log(stdlog_channel_t ch, const int severity);
+
+/* formatter "library" routines */
+void __stdlog_fmt_print_int (char *__restrict__ const buf, const size_t lenbuf, int *idx, int64_t nbr);
+void __stdlog_fmt_print_str (char *__restrict__ const buf, const size_t lenbuf, int *__restrict__ const idx, const char *const str);
+size_t __stdlog_fmt_printf(char *buf, const size_t lenbuf, const char *fmt, va_list ap);
+void __stdlog_sigsafe_memcpy(void *dest, const void *src, size_t n);
 
 #endif /* STDLOG_INTERN_H_INCLUDED */

@@ -1,6 +1,4 @@
 /* The stdlog main file
- * This is currently a small shim, which enables us to inject the full
- * functionality at a later point in time.
  *
  * Copyright (C) 2014 Adiscon GmbH
  * All rights reserved.
@@ -51,13 +49,11 @@ stdlog_init(void)
 {
 	char *chanspec;
 
-printf("ini init, dch %p\n", dflt_channel);
 	if (dflt_channel != NULL) {
 		errno = EINVAL;
 		return -1;
 	}
 
-printf("in2 init\n");
 	chanspec = getenv("LIBLOGGING_STDLOG_DFLT_LOG_DESTINATION");
 	if (chanspec == NULL)
 		chanspec = "syslog:";
@@ -67,7 +63,6 @@ printf("in2 init\n");
 	if((dflt_channel = 
 	      stdlog_open("TEST", 0, 3, NULL)) == NULL)
 		return -1;
-printf("out init\n");
 
 	return 0;
 }
@@ -89,7 +84,6 @@ __stdlog_set_driver(stdlog_channel_t ch, const char *__restrict__ chanspec)
 	ch->driver = 0;
 	if (chanspec == NULL)
 		chanspec = dflt_chanspec;
-printf("chanspec: '%s'\n", chanspec);
 
 	if((ch->spec = strdup(chanspec)) == NULL) {
 		errno = ENOMEM;
@@ -98,7 +92,6 @@ printf("chanspec: '%s'\n", chanspec);
 
 	if (!strcmp(chanspec, "journal:"))
 		ch->driver = 1;
-	printf("driver %d set\n", ch->driver);
 	return 0;
 }
 
@@ -141,144 +134,6 @@ stdlog_close(stdlog_channel_t channel)
 	free(channel);
 }
 
-
-static void
-print_int (char *__restrict__ const buf, const size_t lenbuf, int *idx, int64_t nbr)
-{
-	size_t i;
-	int j;
-	char numbuf[21];
-
-	if (nbr == 0) {
-		buf[*idx] = '0';
-		(*idx)++;
-		goto done;
-	}
-	j = 0;
-	while(nbr != 0) {
-		numbuf[j++] = nbr % 10 + '0';
-		nbr /= 10;
-	}
-	for(i = *idx, --j; i < lenbuf && j >= 0 ; ++i, --j)
-		buf[i] = numbuf[j];
-
-	*idx = i;
-
-done:	return;
-}
-
-static void
-print_str (char *__restrict__ const buf, const size_t lenbuf, int *idx, const char *const str)
-{
-	size_t lenstr = strlen(str);
-	memcpy(buf+(*idx), str, lenstr);
-	// TODO: check limits!
-	*idx += lenstr;
-}
-
-static size_t
-my_printf(char *buf, size_t lenbuf, const char *fmt, va_list ap)
-{
-	char *s;
-	int d;
-	int i = 0;
-
-	--lenbuf; /* reserve for terminal \0 */
-	while(*fmt && i < (int) lenbuf) {
-		printf("to process: '%c'\n", *fmt);
-		switch(*fmt) {
-		case '\\':
-			if(*++fmt == '\0') goto done;
-			switch(*fmt) {
-			case 'n':
-				buf[i++] = '\n';
-				break;
-			case 'r':
-				buf[i++] = '\r';
-				break;
-			case 't':
-				buf[i++] = '\t';
-				break;
-			case '\\':
-				buf[i++] = '\\';
-				break;
-			// TODO: implement others
-			default:
-				buf[i++] = *fmt;
-				break;
-			}
-			break;
-		case '%':
-			if(*++fmt == '\0') goto done;
-			switch(*fmt) {
-			case 's':
-				s = va_arg(ap, char *);
-				print_str(buf, lenbuf, &i, s);
-				break;
-			case 'd':
-				d = va_arg(ap, int);
-				print_int(buf, lenbuf, &i, (int64_t) d); 
-				break;
-			case 'c':
-				buf[i++] = (char) va_arg(ap, int);
-				break;
-			// TODO: implement others
-			default:
-				buf[i++] = '?';
-				break;
-			}
-			break;
-		default:
-			buf[i++] = *fmt;
-			break;
-		}
-		++fmt;
-	}
-done:
-	buf[i] = '\0'; /* we reserved space for this! */
-	va_end(ap);
-	return i;
-}
-
-
-/* TODO: move to driver layer */
-static void
-format_syslog(stdlog_channel_t ch,
-	const int severity,
-	const char *__restrict__ const fmt,
-	va_list ap)
-{
-	char *msg = ch->msgbuf;
-	size_t lenmsg = sizeof(ch->msgbuf);
-	int i = 0;
-	struct tm tm;
-	time_t t = time(NULL);
-
-	__stdlog_timesub(&t, 0, &tm);
-	msg[i++] = '<';
-	print_int(msg, lenmsg-i, &i, (int64_t) severity); 
-	msg[i++] = '>';
-	i += __stdlog_formatTimestamp3164(&tm, msg+i);
-	msg[i++] = ' ';
-	print_str(msg, lenmsg-i, &i, ch->ident);
-	msg[i++] = ':';
-	msg[i++] = ' ';
-	i += my_printf(msg+i, lenmsg-i, fmt, ap);
-	ch->lenmsg = i;
-}
-
-/* TODO: move to driver layer */
-static void
-format_jrnl(stdlog_channel_t ch,
-	const int severity,
-	const char *__restrict__ const fmt,
-	va_list ap)
-{
-
-	ch->lenmsg = my_printf(ch->msgbuf, sizeof(ch->msgbuf), fmt, ap);
-}
-	
-
 /* Log a message to the specified channel. If channel is NULL,
  * use the default channel (which always exists).
  * Returns 0 on success or a standard (negative) error code.
@@ -298,12 +153,12 @@ stdlog_log(stdlog_channel_t ch,
 		ch = dflt_channel;
 	}
 	va_start(ap, fmt);
+	ch->lenmsg = __stdlog_fmt_printf(ch->msgbuf, sizeof(ch->msgbuf), fmt, ap);
+printf("formatter returned msg: '%s'\n", ch->msgbuf);
 	if(ch->driver == 1) {
-		format_jrnl(ch, severity, fmt, ap);
 		__stdlog_jrnl_log(ch, severity);
 	} else {
-		format_syslog(ch, severity, fmt, ap);
-		__stdlog_uxs_log(ch);
+		__stdlog_uxs_log(ch, severity);
 	}
 
 done:	return r;
