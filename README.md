@@ -11,7 +11,7 @@ stdlog
 This is the core component. **Think of it as a the next version of the
 syslog(3) API.** We retain the easy semantics, but make it more sophisticated
 "behind the scenes" with better support for multiple threads and flexibility
-for different log destinations. It also is signal-safe and thus can be used
+for different log destinations. It also is i**signal-safe** and thus can be used
 from within signal handlers.
 
 Right now, it actually does more or less what syslog() did.  In the next couple
@@ -26,6 +26,13 @@ The key point here is that we provide a **separation of concerns**: the
 application developer will do the logging calls, but the sysadmin will
 be able to configure where log messages actually are send to. We will
 use a driver layer to do so.
+
+With the current version, the logging driver is set via an environment
+variable or directly specified from within the application code. The
+latter provides applications the ability to request specific logging
+drivers. At the smame time, a single application can log to multiple
+channels which in turn use multiple logging providers -- all at the
+same time.
 
 This follows much the successful log4j paradigm. However, we have a
 focus on simplicity. No app developer likes logging, and so we really
