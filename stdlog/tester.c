@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include "stdlog.h"
 
-void main()
+int main(int __attribute__((unused)) argc, char __attribute__((unused)) *argv[])
 {
-	stdlog_log(NULL, 7, "Test %s, %d, %c, %p\n", "abc", 4712, 'T', NULL);
+	stdlog_log(NULL, 7, "Test %s, %d, %c, %p", "abc", 4712, 'T', NULL);
+	return 0;
 }
