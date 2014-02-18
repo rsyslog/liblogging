@@ -73,6 +73,21 @@ if test "$enable_stdlog" = "yes"; then
         AC_DEFINE(LIBLOGGING_STDLOG, 1, [stdlog support is integrated.])
 fi
 
+# journal support to be added
+# if so, this enables the journal driver in liblogging-stdlog
+AC_ARG_ENABLE(journal,
+        [AS_HELP_STRING([--enable-journal],[systemd journal support @<:@default=yes@:>@])],
+        [case "${enableval}" in
+         yes) enable_journal="yes" ;;
+          no) enable_journal="no" ;;
+           *) AC_MSG_ERROR(bad value ${enableval} for --enable-journal) ;;
+         esac],
+        [enable_journal="yes"]
+)
+if test "x$enable_journal" = "xyes"; then
+	PKG_CHECK_MODULES([LIBSYSTEMD_JOURNAL], [libsystemd-journal >= 197])
+fi
+AM_CONDITIONAL(ENABLE_JOURNAL, test x$enable_journal = xyes)
 
 AC_CONFIG_FILES([Makefile \
                  rfc3195/liblogging-rfc3195.pc \
@@ -87,4 +102,5 @@ echo "********************************************************"
 echo "liblogging will be compiled with the following settings:"
 echo
 echo "stdlog support enabled:               $enable_stdlog"
+echo "systemd journal support:              $enable_journal"
 echo "rfc3195 support enabled:              $enable_rfc3195"
