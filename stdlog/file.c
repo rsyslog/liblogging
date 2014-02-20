@@ -40,7 +40,6 @@
 
 static int
 build_file_line(stdlog_channel_t ch,
-	const int severity,
 	char *__restrict__ const linebuf,
 	const size_t lenline,
 	const char *fmt,
@@ -88,20 +87,20 @@ file_close(stdlog_channel_t ch)
 
 
 static void
-file_log(stdlog_channel_t ch, int severity, const char *fmt, va_list ap)
+file_log(stdlog_channel_t ch, int __attribute__((unused)) severity,
+	const char *fmt, va_list ap)
 {
 	size_t lenline;
-	ssize_t lwritten;
 	char linebuf[__STDLOG_MSGBUF_SIZE];
 
 	if(ch->d.file.fd < 0)
 		file_open(ch);
 	if(ch->d.file.fd < 0)
 		return;
-	lenline = build_file_line(ch, severity, linebuf, sizeof(linebuf), fmt, ap);
+	lenline = build_file_line(ch, linebuf, sizeof(linebuf), fmt, ap);
 printf("file line: '%s'\n", linebuf);
 	// TODO: error handling!!!
-	lwritten = write(ch->d.file.fd, linebuf, lenline);
+	write(ch->d.file.fd, linebuf, lenline);
 }
 
 void

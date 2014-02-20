@@ -153,8 +153,6 @@ stdlog_log(stdlog_channel_t ch,
 {
 	va_list ap;
 	int r = 0;
-	char msgbuf[__STDLOG_MSGBUF_SIZE];
-	size_t lenmsg;
 
 	if(ch == NULL) {
 		if (dflt_channel == NULL)
