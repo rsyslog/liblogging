@@ -191,6 +191,7 @@ __stdlog_fmt_printf(char *buf, size_t lenbuf, const char *fmt, va_list ap)
 
 	--lenbuf; /* reserve for terminal \0 */
 	while(*fmt && i < (int) lenbuf) {
+		printf("to process: '%c'\n", *fmt);
 		switch(*fmt) {
 		case '\\':
 			if(*++fmt == '\0') goto done;

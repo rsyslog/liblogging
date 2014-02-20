@@ -25,15 +25,52 @@
  * SUCH DAMAGE.
  */
 
-#ifndef LIBSTDLOG_H_INCLUDED
-#define LIBSTDLOG_H_INCLUDED
+#ifndef LIBLOGGING_STDLOG_H_INCLUDED
+#define LIBLOGGING_STDLOG_H_INCLUDED
+#include <stdint.h>
 
 typedef struct stdlog_channel *stdlog_channel_t;
 
-int stdlog_init(void);
+int stdlog_init(uint32_t options);
 void stdlog_deinit(void);
 stdlog_channel_t stdlog_open(const char *ident, int option, int facility, const char *channelspec);
 int stdlog_log(stdlog_channel_t channel, const int severity, const char *fmt, ...) __attribute__((format(printf, 3, 4)));
 void stdlog_close(stdlog_channel_t channel);
+
+/* options for stdlog_open() call */
+#define STDLOG_SIGSAFE 1	/* enforce signal-safe implementation */
+
+/* traditional syslog facility codes */
+#define	STDLOG_KERN	0	/* kernel messages */
+#define	STDLOG_USER	1	/* random user-level messages */
+#define	STDLOG_MAIL	2	/* mail system */
+#define	STDLOG_DAEMON	3	/* system daemons */
+#define	STDLOG_AUTH	4	/* security/authorization messages */
+#define	STDLOG_SYSLOG	5	/* messages generated internally by syslogd */
+#define	STDLOG_LPR	6	/* line printer subsystem */
+#define	STDLOG_NEWS	7	/* network news subsystem */
+#define	STDLOG_UUCP	8	/* UUCP subsystem */
+#define	STDLOG_CRON	9	/* clock daemon */
+#define	STDLOG_AUTHPRIV	10	/* security/authorization messages (private) */
+#define	STDLOG_FTP	11	/* ftp daemon */
+/* other codes through 15 reserved for system use */
+#define	STDLOG_LOCAL0	16	/* reserved for local use */
+#define	STDLOG_LOCAL1	17	/* reserved for local use */
+#define	STDLOG_LOCAL2	18	/* reserved for local use */
+#define	STDLOG_LOCAL3	19	/* reserved for local use */
+#define	STDLOG_LOCAL4	20	/* reserved for local use */
+#define	STDLOG_LOCAL5	21	/* reserved for local use */
+#define	STDLOG_LOCAL6	22	/* reserved for local use */
+#define	STDLOG_LOCAL7	23	/* reserved for local use */
+
+/* traditional syslog priorities */
+#define	STDLOG_EMERG	0	/* system is unusable */
+#define	STDLOG_ALERT	1	/* action must be taken immediately */
+#define	STDLOG_CRIT	2	/* critical conditions */
+#define	STDLOG_ERR	3	/* error conditions */
+#define	STDLOG_WARNING	4	/* warning conditions */
+#define	STDLOG_NOTICE	5	/* normal but significant condition */
+#define	STDLOG_INFO	6	/* informational */
+#define	STDLOG_DEBUG	7	/* debug-level messages */
 
 #endif /* multi-include protection */

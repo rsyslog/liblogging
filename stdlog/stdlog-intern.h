@@ -34,7 +34,7 @@
 struct stdlog_channel {
 	const char *spec;
 	const char *ident;
-	int options;
+	int32_t options;
 	int facility;
 	char *fmtbuf;
 	struct {

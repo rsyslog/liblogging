@@ -37,6 +37,7 @@
 
 static stdlog_channel_t dflt_channel = NULL;
 static char *dflt_chanspec = NULL;
+static int32_t dflt_options = 0;
 
 
 /* can be called before any other library call. If so, initializes
@@ -45,7 +46,7 @@ static char *dflt_chanspec = NULL;
  * returns 0 on success, -1 on error with errno set
  */
 int
-stdlog_init(void)
+stdlog_init(uint32_t options)
 {
 	char *chanspec;
 
@@ -54,6 +55,7 @@ stdlog_init(void)
 		return -1;
 	}
 
+	dflt_options = options;
 	chanspec = getenv("LIBLOGGING_STDLOG_DFLT_LOG_DESTINATION");
 	if (chanspec == NULL)
 		chanspec = "syslog:";
@@ -61,7 +63,7 @@ stdlog_init(void)
 		return -1;
 
 	if((dflt_channel = 
-	      stdlog_open("TEST", 0, 3, NULL)) == NULL)
+	      stdlog_open("TEST", dflt_options, STDLOG_LOCAL7, NULL)) == NULL)
 		return -1;
 
 	return 0;
@@ -154,7 +156,7 @@ stdlog_log(stdlog_channel_t ch,
 
 	if(ch == NULL) {
 		if (dflt_channel == NULL)
-			if((r = stdlog_init()) != 0)
+			if((r = stdlog_init(0)) != 0)
 				goto done;
 		ch = dflt_channel;
 	}
