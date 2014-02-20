@@ -59,7 +59,6 @@ __stdlog_isdigit(const char c)
 {
 	return (c >= '0' && c <='9') ? 1 : 0;
 }
-
 /* hexbase must be 'a' for lower case hex string or 'A' for
  * upper case. Anything else is invalid.
  */
@@ -132,6 +131,35 @@ __stdlog_fmt_print_int (char *__restrict__ const buf, const size_t lenbuf,
 done:	return;
 }
 
+/**
+ * Format a double number as %.2f.
+ * Base idea taken from x.org source ./os/utils.c
+ */
+void
+__stdlog_fmt_print_double (char *__restrict__ const buf, const size_t lenbuf,
+	int *idx, double dbl)
+{
+	uint64_t frac;
+
+	frac = (dbl > 0 ? dbl : -dbl) * 100.0 + 0.5;
+	frac %= 100;
+
+	/* write decimal part to string */
+	__stdlog_fmt_print_int(buf, lenbuf, idx, (int64_t)dbl);
+
+	/* append fractional part, but only if there is space */
+	if (*idx < (int)lenbuf) {
+		buf[(*idx)++] = '.';
+		/* TODO: change _print_int to support min size! */
+		if (frac < 10) { /* work.around for missing _print_int feature! */
+			if(*idx < (int)lenbuf)
+				buf[(*idx)++] = '0';
+		}
+	__stdlog_fmt_print_int(buf, lenbuf, idx, frac);
+	}
+}
+
+
 void
 __stdlog_fmt_print_str (char *__restrict__ const buf, const size_t lenbuf,
 	int *__restrict__ const idx, const char *const str)
@@ -157,12 +185,12 @@ __stdlog_fmt_printf(char *buf, size_t lenbuf, const char *fmt, va_list ap)
 	int fwidth;
 	int precision;
 	int i = 0;
+	double dbl;
 	enum {LMOD_LONG, LMOD_LONG_LONG,
 	      LMOD_SIZE_T, LMOD_SHORT, LMOD_CHAR} length_modifier;
 
 	--lenbuf; /* reserve for terminal \0 */
 	while(*fmt && i < (int) lenbuf) {
-		printf("to process: '%c'\n", *fmt);
 		switch(*fmt) {
 		case '\\':
 			if(*++fmt == '\0') goto done;
@@ -281,6 +309,10 @@ __stdlog_fmt_printf(char *buf, size_t lenbuf, const char *fmt, va_list ap)
 					__stdlog_fmt_print_str(buf, lenbuf, &i, "0x");
 					__stdlog_fmt_print_uint_hex(buf, lenbuf, &i, u, 'a'); 
 				}
+				break;
+			case 'f':
+				dbl = va_arg(ap, double);
+				__stdlog_fmt_print_double(buf, lenbuf, &i, dbl); 
 				break;
 			case 'c':
 				buf[i++] = (char) va_arg(ap, int);
