@@ -109,6 +109,9 @@ if test "x$enable_journal" = "xyes"; then
 	PKG_CHECK_MODULES([LIBSYSTEMD_JOURNAL], [libsystemd-journal >= 197])
 fi
 AM_CONDITIONAL(ENABLE_JOURNAL, test x$enable_journal = xyes)
+if test "$enable_stdlog" = "yes"; then
+        AC_DEFINE(ENABLE_JOURNAL, 1, [journal support is integrated.])
+fi
 
 AC_CONFIG_FILES([Makefile \
                  rfc3195/liblogging-rfc3195.pc \
