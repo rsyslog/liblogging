@@ -47,11 +47,13 @@ build_syslog_frame(stdlog_channel_t ch, const int severity)
 	size_t lenframe = sizeof(ch->d.uxs.framebuf);
 	int i = 0;
 	struct tm tm;
+	int64_t pri;
 	const time_t t = time(NULL);
 
+	pri = (ch->facility << 3) | (severity & 0x07);
 	__stdlog_timesub(&t, 0, &tm);
 	f[i++] = '<';
-	__stdlog_fmt_print_int(f, lenframe-i, &i, (int64_t) severity); 
+	__stdlog_fmt_print_int(f, lenframe-i, &i, pri); 
 	f[i++] = '>';
 	i += __stdlog_formatTimestamp3164(&tm, f+i);
 	f[i++] = ' ';
