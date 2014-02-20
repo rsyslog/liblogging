@@ -29,14 +29,6 @@
 #define LIBLOGGING_STDLOG_H_INCLUDED
 #include <stdint.h>
 
-typedef struct stdlog_channel *stdlog_channel_t;
-
-int stdlog_init(uint32_t options);
-void stdlog_deinit(void);
-stdlog_channel_t stdlog_open(const char *ident, int option, int facility, const char *channelspec);
-int stdlog_log(stdlog_channel_t channel, const int severity, const char *fmt, ...) __attribute__((format(printf, 3, 4)));
-void stdlog_close(stdlog_channel_t channel);
-
 /* options for stdlog_open() call */
 #define STDLOG_SIGSAFE 1	/* enforce signal-safe implementation */
 
@@ -72,5 +64,13 @@ void stdlog_close(stdlog_channel_t channel);
 #define	STDLOG_NOTICE	5	/* normal but significant condition */
 #define	STDLOG_INFO	6	/* informational */
 #define	STDLOG_DEBUG	7	/* debug-level messages */
+
+typedef struct stdlog_channel *stdlog_channel_t;
+
+int stdlog_init(uint32_t options);
+void stdlog_deinit(void);
+stdlog_channel_t stdlog_open(const char *ident, const int option, const int facility, const char *channelspec);
+int stdlog_log(stdlog_channel_t channel, const int severity, const char *fmt, ...) __attribute__((format(printf, 3, 4)));
+void stdlog_close(stdlog_channel_t channel);
 
 #endif /* multi-include protection */

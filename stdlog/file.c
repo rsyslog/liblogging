@@ -39,23 +39,29 @@
 #include "stdlog.h"
 
 static int
-build_file_line(stdlog_channel_t ch, const int severity)
+build_file_line(stdlog_channel_t ch,
+	const int severity,
+	char *__restrict__ const linebuf,
+	const size_t lenline,
+	const char *__restrict__ const msgbuf,
+	size_t lenmsg)
 {
-	char *f = ch->d.file.lnbuf;
-	size_t lenline = sizeof(ch->d.file.lnbuf);
 	int i = 0;
 	struct tm tm;
 	const time_t t = time(NULL);
 
 	__stdlog_timesub(&t, 0, &tm);
-	i += __stdlog_formatTimestamp3164(&tm, f+i);
-	f[i++] = ' ';
-	__stdlog_fmt_print_str(f, lenline-i, &i, ch->ident);
-	f[i++] = ':';
-	f[i++] = ' ';
-	__stdlog_sigsafe_memcpy(f+i, ch->msgbuf, ch->lenmsg);
-	i += ch->lenmsg;
-	f[i++] = '\n';
+	i += __stdlog_formatTimestamp3164(&tm, linebuf+i);
+	linebuf[i++] = ' ';
+	__stdlog_fmt_print_str(linebuf, lenline-i, &i, ch->ident);
+	linebuf[i++] = ':';
+	linebuf[i++] = ' ';
+	/* check overflow and truncate, if necessary (keep '\n' in mind) */
+	if(i + lenmsg > lenline - 1)
+		lenmsg = lenline - i - 1;
+	__stdlog_sigsafe_memcpy(linebuf+i, msgbuf, lenmsg);
+	i += lenmsg;
+	linebuf[i++] = '\n';
 	return i;
 }
 
@@ -86,21 +92,21 @@ file_close(stdlog_channel_t ch)
 
 
 static void
-file_log(stdlog_channel_t ch, int severity)
+file_log(stdlog_channel_t ch, int severity, char *__restrict__ msgbuf, const size_t lenmsg)
 {
 	size_t lenline;
 	ssize_t lwritten;
-	printf("syslog got: '%s'\n", ch->msgbuf);
+	char linebuf[__STDLOG_MSGBUF_SIZE+64];
+printf("file drvr got: '%s'\n", msgbuf);
 
 	if(ch->d.file.fd < 0)
 		file_open(ch);
 	if(ch->d.file.fd < 0)
 		return;
-	lenline = build_file_line(ch, severity);
-printf("file line: '%s'\n", ch->d.file.lnbuf);
+	lenline = build_file_line(ch, severity, linebuf, sizeof(linebuf), msgbuf, lenmsg);
+printf("file line: '%s'\n", linebuf);
 	// TODO: error handling!!!
-	lwritten = write(ch->d.file.fd, ch->d.file.lnbuf, lenline);
-	printf("fd: %d, lwritten: %d\n", ch->d.file.fd, lwritten);
+	lwritten = write(ch->d.file.fd, linebuf, lenline);
 }
 
 void

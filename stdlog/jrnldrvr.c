@@ -39,10 +39,10 @@ static void jrnl_open(stdlog_channel_t __attribute__((unused)) ch) { }
 static void jrnl_close(stdlog_channel_t __attribute__((unused)) ch) { }
 
 static void
-jrnl_log(stdlog_channel_t ch, const int severity)
+jrnl_log(stdlog_channel_t ch, const int severity, char *__restrict__ msgbuf, const size_t lenmsg)
 {
 	// TODO: error handling!!!
-	sd_journal_send("MESSAGE=%s", ch->msgbuf,
+	sd_journal_send("MESSAGE=%s", msgbuf,
                 "PRIORITY=%d", severity,
                 NULL);
 }

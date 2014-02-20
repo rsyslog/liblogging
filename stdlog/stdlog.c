@@ -103,7 +103,7 @@ __stdlog_set_driver(stdlog_channel_t ch, const char *__restrict__ chanspec)
 }
 
 stdlog_channel_t
-stdlog_open(const char *ident, int option, int facility, const char *chanspec)
+stdlog_open(const char *ident, const int option, const int facility, const char *chanspec)
 {
 	stdlog_channel_t ch;
 
@@ -153,6 +153,8 @@ stdlog_log(stdlog_channel_t ch,
 {
 	va_list ap;
 	int r = 0;
+	char msgbuf[__STDLOG_MSGBUF_SIZE];
+	size_t lenmsg;
 
 	if(ch == NULL) {
 		if (dflt_channel == NULL)
@@ -161,9 +163,9 @@ stdlog_log(stdlog_channel_t ch,
 		ch = dflt_channel;
 	}
 	va_start(ap, fmt);
-	ch->lenmsg = __stdlog_fmt_printf(ch->msgbuf, sizeof(ch->msgbuf), fmt, ap);
-printf("formatter returned msg: '%s'\n", ch->msgbuf);
-	ch->drvr.log(ch, severity);
+	lenmsg = __stdlog_fmt_printf(msgbuf, sizeof(msgbuf), fmt, ap);
+printf("formatter returned msg: '%s'\n", msgbuf);
+	ch->drvr.log(ch, severity, msgbuf, lenmsg);
 
 done:	return r;
 }

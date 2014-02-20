@@ -38,13 +38,16 @@
 #include "stdlog-intern.h"
 #include "stdlog.h"
 
-#define _PATH_LOG "/dev/log" // default syslog socket on Linux
+#define _PATH_LOG "/dev/log" /* default syslog socket on Linux */
 
 static int
-build_syslog_frame(stdlog_channel_t ch, const int severity)
+build_syslog_frame(stdlog_channel_t ch,
+	const int severity,
+	char *__restrict__ const frame,
+	const size_t lenframe,
+	const char *__restrict__ const msgbuf,
+	size_t lenmsg)
 {
-	char *f = ch->d.uxs.framebuf;
-	size_t lenframe = sizeof(ch->d.uxs.framebuf);
 	int i = 0;
 	struct tm tm;
 	int64_t pri;
@@ -52,16 +55,20 @@ build_syslog_frame(stdlog_channel_t ch, const int severity)
 
 	pri = (ch->facility << 3) | (severity & 0x07);
 	__stdlog_timesub(&t, 0, &tm);
-	f[i++] = '<';
-	__stdlog_fmt_print_int(f, lenframe-i, &i, pri); 
-	f[i++] = '>';
-	i += __stdlog_formatTimestamp3164(&tm, f+i);
-	f[i++] = ' ';
-	__stdlog_fmt_print_str(f, lenframe-i, &i, ch->ident);
-	f[i++] = ':';
-	f[i++] = ' ';
-	__stdlog_sigsafe_memcpy(f+i, ch->msgbuf, ch->lenmsg);
-	i += ch->lenmsg;
+	frame[i++] = '<';
+	__stdlog_fmt_print_int(frame, lenframe-i, &i, pri); 
+	frame[i++] = '>';
+	i += __stdlog_formatTimestamp3164(&tm, frame+i);
+	frame[i++] = ' ';
+	__stdlog_fmt_print_str(frame, lenframe-i, &i, ch->ident);
+	frame[i++] = ':';
+	frame[i++] = ' ';
+
+	/* check overflow and truncate, if necessary */
+	if(i + lenmsg > lenframe)
+		lenmsg = lenframe - i;
+	__stdlog_sigsafe_memcpy(frame+i, msgbuf, lenmsg);
+	i += lenmsg;
 	return i;
 }
 
@@ -95,20 +102,21 @@ uxs_close(stdlog_channel_t ch)
 
 
 static void
-uxs_log(stdlog_channel_t ch, int severity)
+uxs_log(stdlog_channel_t ch, int severity, char *__restrict__ msgbuf, const size_t lenmsg)
 {
-	size_t lenframe;
 	ssize_t lsent;
-	printf("syslog got: '%s'\n", ch->msgbuf);
+	char frame[__STDLOG_MSGBUF_SIZE+256];
+	size_t lenframe;
+	printf("syslog got: '%s'\n", msgbuf);
 
 	if(ch->d.uxs.sock < 0)
 		uxs_open(ch);
 	if(ch->d.uxs.sock < 0)
 		return;
-	lenframe = build_syslog_frame(ch, severity);
-printf("syslog frame: '%s'\n", ch->d.uxs.framebuf);
+	lenframe = build_syslog_frame(ch, severity, frame, sizeof(frame), msgbuf, lenmsg);
+printf("syslog frame: '%s'\n", frame);
 	// TODO: error handling!!!
-	lsent = sendto(ch->d.uxs.sock, ch->d.uxs.framebuf, lenframe, 0,
+	lsent = sendto(ch->d.uxs.sock, frame, lenframe, 0,
 		(struct sockaddr*) &ch->d.uxs.addr, sizeof(ch->d.uxs.addr));
 	printf("sock: %d, lsent: %d\n", ch->d.uxs.sock, lsent);
 	perror("send");
