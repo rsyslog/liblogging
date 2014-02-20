@@ -43,6 +43,7 @@ __stdlog_sigsafe_memcpy(void *__restrict__ dest, const void *__restrict__ src, s
 		*d++ = *s++;
 }
 
+#if 0 /* currently not used, but do not want to remove */
 static size_t
 __stdlog_sigsafe_strlen(const char *__restrict__ s)
 {
@@ -51,18 +52,55 @@ __stdlog_sigsafe_strlen(const char *__restrict__ s)
 		len++;
 	return len;
 }
+#endif
+
+static int
+__stdlog_isdigit(const char c)
+{
+	return (c >= '0' && c <='9') ? 1 : 0;
+}
+
+/* hexbase must be 'a' for lower case hex string or 'A' for
+ * upper case. Anything else is invalid.
+ */
+void
+__stdlog_fmt_print_uint_hex (char *__restrict__ const buf, const size_t lenbuf,
+	int *idx, uint64_t nbr, const char hexbase)
+{
+	size_t i;
+	int j;
+	int hexdigit;
+	char numbuf[17];
+
+	if (nbr == 0) {
+		buf[(*idx)++] = '0';
+		goto done;
+	}
+	j = 0;
+	while(nbr != 0) {
+		hexdigit = nbr % 16;
+		numbuf[j++] = (hexdigit < 10) ? hexdigit + '0'
+					      : hexdigit - 10 + hexbase;
+		nbr /= 16;
+	}
+	for(i = *idx, --j; i < lenbuf && j >= 0 ; ++i, --j)
+		buf[i] = numbuf[j];
+
+	*idx = i;
+
+done:	return;
+}
 
 void
-__stdlog_fmt_print_int (char *__restrict__ const buf, const size_t lenbuf,
-	int *idx, int64_t nbr)
+__stdlog_fmt_print_uint (char *__restrict__ const buf, const size_t lenbuf,
+	int *idx, uint64_t nbr)
 {
 	size_t i;
 	int j;
 	char numbuf[21];
 
 	if (nbr == 0) {
-		buf[*idx] = '0';
-		(*idx)++;
+		buf[(*idx)++] = '0';
 		goto done;
 	}
 	j = 0;
@@ -79,21 +117,48 @@ done:	return;
 }
 
 void
+__stdlog_fmt_print_int (char *__restrict__ const buf, const size_t lenbuf,
+	int *idx, int64_t nbr)
+{
+	if (nbr == 0) {
+		buf[(*idx)++] = '0';
+		goto done;
+	}
+	if (nbr < 0) {
+		buf[(*idx)++] = '-';
+		nbr *= -1;
+	}
+	__stdlog_fmt_print_uint(buf, lenbuf, idx, (uint64_t)nbr);
+done:	return;
+}
+
+void
 __stdlog_fmt_print_str (char *__restrict__ const buf, const size_t lenbuf,
 	int *__restrict__ const idx, const char *const str)
 {
-	size_t lenstr = __stdlog_sigsafe_strlen(str);
-	__stdlog_sigsafe_memcpy(buf+(*idx), str, lenstr);
-	// TODO: check limits!
-	*idx += lenstr;
+	int i = *idx;
+	int j = 0;
+
+	while(i < (int) lenbuf && str[j])
+		buf[i++] = str[j++];
+	*idx = i;
 }
 
+/* This is a big monolythic function to save us hassle with the
+ * va_list macros (and do not loose performance solving that
+ * hassle...).
+ */
 size_t
 __stdlog_fmt_printf(char *buf, size_t lenbuf, const char *fmt, va_list ap)
 {
 	char *s;
-	int d;
+	int64_t d;
+	uint64_t u;
+	int fwidth;
+	int precision;
 	int i = 0;
+	enum {LMOD_LONG, LMOD_LONG_LONG,
+	      LMOD_SIZE_T, LMOD_SHORT, LMOD_CHAR} length_modifier;
 
 	--lenbuf; /* reserve for terminal \0 */
 	while(*fmt && i < (int) lenbuf) {
@@ -114,7 +179,9 @@ __stdlog_fmt_printf(char *buf, size_t lenbuf, const char *fmt, va_list ap)
 			case '\\':
 				buf[i++] = '\\';
 				break;
-			// TODO: implement others
+			/* TODO: implement others -- and think if we want these
+			 * in log messages in the first place...
+			 */
 			default:
 				buf[i++] = *fmt;
 				break;
@@ -122,19 +189,106 @@ __stdlog_fmt_printf(char *buf, size_t lenbuf, const char *fmt, va_list ap)
 			break;
 		case '%':
 			if(*++fmt == '\0') goto done;
+
+			/* width */
+			/* currently only read, but not processed.
+			 * TODO: actually use fwidth and precision?
+			 */
+			fwidth = precision = -1;
+			if(__stdlog_isdigit(*fmt)) {
+				fwidth = 0;
+				for(; __stdlog_isdigit(*fmt) ; ++fmt)
+					fwidth = fwidth * 10 + *fmt - '0';
+				if(*fmt == '.') {
+					precision = 0;
+					for(++fmt ; __stdlog_isdigit(*fmt) ; ++fmt)
+						precision = precision * 10 + *fmt - '0';
+				}
+			}
+		
+			/* length modifiers */
+			length_modifier = 0;
 			switch(*fmt) {
+			case '\0':
+				goto done;
+			case 'l':
+				++fmt;
+				if (*fmt == 'l') {
+					++fmt;
+					length_modifier = LMOD_LONG_LONG;
+				} else {
+					length_modifier = LMOD_LONG;
+				}
+				break;
+			case 'h':
+				++fmt;
+				if (*fmt == 'h') {
+					++fmt;
+					length_modifier = LMOD_CHAR;
+				} else {
+					length_modifier = LMOD_SHORT;
+				}
+				break;
+			case 'z':
+				++fmt;
+				length_modifier = LMOD_SIZE_T;
+				break;
+			default:break; /* no modifier, nothing to do */
+			}
+
+			/* conversions */
+			switch(*fmt) {
+			case '\0':
+				goto done;
 			case 's':
 				s = va_arg(ap, char *);
 				__stdlog_fmt_print_str(buf, lenbuf, &i, s);
 				break;
+			case 'i':
 			case 'd':
-				d = va_arg(ap, int);
-				__stdlog_fmt_print_int(buf, lenbuf, &i, (int64_t) d); 
+				if (length_modifier == LMOD_LONG_LONG)
+					d = va_arg(ap, long long);
+				else if (length_modifier == LMOD_LONG)
+					d = va_arg(ap, long);
+				else if (length_modifier == LMOD_SIZE_T)
+					d = va_arg(ap, ssize_t);
+				else
+					d = va_arg(ap, int);
+				__stdlog_fmt_print_int(buf, lenbuf, &i, d); 
+				break;
+			case 'u':
+			case 'x':
+			case 'X':
+				if (length_modifier == LMOD_LONG_LONG)
+					u = va_arg(ap, unsigned long long);
+				else if (length_modifier == LMOD_LONG)
+					u = va_arg(ap, unsigned long);
+				else if (length_modifier == LMOD_SIZE_T)
+					u = va_arg(ap, size_t);
+				else
+					u = va_arg(ap, unsigned);
+				if(*fmt == 'u')
+					__stdlog_fmt_print_uint(buf, lenbuf, &i, u); 
+				else
+					__stdlog_fmt_print_uint_hex(buf, lenbuf, &i,
+						u, *fmt == 'x'? 'a' : 'A'); 
+				break;
+			case 'p':
+				u = (uintptr_t) va_arg(ap, void *);
+				if (u == 0) {
+					__stdlog_fmt_print_str(buf, lenbuf, &i, "(null)");
+				} else {
+					__stdlog_fmt_print_str(buf, lenbuf, &i, "0x");
+					__stdlog_fmt_print_uint_hex(buf, lenbuf, &i, u, 'a'); 
+				}
 				break;
 			case 'c':
 				buf[i++] = (char) va_arg(ap, int);
 				break;
-			// TODO: implement others
+			case '%':
+				buf[i++] = '%';
+				break;
+			// TODO: missing float types
 			default:
 				buf[i++] = '?';
 				break;
