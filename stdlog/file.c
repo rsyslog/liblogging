@@ -43,8 +43,8 @@ build_file_line(stdlog_channel_t ch,
 	const int severity,
 	char *__restrict__ const linebuf,
 	const size_t lenline,
-	const char *__restrict__ const msgbuf,
-	size_t lenmsg)
+	const char *fmt,
+	va_list ap)
 {
 	int i = 0;
 	struct tm tm;
@@ -56,11 +56,7 @@ build_file_line(stdlog_channel_t ch,
 	__stdlog_fmt_print_str(linebuf, lenline-i, &i, ch->ident);
 	linebuf[i++] = ':';
 	linebuf[i++] = ' ';
-	/* check overflow and truncate, if necessary (keep '\n' in mind) */
-	if(i + lenmsg > lenline - 1)
-		lenmsg = lenline - i - 1;
-	__stdlog_sigsafe_memcpy(linebuf+i, msgbuf, lenmsg);
-	i += lenmsg;
+	i += __stdlog_fmt_printf(linebuf+i, lenline-1, fmt, ap);
 	linebuf[i++] = '\n';
 	return i;
 }
@@ -92,18 +88,17 @@ file_close(stdlog_channel_t ch)
 
 
 static void
-file_log(stdlog_channel_t ch, int severity, char *__restrict__ msgbuf, const size_t lenmsg)
+file_log(stdlog_channel_t ch, int severity, const char *fmt, va_list ap)
 {
 	size_t lenline;
 	ssize_t lwritten;
-	char linebuf[__STDLOG_MSGBUF_SIZE+64];
-printf("file drvr got: '%s'\n", msgbuf);
+	char linebuf[__STDLOG_MSGBUF_SIZE];
 
 	if(ch->d.file.fd < 0)
 		file_open(ch);
 	if(ch->d.file.fd < 0)
 		return;
-	lenline = build_file_line(ch, severity, linebuf, sizeof(linebuf), msgbuf, lenmsg);
+	lenline = build_file_line(ch, severity, linebuf, sizeof(linebuf), fmt, ap);
 printf("file line: '%s'\n", linebuf);
 	// TODO: error handling!!!
 	lwritten = write(ch->d.file.fd, linebuf, lenline);

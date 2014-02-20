@@ -45,8 +45,8 @@ build_syslog_frame(stdlog_channel_t ch,
 	const int severity,
 	char *__restrict__ const frame,
 	const size_t lenframe,
-	const char *__restrict__ const msgbuf,
-	size_t lenmsg)
+	const char *fmt,
+	va_list ap)
 {
 	int i = 0;
 	struct tm tm;
@@ -63,12 +63,7 @@ build_syslog_frame(stdlog_channel_t ch,
 	__stdlog_fmt_print_str(frame, lenframe-i, &i, ch->ident);
 	frame[i++] = ':';
 	frame[i++] = ' ';
-
-	/* check overflow and truncate, if necessary */
-	if(i + lenmsg > lenframe)
-		lenmsg = lenframe - i;
-	__stdlog_sigsafe_memcpy(frame+i, msgbuf, lenmsg);
-	i += lenmsg;
+	i += __stdlog_fmt_printf(frame+i, lenframe, fmt, ap);
 	return i;
 }
 
@@ -102,18 +97,17 @@ uxs_close(stdlog_channel_t ch)
 
 
 static void
-uxs_log(stdlog_channel_t ch, int severity, char *__restrict__ msgbuf, const size_t lenmsg)
+uxs_log(stdlog_channel_t ch, int severity, const char *fmt, va_list ap)
 {
 	ssize_t lsent;
-	char frame[__STDLOG_MSGBUF_SIZE+256];
+	char frame[__STDLOG_MSGBUF_SIZE];
 	size_t lenframe;
-	printf("syslog got: '%s'\n", msgbuf);
 
 	if(ch->d.uxs.sock < 0)
 		uxs_open(ch);
 	if(ch->d.uxs.sock < 0)
 		return;
-	lenframe = build_syslog_frame(ch, severity, frame, sizeof(frame), msgbuf, lenmsg);
+	lenframe = build_syslog_frame(ch, severity, frame, sizeof(frame), fmt, ap);
 printf("syslog frame: '%s'\n", frame);
 	// TODO: error handling!!!
 	lsent = sendto(ch->d.uxs.sock, frame, lenframe, 0,
