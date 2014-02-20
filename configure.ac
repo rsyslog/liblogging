@@ -17,6 +17,27 @@ if test "$GCC" = "yes"
 then CFLAGS="$CFLAGS -W -Wall -Wformat-security -Wshadow -Wcast-align -Wpointer-arith -Wmissing-format-attribute -g"
 fi
 
+case "${host}" in
+  *-*-linux*)
+    os_type="linux"
+  ;;
+  *-*-*darwin*|*-*-freebsd*|*-*-netbsd*|*-*-openbsd*)
+    AC_DEFINE([OS_BSD], [1], [Indicator for a BSD OS])
+    os_type="bsd"
+  ;;
+  *-*-kfreebsd*)
+    # kernel is FreeBSD, but userspace is glibc - i.e. like linux
+    # do not DEFINE OS_BSD
+    os_type="bsd"
+  ;;
+  *-*-solaris*)
+    os_type="solaris"
+    AC_DEFINE([OS_SOLARIS], [1], [Indicator for a Solaris OS])
+    SOL_LIBS="-lsocket -lnsl"
+    AC_SUBST(SOL_LIBS)
+  ;;
+esac
+
 save_LIBS=$LIBS
 LIBS=
 #AC_SEARCH_LIBS(clock_gettime, rt)
