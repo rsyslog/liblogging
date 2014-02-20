@@ -7,6 +7,7 @@ passed a short test on these platforms:
 
 * Linux
 * FreeBSD
+* Solaris (10)
 
 More platforms will be added as work progresses. In general,
 we use fairly common C constructs, so chances are high that
