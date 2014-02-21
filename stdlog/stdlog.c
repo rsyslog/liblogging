@@ -56,7 +56,7 @@ stdlog_init(uint32_t options)
 	}
 
 	dflt_options = options;
-	chanspec = getenv("LIBLOGGING_STDLOG_DFLT_LOG_DESTINATION");
+	chanspec = getenv("LIBLOGGING_STDLOG_DFLT_LOG_CHANNEL");
 	if (chanspec == NULL)
 		chanspec = "syslog:";
 	if ((dflt_chanspec = strdup(chanspec)) == NULL)
