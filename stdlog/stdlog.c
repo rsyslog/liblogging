@@ -181,7 +181,6 @@ stdlog_log_b(stdlog_channel_t ch, const int severity,
 	STDLOG_LOG_READY_CHANNEL
 	va_start(ap, fmt);
 	ch->drvr.log(ch, severity, fmt, ap, wrkbuf, buflen);
-
 done:	return r;
 }
 
@@ -201,6 +200,5 @@ stdlog_log(stdlog_channel_t ch,
 	STDLOG_LOG_READY_CHANNEL
 	va_start(ap, fmt);
 	ch->drvr.log(ch, severity, fmt, ap, wrkbuf, sizeof(wrkbuf));
-
 done:	return r;
 }
