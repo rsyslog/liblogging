@@ -84,6 +84,12 @@ stdlog_version(void)
 	return VERSION;
 }
 
+size_t
+stdlog_get_msgbuf_size(void)
+{
+	return __STDLOG_MSGBUF_SIZE;
+}
+
 /* interprets a driver chanspec and sets the channel accordingly
  */
 static int

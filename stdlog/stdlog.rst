@@ -30,6 +30,8 @@ SYNOPSIS
                   const char *fmt, ...);
    void stdlog_close(stdlog_channel_t channel);
 
+   size_t stdlog_get_msgbuf_size(void);
+
 DESCRIPTION
 ===========
 
@@ -103,6 +105,11 @@ syslog header, which among others contains the *ident* string provided
 by **stdlog_open()**. If the complete log message does not fit into
 the buffer, it is silently truncated.
 
+Note that the 4Kib buffer size is a build time default. As such,
+distributions may change it. To obtain the size limit that the
+linked in instance of libloggin-stdlog was build with, use
+**stdlog_get_msgbuf_size()**.
+
 FACILITIES
 ==========
 The following facilities are supported. Please note that they are mimiced
@@ -171,6 +178,7 @@ THREAD- AND SIGNAL-SAFENESS
 These calls are thread- and signal-safe:
 
 * **stdlog_version()**
+* **stdlog_get_msgbuf_size()**
 
 These calls are **not** thread- or signal-safe:
 
