@@ -97,20 +97,21 @@ uxs_close(stdlog_channel_t ch)
 
 
 static void
-uxs_log(stdlog_channel_t ch, int severity, const char *fmt, va_list ap)
+uxs_log(stdlog_channel_t ch, int severity,
+	const char *fmt, va_list ap,
+	char *__restrict__ const wrkbuf, const size_t buflen)
 {
 	ssize_t lsent;
-	char frame[__STDLOG_MSGBUF_SIZE];
 	size_t lenframe;
 
 	if(ch->d.uxs.sock < 0)
 		uxs_open(ch);
 	if(ch->d.uxs.sock < 0)
 		return;
-	lenframe = build_syslog_frame(ch, severity, frame, sizeof(frame), fmt, ap);
-printf("syslog frame: '%s'\n", frame);
+	lenframe = build_syslog_frame(ch, severity, wrkbuf, buflen, fmt, ap);
+printf("syslog frame: '%s'\n", wrkbuf);
 	// TODO: error handling!!!
-	lsent = sendto(ch->d.uxs.sock, frame, lenframe, 0,
+	lsent = sendto(ch->d.uxs.sock, wrkbuf, lenframe, 0,
 		(struct sockaddr*) &ch->d.uxs.addr, sizeof(ch->d.uxs.addr));
 	printf("sock: %d, lsent: %d\n", ch->d.uxs.sock, lsent);
 	perror("send");

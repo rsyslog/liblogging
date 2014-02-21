@@ -165,6 +165,7 @@ stdlog_log(stdlog_channel_t ch,
 {
 	va_list ap;
 	int r = 0;
+	char wrkbuf[__STDLOG_MSGBUF_SIZE];
 
 	if(ch == NULL) {
 		if (dflt_channel == NULL)
@@ -173,7 +174,7 @@ stdlog_log(stdlog_channel_t ch,
 		ch = dflt_channel;
 	}
 	va_start(ap, fmt);
-	ch->drvr.log(ch, severity, fmt, ap);
+	ch->drvr.log(ch, severity, fmt, ap, wrkbuf, sizeof(wrkbuf));
 
 done:	return r;
 }

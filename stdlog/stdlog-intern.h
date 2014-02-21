@@ -41,7 +41,7 @@ struct stdlog_channel {
 		void (*init)(stdlog_channel_t ch); /* initialize driver */
 		void (*open)(stdlog_channel_t ch);
 		void (*close)(stdlog_channel_t ch);
-		void (*log)(stdlog_channel_t ch, const int severity, const char *fmt, va_list ap);
+		void (*log)(stdlog_channel_t ch, const int severity, const char *fmt, va_list ap, char *wrkbuf, const size_t buflen);
 	} drvr;
 	union {
 		struct {

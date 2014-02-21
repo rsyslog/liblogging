@@ -88,19 +88,19 @@ file_close(stdlog_channel_t ch)
 
 static void
 file_log(stdlog_channel_t ch, int __attribute__((unused)) severity,
-	const char *fmt, va_list ap)
+	const char *fmt, va_list ap,
+	char *__restrict__ const wrkbuf, const size_t buflen)
 {
 	size_t lenline;
-	char linebuf[__STDLOG_MSGBUF_SIZE];
 
 	if(ch->d.file.fd < 0)
 		file_open(ch);
 	if(ch->d.file.fd < 0)
 		return;
-	lenline = build_file_line(ch, linebuf, sizeof(linebuf), fmt, ap);
-printf("file line: '%s'\n", linebuf);
+	lenline = build_file_line(ch, wrkbuf, buflen, fmt, ap);
+printf("file line: '%s'\n", wrkbuf);
 	// TODO: error handling!!!
-	write(ch->d.file.fd, linebuf, lenline);
+	write(ch->d.file.fd, wrkbuf, lenline);
 }
 
 void
