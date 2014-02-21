@@ -154,6 +154,37 @@ stdlog_close(stdlog_channel_t ch)
 	free(ch);
 }
 
+/* the following macro is common code for the two stdlog_logXX()
+ * functions.
+ */
+#define STDLOG_LOG_READY_CHANNEL \
+	if(ch == NULL) { \
+		if (dflt_channel == NULL) \
+			if((r = stdlog_init(0)) != 0) \
+				goto done; \
+		ch = dflt_channel; \
+	}
+
+/* Log a message to the specified channel. If channel is NULL,
+ * use the default channel (which always exists).
+ * Returns 0 on success or a standard (negative) error code.
+ * Otherwise the semantics are equivalent to syslog().
+ */
+int
+stdlog_log_b(stdlog_channel_t ch, const int severity,
+	char *__restrict__ const wrkbuf, const size_t buflen,
+	const char *fmt, ...)
+{
+	va_list ap;
+	int r = 0;
+
+	STDLOG_LOG_READY_CHANNEL
+	va_start(ap, fmt);
+	ch->drvr.log(ch, severity, fmt, ap, wrkbuf, buflen);
+
+done:	return r;
+}
+
 /* Log a message to the specified channel. If channel is NULL,
  * use the default channel (which always exists).
  * Returns 0 on success or a standard (negative) error code.
@@ -167,12 +198,7 @@ stdlog_log(stdlog_channel_t ch,
 	int r = 0;
 	char wrkbuf[__STDLOG_MSGBUF_SIZE];
 
-	if(ch == NULL) {
-		if (dflt_channel == NULL)
-			if((r = stdlog_init(0)) != 0)
-				goto done;
-		ch = dflt_channel;
-	}
+	STDLOG_LOG_READY_CHANNEL
 	va_start(ap, fmt);
 	ch->drvr.log(ch, severity, fmt, ap, wrkbuf, sizeof(wrkbuf));
 
