@@ -86,21 +86,33 @@ file_close(stdlog_channel_t ch)
 }
 
 
-static void
+static int
 file_log(stdlog_channel_t ch, int __attribute__((unused)) severity,
 	const char *fmt, va_list ap,
 	char *__restrict__ const wrkbuf, const size_t buflen)
 {
+	ssize_t lenWritten;
 	size_t lenline;
+	int r;
 
 	if(ch->d.file.fd < 0)
 		file_open(ch);
-	if(ch->d.file.fd < 0)
-		return;
+	if(ch->d.file.fd < 0) {
+		r = -1;
+		goto done;
+	}
 	lenline = build_file_line(ch, wrkbuf, buflen, fmt, ap);
 printf("file line: '%s'\n", wrkbuf);
-	// TODO: error handling!!!
-	write(ch->d.file.fd, wrkbuf, lenline);
+	lenWritten = write(ch->d.file.fd, wrkbuf, lenline);
+	if(lenWritten == -1) {
+		r = -1;
+	} else if(lenWritten != (ssize_t) lenline) {
+		r = -1;
+		errno = EAGAIN;
+	} else {
+		r = 0;
+	}
+done:	return r;
 }
 
 void

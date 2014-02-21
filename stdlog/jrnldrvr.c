@@ -38,16 +38,18 @@ static void jrnl_init(stdlog_channel_t __attribute__((unused)) ch) { }
 static void jrnl_open(stdlog_channel_t __attribute__((unused)) ch) { }
 static void jrnl_close(stdlog_channel_t __attribute__((unused)) ch) { }
 
-static void
+static int
 jrnl_log(stdlog_channel_t ch, const int severity,
 	const char *fmt, va_list ap,
 	char *__restrict__ const wrkbuf, const size_t buflen)
 {
+	int r;
 	__stdlog_fmt_printf(wrkbuf, buflen, fmt, ap);
-	// TODO: error handling!!!
-	sd_journal_send("MESSAGE=%s", wrkbuf,
+	r = sd_journal_send("MESSAGE=%s", wrkbuf,
                 "PRIORITY=%d", severity,
                 NULL);
+	if(r) errno = -r;
+	return r;
 }
 
 void

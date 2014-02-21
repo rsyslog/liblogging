@@ -96,25 +96,36 @@ uxs_close(stdlog_channel_t ch)
 }
 
 
-static void
+static int
 uxs_log(stdlog_channel_t ch, int severity,
 	const char *fmt, va_list ap,
 	char *__restrict__ const wrkbuf, const size_t buflen)
 {
 	ssize_t lsent;
 	size_t lenframe;
+	int r;
 
 	if(ch->d.uxs.sock < 0)
 		uxs_open(ch);
-	if(ch->d.uxs.sock < 0)
-		return;
+	if(ch->d.uxs.sock < 0) {
+		r = -1;
+		goto done;
+	}
 	lenframe = build_syslog_frame(ch, severity, wrkbuf, buflen, fmt, ap);
 printf("syslog frame: '%s'\n", wrkbuf);
 	// TODO: error handling!!!
 	lsent = sendto(ch->d.uxs.sock, wrkbuf, lenframe, 0,
 		(struct sockaddr*) &ch->d.uxs.addr, sizeof(ch->d.uxs.addr));
+	if(lsent == -1) {
+		r = -1;
+	} else if(lsent != (ssize_t)lenframe) {
+		r = -1;
+		errno = EAGAIN;
+	} else {
+		r = 0;
+	}
 	printf("sock: %d, lsent: %d\n", ch->d.uxs.sock, lsent);
-	perror("send");
+done:	return r;
 }
 
 void
