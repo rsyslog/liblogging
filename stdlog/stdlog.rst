@@ -18,6 +18,8 @@ SYNOPSIS
    
    #include <liblogging/stdlog.h>
 
+   const char* stdlog_version(void);
+
    int stdlog_init(int options);
    void stdlog_deinit();
 
@@ -31,7 +33,13 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-**stdlog_init(options)** is used to initialize the logging system.
+**stdlog_version()** returns the version string for the library
+currently being used (e.g. "1.0.2"). It may be called at any time.
+If a specific (minimal) version of the library is required, it is
+suggested to do runtime checks via **stdlog_version()** before
+**stdlog_init()** is called.
+
+**stdlog_init()** is used to initialize the logging system.
 It must only be called once during the lifetime of a process. If no
 special options are desired, stdlog_init() is optional. If it is not
 called, the first call to any of the other calls will initiate it.
@@ -160,7 +168,11 @@ severities into a smaller set.
 THREAD- AND SIGNAL-SAFENESS
 ===========================
 
-The following calls are **not** thread- or signal-safe:
+These calls are thread- and signal-safe:
+
+* **stdlog_version()**
+
+These calls are **not** thread- or signal-safe:
 
 * **stdlog_init()**
 * **stdlog_deinit()**

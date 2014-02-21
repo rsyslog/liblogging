@@ -78,6 +78,12 @@ stdlog_deinit (void)
 	free(dflt_chanspec);
 }
 
+const char *
+stdlog_version(void)
+{
+	return VERSION;
+}
+
 /* interprets a driver chanspec and sets the channel accordingly
  */
 static int
