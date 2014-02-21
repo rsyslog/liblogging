@@ -17,6 +17,15 @@ pkginclude_HEADERS = \
 
 noinst_HEADERS =
 noinst_PROGRAMS = tester
+bin_PROGRAMS =
+
+tester_SOURCES = tester.c
+tester_LDADD = liblogging-stdlog.la $(SOL_LIBS)
+
+bin_PROGRAMS += stdlogctl
+stdlogctl_SOURCES = stdlogctl.c
+stdlogctl_CPPFLAGS =  
+stdlogctl_LDADD = liblogging-stdlog.la $(SOL_LIBS)
 
 man3_MANS = stdlog.3
 CLEANFILES += stdlog.3
@@ -24,9 +33,6 @@ EXTRA_DIST += stdlog.3
 
 stdlog.3: stdlog.rst
 	$(AM_V_GEN) $(RST2MAN) $< $@
-
-tester_SOURCES = tester.c
-tester_LDADD = liblogging-stdlog.la $(SOL_LIBS)
 
 if ENABLE_JOURNAL
    liblogging_stdlog_la_LIBADD +=  $(LIBSYSTEMD_JOURNAL_LIBS)

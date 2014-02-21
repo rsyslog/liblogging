@@ -109,6 +109,8 @@ Note that the 4Kib buffer size is a build time default. As such,
 distributions may change it. To obtain the size limit that the
 linked in instance of libloggin-stdlog was build with, use
 **stdlog_get_msgbuf_size()**.
+You may also use the **stdlogctl(1)** utility to find out the build
+time settings for the installed version of liblogging-stdlog.
 
 FACILITIES
 ==========
@@ -276,7 +278,7 @@ Being thread- and signal-safe requires a little bit more of setup:
 
 SEE ALSO
 ========
-**syslog(3)**
+**stdlogctl(1)**, **syslog(3)**
 
 COPYRIGHT
 =========
