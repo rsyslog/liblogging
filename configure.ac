@@ -113,6 +113,25 @@ if test "$enable_stdlog" = "yes"; then
         AC_DEFINE(ENABLE_JOURNAL, 1, [journal support is integrated.])
 fi
 
+# Support using cached man file copies, to avoid the need for rst2man
+# in the build environment
+AC_ARG_ENABLE(cached_man_pages,
+        [AS_HELP_STRING([--enable-cached-man-pages],[Enable using cached versions of man files (avoid rst2man) @<:@default=no@:>@])],
+        [case "${enableval}" in
+         yes) enable_cached_man_pages="yes" ;;
+          no) enable_cached_man_pages="no" ;;
+           *) AC_MSG_ERROR(bad value ${enableval} for --enable-cached-man-pages) ;;
+         esac],
+        [enable_cached_man_pages=no]
+)
+if test "x$enable_cached_man_pages" = "xno"; then
+# obtain path for rst2man
+    AC_PATH_PROG([RST2MAN], [rst2man])
+    if test "x${RST2MAN}" == "x"; then
+        AC_MSG_FAILURE([rst2man not found in PATH])
+    fi
+fi
+
 AC_CONFIG_FILES([Makefile \
                  rfc3195/liblogging-rfc3195.pc \
                  rfc3195/doc/Makefile \
@@ -128,3 +147,4 @@ echo
 echo "stdlog support enabled:               $enable_stdlog"
 echo "systemd journal support:              $enable_journal"
 echo "rfc3195 support enabled:              $enable_rfc3195"
+echo "using cached copies of man files:     $enable_cached_man_pages"
