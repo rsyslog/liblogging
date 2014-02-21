@@ -27,9 +27,16 @@ stdlogctl_SOURCES = stdlogctl.c
 stdlogctl_CPPFLAGS =  
 stdlogctl_LDADD = liblogging-stdlog.la $(SOL_LIBS)
 
+man1_MANS = stdlogctl.1
+CLEANFILES += stdlogctl.1
+EXTRA_DIST += stdlogctl.1
+
 man3_MANS = stdlog.3
 CLEANFILES += stdlog.3
 EXTRA_DIST += stdlog.3
+
+stdlogctl.1: stdlogctl.rst
+	$(AM_V_GEN) $(RST2MAN) $< $@
 
 stdlog.3: stdlog.rst
 	$(AM_V_GEN) $(RST2MAN) $< $@
