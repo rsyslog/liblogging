@@ -28,6 +28,9 @@ SYNOPSIS
              const char *channelspec);
    int stdlog_log(stdlog_channel_t channel, const int severity,
                   const char *fmt, ...);
+   int stdlog_log_b(stdlog_channel_t channel, const int severity,
+                  char *buf, const size_t lenbuf,
+                  const char *fmt, ...);
    void stdlog_close(stdlog_channel_t channel);
 
    size_t stdlog_get_msgbuf_size(void);
@@ -96,14 +99,15 @@ field contains a syslog-like severity. The *fmt* is a restricted set of
 printf-like formats. This set has some restrictions in order to provide
 a signal-safe implementation. The remaining parameters are values to be
 used with the format string. The **stdlog_log()** supports log message sizes
-of slighlty less than 4KiB. The exact size depends on the log driver
+of slightly less than 4KiB. The exact size depends on the log driver
 and parameters specified in *stdlog_open()**. The reason is that the
 log drivers may need to add headers and trailers to the message
 text, and this is done inside the same 4KiB buffer that is also used for
 the actual message text. For example, the "syslog:" driver adds a traditional
 syslog header, which among others contains the *ident* string provided
 by **stdlog_open()**. If the complete log message does not fit into
-the buffer, it is silently truncated.
+the buffer, it is silently truncated. The formatting buffer is allocated
+on the stack.
 
 Note that the 4Kib buffer size is a build time default. As such,
 distributions may change it. To obtain the size limit that the
@@ -111,6 +115,15 @@ linked in instance of libloggin-stdlog was build with, use
 **stdlog_get_msgbuf_size()**.
 You may also use the **stdlogctl(1)** utility to find out the build
 time settings for the installed version of liblogging-stdlog.
+
+**stdlog_log_b()** is almost equivalent to **stdlog_log()**, except that
+the caller can provide a formatting work buffer. This is done via the *buf*
+and *buflen* parameters. This permits to use both smaller and larger buffer
+sizes. For embedded systems (or signal handlers), this may be convenient to
+reduce the amount of stack space required. Also, it is useful if very large
+messages are to be logged. Note that while there is no upper limit on the
+buffer size per se, the log drivers may have some limits. In general, up
+to 64KiB of buffer should work with all drivers.
 
 FACILITIES
 ==========
@@ -145,7 +158,7 @@ STDLOG_xxx defines:
    STDLOG_LOCAL7   - reserved for application use
 
 Regular applications should use facilities in the **STDLOG_LOCALx**
-range. Note that non-priviledged applications may not be able to use
+range. Non-priviledged applications may not be able to use
 all of the system-defined facilites. Note that it is also safe to
 refer to applicaton specific facilities via
 
@@ -189,7 +202,7 @@ These calls are **not** thread- or signal-safe:
 * **stdlog_open()**
 * **stdlog_close()**
 
-For the **stdlog_log()** call, it depends:
+For **stdlog_log()** and **stdlog_log_b()**, it depends:
 
 * if either the library has been initialized with the option *STDLOG_SIGSAFE*
   or the channel has been opened with it, the call is both thread-safe and
@@ -199,6 +212,11 @@ For the **stdlog_log()** call, it depends:
   signal-safe.
 * if the library has not been initialized and the default (NULL) channel is
   used, the call is neither thread- nor signal-safe.
+
+For **stdlog_log_b()** the caller must also ensure that the provided formatting
+buffer supports the desired thread- and signal-safeness. For example, if a
+static buffer is used, thread-safeness is not given. For signal-safeness,
+typcially a buffer allocted on the signal handler's stack is needed.
 
 For multithreaded applications, it is **highly recommended** to initialize
 the library via **stdlog_init()** on the main thread **before** any other
@@ -212,6 +230,14 @@ is inside a **stdlog_log()** call while an async signal handler using that
 same call is activated. Depending on timing, the first call may or may not
 complete successfully. It is the caller's chore to check return status and
 do retries if necessary.
+
+Finally, thread- and signal-safeness depend on the log driver. At the time
+of this writing,
+the "syslog:" and "file:" drivers are thread- and signal-safe while the
+current "journal:" driver is thread- but not signal-safe. To the best of
+our knowledge, the systemd team is working on making the API we depend on
+signal-safe. If this is done, the driver itself is also signal-safe (the
+restriction results from the journal API).
 
 CHANNEL SPECIFICATIONS
 ======================
@@ -255,7 +281,7 @@ the **stdlog_log()** call:
 
 ::
 
-    status = stdlog_log(NULL, STDLOG_ERR,
+    status = stdlog_log(NULL, STDLOG_NOTICE,
                         "New session %d of user %s",
                         sessid, username);
 
@@ -272,9 +298,21 @@ Being thread- and signal-safe requires a little bit more of setup:
 
 
     /* And do this in threads, signal handlers, etc: */
-    status = stdlog_log(NULL, STDLOG_ERR,
+    status = stdlog_log(NULL, STDLOG_NOTICE,
                         "New session %d of user %s",
                         sessid, username);
+
+If you need just a small formatting buffer (or a large one), you can
+provide the memory yourself:
+
+::
+
+    char buf[512];
+    status = stdlog_log_b(NULL, STDLOG_NOTICE,
+                          buf, sizeof(buf),
+                          "New session %d of user %s",
+                          sessid, username);
+
 
 SEE ALSO
 ========
