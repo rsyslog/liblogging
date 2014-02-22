@@ -7,7 +7,7 @@ standard logging library
 ------------------------
 
 :Author: Rainer Gerhards <rgerhards@adiscon.com>
-:Date: 2014-02-21
+:Date: 2014-02-22
 :Manual section: 3
 :Manual group: standard logging library
 
