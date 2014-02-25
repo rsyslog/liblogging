@@ -281,6 +281,10 @@ It has the following restrictions:
 * the following length modifiers are supported: **l, ll, h, hh, z**
 * the following conversion specifiers are supported: **s, i, d, u, x, X,
   p, c, f** (where **f** is always formatted as "%.2f")
+* only the following control character escapes are supported:
+  **\\n, \\r, \\t, \\\\**.
+  Please note that it is **not** advisible to include control characters
+  in log records. Log drivers and log backend systems may remove them.
 
 CHANNEL SPECIFICATIONS
 ======================
