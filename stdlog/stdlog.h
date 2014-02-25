@@ -72,8 +72,9 @@ size_t stdlog_get_msgbuf_size(void);
 int stdlog_init(uint32_t options);
 void stdlog_deinit(void);
 stdlog_channel_t stdlog_open(const char *ident, const int option, const int facility, const char *channelspec);
-int stdlog_log(stdlog_channel_t channel, const int severity, const char *fmt, ...) __attribute__((format(printf, 3, 4)));
 void stdlog_close(stdlog_channel_t channel);
+int stdlog_log(stdlog_channel_t channel, const int severity, const char *fmt, ...) __attribute__((format(printf, 3, 4)));
 int stdlog_log_b(stdlog_channel_t ch, const int severity, char *wrkbuf, const size_t buflen, const char *fmt, ...);
+int stdlog_vlog(stdlog_channel_t ch, const int severity, const char *fmt, va_list ap);
 
 #endif /* multi-include protection */

@@ -190,15 +190,27 @@ done:	return r;
  * Otherwise the semantics are equivalent to syslog().
  */
 int
-stdlog_log(stdlog_channel_t ch,
-	const int severity, const char *fmt, ...)
+stdlog_vlog(stdlog_channel_t ch,
+	const int severity, const char *fmt, va_list ap)
 {
-	va_list ap;
 	int r = 0;
 	char wrkbuf[__STDLOG_MSGBUF_SIZE];
 
 	STDLOG_LOG_READY_CHANNEL
-	va_start(ap, fmt);
-	ch->drvr.log(ch, severity, fmt, ap, wrkbuf, sizeof(wrkbuf));
+	r = ch->drvr.log(ch, severity, fmt, ap, wrkbuf, sizeof(wrkbuf));
 done:	return r;
+}
+
+/* Log a message to the specified channel. If channel is NULL,
+ * use the default channel (which always exists).
+ * Returns 0 on success or a standard (negative) error code.
+ * Otherwise the semantics are equivalent to syslog().
+ */
+int
+stdlog_log(stdlog_channel_t ch,
+	const int severity, const char *fmt, ...)
+{
+	va_list ap;
+	va_start(ap, fmt);
+	return stdlog_vlog(ch, severity, fmt, ap);
 }
