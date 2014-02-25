@@ -56,15 +56,8 @@ called, the first call to any of the other calls will initiate it.
 This feature is primarily for backward compatibility with how the
 legacy **syslog(3)** API worked. It does not play well with multithreaded
 applications. With them, call stdlog_init() explicitely from the
-startup thread.
-
-The following options can be given:
-
-:STDLOG_SIGSAFE: request signal-safe mode. If and only if this is 
-   specified library calls are signal-safe. With the current version
-   of the library, there is no functional difference in signal-safe
-   mode. Future versions may offer additional features which may not
-   all work in signal-safe mode.
+startup thread. The parameter *options* contains one or more of
+the library options specified in their own section below.
 
 **stdlog_deinit(void)** is used to clean up resources including closing
 file handles at library exit. No library calls are permitted after it
@@ -133,6 +126,28 @@ to 64KiB of buffer should work with all drivers.
 The **stdlog_vlog()** and **stdlog_vlog_b()** calls are equivalent to
 **stdlog_log()** and **stdlog_log_b()** except that they take a *va_list*
 argument.
+
+OPTIONS
+=======
+Options modify library behaviour. They can be specified in **stdlog_init()**
+and **stdlog_open()** calls. The **stdlog_init()** call is used to set
+default options. These are applied if channels are automatically created or
+the *STDLOG_USE_DFLT_OPTS* option is used in **stdlog_open()**. Otherwise,
+options provided to **stdlog_open()** are not affected by the global option
+set.
+
+The following options can be given:
+
+:STDLOG_USE_DFLT_OPTS: is used to indicate that the **stdlog_open()** call
+   shall use the default global options. If this option is given, on other
+   options can be set. Trying to do so results in an error. Note that this
+   option is *not* valid to for the **stdlog_init()** call.
+
+:STDLOG_SIGSAFE: request signal-safe mode. If and only if this is 
+   specified library calls are signal-safe. With the current version
+   of the library, there is no functional difference in signal-safe
+   mode. Future versions may offer additional features which may not
+   all work in signal-safe mode.
 
 FACILITIES
 ==========
@@ -214,9 +229,8 @@ These calls are **not** thread- or signal-safe:
 For **stdlog_log()**, **stdlog_vlog()**, **stdlog_log_b()**, and
 **stdlog_vlog_b()**, it depends:
 
-* if either the library has been initialized with the option *STDLOG_SIGSAFE*
-  or the channel has been opened with it, the call is both thread-safe and
-  signal-safe.
+* if the channel has been opened with the *STDLOG_SIGSAFE* option,
+  the call is both thread-safe and signal-safe.
 * if the library has been initialized by **stdlog_init()** or the channel has
   been opened by **stdlog_open()**, the call is thread-safe but **not**
   signal-safe.

@@ -54,6 +54,10 @@ stdlog_init(uint32_t options)
 		errno = EINVAL;
 		return -1;
 	}
+	if ((options & STDLOG_USE_DFLT_OPTS) != 0) {
+		errno = EINVAL;
+		return -1;
+	}
 
 	dflt_options = options;
 	chanspec = getenv("LIBLOGGING_STDLOG_DFLT_LOG_CHANNEL");
@@ -119,6 +123,12 @@ stdlog_open(const char *ident, const int option, const int facility, const char 
 {
 	stdlog_channel_t ch;
 
+	if(option == STDLOG_USE_DFLT_OPTS &&
+	   (option & ~STDLOG_USE_DFLT_OPTS) != 0) {
+		ch = NULL;
+		errno = EINVAL;
+		goto done;
+	}
 	if((ch = calloc(1, sizeof(struct stdlog_channel))) == NULL) {
 		errno = ENOMEM;
 		goto done;
@@ -129,7 +139,7 @@ stdlog_open(const char *ident, const int option, const int facility, const char 
 		errno = ENOMEM;
 		goto done;
 	}
-	ch->options = option;
+	ch->options = (option == STDLOG_USE_DFLT_OPTS) ? dflt_options : option;
 	ch->facility = facility;
 
 	if(__stdlog_set_driver(ch, chanspec) != 0) {
