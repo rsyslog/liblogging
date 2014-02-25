@@ -93,12 +93,12 @@ been free'ed.
 similar interface, but there are notable differences. The *channel* 
 parameter is used to specify the log channel to use to. Use *NULL* to select
 the default channel. This is sufficient for most applications. The *severity*
-field contains a syslog-like severity. The *fmt* is a restricted set of
-printf-like formats. This set has some restrictions in order to provide
-a signal-safe implementation. The remaining parameters are values to be
-used with the format string. The **stdlog_log()** supports log message sizes
+field contains a syslog-like severity.  The remaining arguments are a format,
+as in **printf(3)** and any arguments required by the format. Note that some
+restrictions apply to the format in signal-safe mode (described below).
+The **stdlog_log()** supports log message sizes
 of slightly less than 4KiB. The exact size depends on the log driver
-and parameters specified in *stdlog_open()**. The reason is that the
+and parameters specified in **stdlog_open()**. The reason is that the
 log drivers may need to add headers and trailers to the message
 text, and this is done inside the same 4KiB buffer that is also used for
 the actual message text. For example, the "syslog:" driver adds a traditional
@@ -144,10 +144,8 @@ The following options can be given:
    option is *not* valid to for the **stdlog_init()** call.
 
 :STDLOG_SIGSAFE: request signal-safe mode. If and only if this is 
-   specified library calls are signal-safe. With the current version
-   of the library, there is no functional difference in signal-safe
-   mode. Future versions may offer additional features which may not
-   all work in signal-safe mode.
+   specified library calls are signal-safe. Some restrictions apply
+   in signal-safe mode. See description below for details.
 
 FACILITIES
 ==========
@@ -263,6 +261,21 @@ current "journal:" driver is thread- but not signal-safe. To the best of
 our knowledge, the systemd team is working on making the API we depend on
 signal-safe. If this is done, the driver itself is also signal-safe (the
 restriction results from the journal API).
+
+RESRICTIONS IN SIGNAL-SAFE MODE
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+When signal-safeness is requested, the set of supported printf formats
+is restricted. This is due to the fact that the standard printf routines
+cannot be called and so a smaller signal-safe printf implementation that is
+part of *liblogging-stdlog* is used instead.
+
+It has the following restrictions:
+
+* flag characters are not supported
+* field width and precision fields are accepted but silently ignored
+* the following length modifiers are supported: **l, ll, h, hh, z**
+* the following conversion specifiers are supported: **s, i, d, u, x, X,
+  p, c, f** (where **f** is always formatted as "%.2f")
 
 CHANNEL SPECIFICATIONS
 ======================
