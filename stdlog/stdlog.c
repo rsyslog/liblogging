@@ -180,7 +180,7 @@ stdlog_log_b(stdlog_channel_t ch, const int severity,
 
 	STDLOG_LOG_READY_CHANNEL
 	va_start(ap, fmt);
-	ch->drvr.log(ch, severity, fmt, ap, wrkbuf, buflen);
+	r = ch->drvr.log(ch, severity, fmt, ap, wrkbuf, buflen);
 done:	return r;
 }
 
@@ -201,10 +201,8 @@ stdlog_vlog(stdlog_channel_t ch,
 done:	return r;
 }
 
-/* Log a message to the specified channel. If channel is NULL,
- * use the default channel (which always exists).
- * Returns 0 on success or a standard (negative) error code.
- * Otherwise the semantics are equivalent to syslog().
+/* Equivalent to stdlog_vlog(), except that it takes multiple
+ * arguments.
  */
 int
 stdlog_log(stdlog_channel_t ch,
