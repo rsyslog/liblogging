@@ -70,6 +70,7 @@ typedef struct stdlog_channel *stdlog_channel_t;
 
 const char *stdlog_version(void);
 size_t stdlog_get_msgbuf_size(void);
+const char *stdlog_get_dflt_chanspec(void);
 int stdlog_init(uint32_t options);
 void stdlog_deinit(void);
 stdlog_channel_t stdlog_open(const char *ident, const int option, const int facility, const char *channelspec);

@@ -39,6 +39,7 @@ SYNOPSIS
    void stdlog_close(stdlog_channel_t channel);
 
    size_t stdlog_get_msgbuf_size(void);
+   const char *stdlog_get_dflt_chanspec(void);
 
 DESCRIPTION
 ===========
@@ -126,6 +127,9 @@ to 64KiB of buffer should work with all drivers.
 The **stdlog_vlog()** and **stdlog_vlog_b()** calls are equivalent to
 **stdlog_log()** and **stdlog_log_b()** except that they take a *va_list*
 argument.
+
+Use **stdlog_get_dflt_chanspec()** to obtain the default channel specification.
+This must be called only after **stdlog_init()** has been called.
 
 OPTIONS
 =======
@@ -216,6 +220,7 @@ These calls are thread- and signal-safe:
 
 * **stdlog_version()**
 * **stdlog_get_msgbuf_size()**
+* **stdlog_get_dflt_chanspec()**
 
 These calls are **not** thread- or signal-safe:
 

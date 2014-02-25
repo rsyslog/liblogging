@@ -94,6 +94,13 @@ stdlog_get_msgbuf_size(void)
 	return __STDLOG_MSGBUF_SIZE;
 }
 
+const char *
+stdlog_get_dflt_chanspec(void)
+{
+	return dflt_chanspec;
+}
+
+
 /* interprets a driver chanspec and sets the channel accordingly
  */
 static int

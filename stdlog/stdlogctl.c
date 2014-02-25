@@ -38,6 +38,7 @@ main(int __attribute__((unused)) argc, char __attribute__((unused)) *argv[])
 
 	stdlog_init(0);
 	printf("\tmax message size: %d\n", (int) stdlog_get_msgbuf_size());
+	printf("\tdefault channel.: \"%s\"\n", stdlog_get_dflt_chanspec());
 	stdlog_deinit();
 
 	return 0;
