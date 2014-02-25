@@ -41,7 +41,7 @@ static int32_t dflt_options = 0;
 
 
 /* can be called before any other library call. If so, initializes
- * some library strucutres.
+ * some library structures.
  * NOTE: this API may change in the final version
  * returns 0 on success, -1 on error with errno set
  */
@@ -67,7 +67,7 @@ stdlog_init(uint32_t options)
 		return -1;
 
 	if((dflt_channel = 
-	      stdlog_open("TEST", dflt_options, STDLOG_LOCAL7, NULL)) == NULL)
+	      stdlog_open("liblogging-stdlog", dflt_options, STDLOG_LOCAL7, NULL)) == NULL)
 		return -1;
 
 	return 0;
