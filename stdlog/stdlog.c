@@ -120,6 +120,8 @@ __stdlog_set_driver(stdlog_channel_t ch, const char *__restrict__ chanspec)
 	else if (!strcmp(chanspec, "journal:"))
 		__stdlog_set_jrnl_drvr(ch);
 #	endif
+	else if (!strncmp(chanspec, "uxsock:", 7))
+		__stdlog_set_uxs_drvr(ch);
 	else
 		__stdlog_set_uxs_drvr(ch);
 	return 0;

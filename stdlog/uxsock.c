@@ -63,7 +63,7 @@ build_syslog_frame(stdlog_channel_t ch,
 	__stdlog_fmt_print_str(frame, lenframe-i, &i, ch->ident);
 	frame[i++] = ':';
 	frame[i++] = ' ';
-	i += ch->vsnprintf(frame+i, lenframe, fmt, ap);
+	i += ch->vsnprintf(frame+i, lenframe-i, fmt, ap);
 	return i;
 }
 
@@ -71,6 +71,14 @@ static void
 uxs_init(stdlog_channel_t ch)
 {
 	ch->d.uxs.sock = -1;
+	/* Note: we handle both "syslog:" as well as "uxsock:" as
+	 * they are essentially the same. Here we configure the
+	 * difference.
+	 */
+	if (!strncmp(ch->spec, "uxsock:", 7))
+		ch->d.uxs.sockname = strdup(ch->spec+7);
+	else
+		ch->d.uxs.sockname = strdup(_PATH_LOG);
 }
 
 static void
@@ -81,7 +89,7 @@ uxs_open(stdlog_channel_t ch)
 			return;
 		memset(&ch->d.uxs.addr, 0, sizeof(ch->d.uxs.addr));
 		ch->d.uxs.addr.sun_family = AF_UNIX;
-		strncpy(ch->d.uxs.addr.sun_path, _PATH_LOG,
+		strncpy(ch->d.uxs.addr.sun_path, ch->d.uxs.sockname,
 			sizeof(ch->d.uxs.addr.sun_path));
 	}
 }
@@ -90,6 +98,7 @@ static void
 uxs_close(stdlog_channel_t ch)
 {
 	if (ch->d.uxs.sock >= 0) {
+		free(ch->d.uxs.sockname);
 		close(ch->d.uxs.sock);
 		ch->d.uxs.sock = -1;
 	}

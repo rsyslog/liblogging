@@ -46,6 +46,7 @@ struct stdlog_channel {
 	} drvr;
 	union {
 		struct {
+			char *sockname;
 			int sock;
 			struct sockaddr_un addr;
 		} uxs;	/* unix socket (including syslog) */

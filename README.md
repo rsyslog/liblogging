@@ -19,7 +19,7 @@ of weeks, this will change. It supports different log destionations:
 
 * syslog()
 * systemd journal native API
-* unix domain socket [very soon]
+* unix domain socket
 * files
 
 The key point here is that we provide a **separation of concerns**: the

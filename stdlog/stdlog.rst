@@ -288,9 +288,11 @@ The channel is described via a single-line string. Currently, the following
 channels can be selected:
 
 * "syslog:", which is the traditional syslog output to /dev/log
+* "uxsock:<name>", which writes messages to the local unix socket
+  *name*. The message is formatted in traditional syslog-format.
 * "journal:", which emits messages via the native systemd journal API
 * "file:<name>", which writes messages in a syslog-like format to
-  the file specified as "name"
+  the file specified as *name*
 
 If no channel specification is given, the default is "syslog:". The
 default channel can be set via the **LIBLOGGING_STDLOG_DFLT_LOG_CHANNEL**
