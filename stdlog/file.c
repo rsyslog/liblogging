@@ -102,7 +102,6 @@ file_log(stdlog_channel_t ch, int __attribute__((unused)) severity,
 		goto done;
 	}
 	lenline = build_file_line(ch, wrkbuf, buflen, fmt, ap);
-printf("file line: '%s'\n", wrkbuf);
 	lenWritten = write(ch->d.file.fd, wrkbuf, lenline);
 	if(lenWritten == -1) {
 		r = -1;

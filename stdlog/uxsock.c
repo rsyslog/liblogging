@@ -112,8 +112,6 @@ uxs_log(stdlog_channel_t ch, int severity,
 		goto done;
 	}
 	lenframe = build_syslog_frame(ch, severity, wrkbuf, buflen, fmt, ap);
-printf("syslog frame: '%s'\n", wrkbuf);
-	// TODO: error handling!!!
 	lsent = sendto(ch->d.uxs.sock, wrkbuf, lenframe, 0,
 		(struct sockaddr*) &ch->d.uxs.addr, sizeof(ch->d.uxs.addr));
 	if(lsent == -1) {
@@ -124,7 +122,6 @@ printf("syslog frame: '%s'\n", wrkbuf);
 	} else {
 		r = 0;
 	}
-	printf("sock: %d, lsent: %d\n", ch->d.uxs.sock, lsent);
 done:	return r;
 }
 
