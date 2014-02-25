@@ -31,6 +31,11 @@ SYNOPSIS
    int stdlog_log_b(stdlog_channel_t channel, const int severity,
                   char *buf, const size_t lenbuf,
                   const char *fmt, ...);
+   int stdlog_vlog(stdlog_channel_t channel, const int severity,
+                  const char *fmt, va_list ap);
+   int stdlog_vlog_b(stdlog_channel_t channel, const int severity,
+                  char *buf, const size_t lenbuf,
+                  const char *fmt, va_list ap);
    void stdlog_close(stdlog_channel_t channel);
 
    size_t stdlog_get_msgbuf_size(void);
@@ -125,6 +130,10 @@ messages are to be logged. Note that while there is no upper limit on the
 buffer size per se, the log drivers may have some limits. In general, up
 to 64KiB of buffer should work with all drivers.
 
+The **stdlog_vlog()** and **stdlog_vlog_b()** calls are equivalent to
+**stdlog_log()** and **stdlog_log_b()** except that they take a *va_list*
+argument.
+
 FACILITIES
 ==========
 The following facilities are supported. Please note that they are mimiced
@@ -202,7 +211,8 @@ These calls are **not** thread- or signal-safe:
 * **stdlog_open()**
 * **stdlog_close()**
 
-For **stdlog_log()** and **stdlog_log_b()**, it depends:
+For **stdlog_log()**, **stdlog_vlog()**, **stdlog_log_b()**, and
+**stdlog_vlog_b()**, it depends:
 
 * if either the library has been initialized with the option *STDLOG_SIGSAFE*
   or the channel has been opened with it, the call is both thread-safe and
@@ -213,7 +223,8 @@ For **stdlog_log()** and **stdlog_log_b()**, it depends:
 * if the library has not been initialized and the default (NULL) channel is
   used, the call is neither thread- nor signal-safe.
 
-For **stdlog_log_b()** the caller must also ensure that the provided formatting
+For **stdlog_log_b()** and **stdlog_vlog_b()** the caller must also ensure
+that the provided formatting
 buffer supports the desired thread- and signal-safeness. For example, if a
 static buffer is used, thread-safeness is not given. For signal-safeness,
 typcially a buffer allocted on the signal handler's stack is needed.
