@@ -55,7 +55,7 @@ build_file_line(stdlog_channel_t ch,
 	__stdlog_fmt_print_str(linebuf, lenline-i, &i, ch->ident);
 	linebuf[i++] = ':';
 	linebuf[i++] = ' ';
-	i += __stdlog_fmt_printf(linebuf+i, lenline-1, fmt, ap);
+	i += ch->vsnprintf(linebuf+i, lenline-1, fmt, ap);
 	linebuf[i++] = '\n';
 	return i;
 }
@@ -71,7 +71,7 @@ static void
 file_open(stdlog_channel_t ch)
 {
 	if (ch->d.file.fd == -1) {
-		if((ch->d.file.fd = open(ch->d.file.name, O_WRONLY|O_CREAT, 0660)) < 0)
+		if((ch->d.file.fd = open(ch->d.file.name, O_WRONLY|O_CREAT|O_APPEND, 0660)) < 0)
 			return;
 	}
 }

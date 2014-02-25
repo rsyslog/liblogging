@@ -142,6 +142,11 @@ stdlog_open(const char *ident, const int option, const int facility, const char 
 	ch->options = (option == STDLOG_USE_DFLT_OPTS) ? dflt_options : option;
 	ch->facility = facility;
 
+	/* formatting driver selection */
+	ch->vsnprintf = (ch->options & STDLOG_SIGSAFE)
+	                    ? __stdlog_sigsafe_printf : __stdlog_wrapper_vsnprintf;
+
+	/* output driver selection */
 	if(__stdlog_set_driver(ch, chanspec) != 0) {
 		int errnosv = errno;
 		free((char*)ch->ident);

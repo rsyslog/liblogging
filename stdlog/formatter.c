@@ -176,8 +176,8 @@ __stdlog_fmt_print_str (char *__restrict__ const buf, const size_t lenbuf,
  * va_list macros (and do not loose performance solving that
  * hassle...).
  */
-size_t
-__stdlog_fmt_printf(char *buf, size_t lenbuf, const char *fmt, va_list ap)
+int
+__stdlog_sigsafe_printf(char *buf, size_t lenbuf, const char *fmt, va_list ap)
 {
 	char *s;
 	int64_t d;
@@ -336,4 +336,18 @@ done:
 	buf[i] = '\0'; /* we reserved space for this! */
 	va_end(ap);
 	return i;
+}
+
+/* wrapper for standard vsnprintf() as we need to return it the number of
+ * bytes actually written (minus the NUL char) - even in overlow case!
+ */
+int
+__stdlog_wrapper_vsnprintf(char *buf, size_t lenbuf, const char *fmt, va_list ap)
+{
+	int len;
+
+	len = vsnprintf(buf, lenbuf, fmt, ap);
+	if (len >= (int)lenbuf)
+		len = (int) lenbuf;
+	return len;
 }

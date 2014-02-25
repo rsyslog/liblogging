@@ -37,6 +37,7 @@ struct stdlog_channel {
 	int32_t options;
 	int facility;
 	char *fmtbuf;
+	int (*vsnprintf)(char *str, size_t size, const char *fmt, va_list ap);
 	struct {
 		void (*init)(stdlog_channel_t ch); /* initialize driver */
 		void (*open)(stdlog_channel_t ch);
@@ -66,7 +67,8 @@ void __stdlog_set_file_drvr(stdlog_channel_t ch);
 /* formatter "library" routines */
 void __stdlog_fmt_print_int (char *__restrict__ const buf, const size_t lenbuf, int *idx, int64_t nbr);
 void __stdlog_fmt_print_str (char *__restrict__ const buf, const size_t lenbuf, int *__restrict__ const idx, const char *const str);
-size_t __stdlog_fmt_printf(char *buf, const size_t lenbuf, const char *fmt, va_list ap);
+int __stdlog_sigsafe_printf(char *buf, const size_t lenbuf, const char *fmt, va_list ap);
 void __stdlog_sigsafe_memcpy(void *dest, const void *src, size_t n);
+int __stdlog_wrapper_vsnprintf(char *buf, size_t lenbuf, const char *fmt, va_list ap);
 
 #endif /* STDLOG_INTERN_H_INCLUDED */

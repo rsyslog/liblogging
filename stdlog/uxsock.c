@@ -63,7 +63,7 @@ build_syslog_frame(stdlog_channel_t ch,
 	__stdlog_fmt_print_str(frame, lenframe-i, &i, ch->ident);
 	frame[i++] = ':';
 	frame[i++] = ' ';
-	i += __stdlog_fmt_printf(frame+i, lenframe, fmt, ap);
+	i += ch->vsnprintf(frame+i, lenframe, fmt, ap);
 	return i;
 }
 
