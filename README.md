@@ -11,7 +11,7 @@ stdlog
 This is the core component. **Think of it as a the next version of the
 syslog(3) API.** We retain the easy semantics, but make it more sophisticated
 "behind the scenes" with better support for multiple threads and flexibility
-for different log destinations. It also is i**signal-safe** and thus can be used
+for different log destinations. It also is **signal-safe** and thus can be used
 from within signal handlers.
 
 Right now, it actually does more or less what syslog() did.  In the next couple

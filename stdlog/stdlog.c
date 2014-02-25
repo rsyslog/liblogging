@@ -132,8 +132,8 @@ stdlog_open(const char *ident, const int option, const int facility, const char 
 {
 	stdlog_channel_t ch;
 
-	if(option == STDLOG_USE_DFLT_OPTS &&
-	   (option & ~STDLOG_USE_DFLT_OPTS) != 0) {
+	if (   (option == STDLOG_USE_DFLT_OPTS && (option & ~STDLOG_USE_DFLT_OPTS) != 0)
+	    || (facility < 0 || facility > STDLOG_LOCAL7) ) {
 		ch = NULL;
 		errno = EINVAL;
 		goto done;
@@ -182,6 +182,10 @@ stdlog_close(stdlog_channel_t ch)
  * functions.
  */
 #define STDLOG_LOG_READY_CHANNEL \
+	if(severity < 0 || severity > 7) { \
+		r = -1; \
+		goto done; \
+	} \
 	if(ch == NULL) { \
 		if (dflt_channel == NULL) \
 			if((r = stdlog_init(0)) != 0) \
