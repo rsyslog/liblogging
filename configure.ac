@@ -109,7 +109,7 @@ if test "x$enable_journal" = "xyes"; then
 	PKG_CHECK_MODULES([LIBSYSTEMD_JOURNAL], [libsystemd-journal >= 197])
 fi
 AM_CONDITIONAL(ENABLE_JOURNAL, test x$enable_journal = xyes)
-if test "$enable_stdlog" = "yes"; then
+if test "$enable_journal" = "yes"; then
         AC_DEFINE(ENABLE_JOURNAL, 1, [journal support is integrated.])
 fi
 
