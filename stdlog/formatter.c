@@ -320,7 +320,6 @@ __stdlog_sigsafe_printf(char *buf, size_t lenbuf, const char *fmt, va_list ap)
 			case '%':
 				buf[i++] = '%';
 				break;
-			// TODO: missing float types
 			default:
 				buf[i++] = '?';
 				break;

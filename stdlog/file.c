@@ -55,7 +55,11 @@ build_file_line(stdlog_channel_t ch,
 	__stdlog_fmt_print_str(linebuf, lenline-i, &i, ch->ident);
 	linebuf[i++] = ':';
 	linebuf[i++] = ' ';
-	i += ch->vsnprintf(linebuf+i, lenline-1, fmt, ap);
+	/* note: we do not need to reserve space for '\0', as we
+	 * will overwrite it with the '\n' below. We don't need 
+	 * a string, just a buffer, so we don't need '\0'!
+	 */
+	i += ch->vsnprintf(linebuf+i, lenline-i, fmt, ap);
 	linebuf[i++] = '\n';
 	return i;
 }

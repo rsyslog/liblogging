@@ -4,7 +4,7 @@
 
 int main(int argc, char *argv[])
 {
-	char buf[400];
+	char buf[40];
 	stdlog_channel_t ch;
 	stdlog_channel_t ch2;
 	if(argc != 2) {
