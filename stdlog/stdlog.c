@@ -171,25 +171,6 @@ stdlog_close(stdlog_channel_t ch)
  * Otherwise the semantics are equivalent to syslog().
  */
 int
-stdlog_log_b(stdlog_channel_t ch, const int severity,
-	char *__restrict__ const wrkbuf, const size_t buflen,
-	const char *fmt, ...)
-{
-	va_list ap;
-	int r = 0;
-
-	STDLOG_LOG_READY_CHANNEL
-	va_start(ap, fmt);
-	r = ch->drvr.log(ch, severity, fmt, ap, wrkbuf, buflen);
-done:	return r;
-}
-
-/* Log a message to the specified channel. If channel is NULL,
- * use the default channel (which always exists).
- * Returns 0 on success or a standard (negative) error code.
- * Otherwise the semantics are equivalent to syslog().
- */
-int
 stdlog_vlog(stdlog_channel_t ch,
 	const int severity, const char *fmt, va_list ap)
 {
@@ -201,8 +182,21 @@ stdlog_vlog(stdlog_channel_t ch,
 done:	return r;
 }
 
-/* Equivalent to stdlog_vlog(), except that it takes multiple
- * arguments.
+/* Same as stdlog_vlog() except that a buffer can be provided
+ */
+int
+stdlog_vlog_b(stdlog_channel_t ch, const int severity,
+	char *__restrict__ const wrkbuf, const size_t buflen,
+	const char *fmt, va_list ap)
+{
+	int r = 0;
+
+	STDLOG_LOG_READY_CHANNEL
+	r = ch->drvr.log(ch, severity, fmt, ap, wrkbuf, buflen);
+done:	return r;
+}
+
+/* Same as stdlog_vlog(), except that it takes multiple arguments.
  */
 int
 stdlog_log(stdlog_channel_t ch,
@@ -212,3 +206,16 @@ stdlog_log(stdlog_channel_t ch,
 	va_start(ap, fmt);
 	return stdlog_vlog(ch, severity, fmt, ap);
 }
+
+/* Same as stdlog_vlog_b(), except that it takes multiple arguments.
+ */
+int
+stdlog_log_b(stdlog_channel_t ch, const int severity,
+	char *__restrict__ const wrkbuf, const size_t buflen,
+	const char *fmt, ...)
+{
+	va_list ap;
+	va_start(ap, fmt);
+	return stdlog_vlog_b(ch, severity, wrkbuf, buflen, fmt, ap);
+}
+

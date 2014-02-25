@@ -4,7 +4,7 @@
 
 int main(int argc, char *argv[])
 {
-	char buf[40];
+	char buf[400];
 	stdlog_channel_t ch;
 	if(argc != 2) {
 		fprintf(stderr, "Usage: tester channelspec\n");
