@@ -51,16 +51,16 @@ build_file_line(stdlog_channel_t ch,
 
 	__stdlog_timesub(&t, 0, &tm);
 	i += __stdlog_formatTimestamp3164(&tm, linebuf+i);
-	linebuf[i++] = ' ';
+	__STDLOG_STRBUILD_ADD_CHAR(linebuf, lenline, i, ' ');
 	__stdlog_fmt_print_str(linebuf, lenline-i, &i, ch->ident);
-	linebuf[i++] = ':';
-	linebuf[i++] = ' ';
+	__STDLOG_STRBUILD_ADD_CHAR(linebuf, lenline, i, ':');
+	__STDLOG_STRBUILD_ADD_CHAR(linebuf, lenline, i, ' ');
 	/* note: we do not need to reserve space for '\0', as we
 	 * will overwrite it with the '\n' below. We don't need 
 	 * a string, just a buffer, so we don't need '\0'!
 	 */
 	i += ch->vsnprintf(linebuf+i, lenline-i, fmt, ap);
-	linebuf[i++] = '\n';
+	linebuf[i++] = '\n'; /* space reserved -- see above */
 	return i;
 }
 

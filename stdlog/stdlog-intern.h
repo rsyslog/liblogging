@@ -57,6 +57,16 @@ struct stdlog_channel {
 	} d;	/* driver-specific data */
 };
 
+/* A useful macro for adding single chars during string building. It ensures
+ * that the target buffer is not overrun. The index idx must be an lvalue and
+ * must point to the location where the character is to be inserted. If there
+ * is sufficient space left, to char is inserted and the index incremented.
+ * Otherwise, no updates happen.
+ */
+#define __STDLOG_STRBUILD_ADD_CHAR(buf, lenbuf, idx, c) \
+	if(idx < (int) (lenbuf)) { \
+		buf[(idx)++] = c; \
+	}
 
 int __stdlog_formatTimestamp3164(const struct tm *const tm, char *const  buf);
 struct tm * __stdlog_timesub(const time_t * timep, const long offset, struct tm *tmp);
