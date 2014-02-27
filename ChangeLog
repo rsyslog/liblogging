@@ -1,4 +1,9 @@
 ----------------------------------------------------------------------------
+v1.0.2 2014-02-??
+- first version of the "real" API of liblogging-stdlog
+  It is now feature-complete with multiple channels, signal-safeness, and
+  logging drivers for syslog, the systemd journal, unix sockets and files.
+----------------------------------------------------------------------------
 v1.0.1 2014-02-10
 - rfc3195 component now 2-clause BSD licensed
   This means the complete liblogging is now under 2-clause BSD
