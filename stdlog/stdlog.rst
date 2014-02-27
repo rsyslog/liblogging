@@ -55,8 +55,8 @@ It must only be called once during the lifetime of a process. If no
 special options are desired, stdlog_init() is optional. If it is not
 called, the first call to any of the other calls will initiate it.
 This feature is primarily for backward compatibility with how the
-legacy **syslog(3)** API worked. It does not play well with multithreaded
-applications. With them, call stdlog_init() explicitely from the
+legacy **syslog(3)** API worked. It does not play well with multi-threaded
+applications. With them, call stdlog_init() explicitly from the
 startup thread. The parameter *options* contains one or more of
 the library options specified in their own section below.
 
@@ -78,7 +78,7 @@ them. In general, you can think of it as being equivalent to the
 given in *options* controls handling of the channel. It can be used to
 override options set during **stdlog_init()**. Note that for signal-safeness
 you need to specify **STDLOG_SIGSAFE**. The *facility* field contains a
-facility similar to the tradtional syslog facility. Again, it is 
+facility similar to the traditional syslog facility. Again, it is 
 driver-dependent on how this field is actually used. The *channelspec*
 filed is a **channel specification** string, which allows to control
 the destination of this channel. To use the default output channel
@@ -87,7 +87,7 @@ if there is no pressing need to do otherwise.
 
 **stdlog_close()** is used to close the associated channel. The channel
 specifier must not be used after *stdlog_close()* has been called. If done
-so, unpredictable behaviour will happen, as the memory it points to has
+so, unpredictable behavior will happen, as the memory it points to has
 been free'ed.
 
 **stdlog_log()** is the equivalent to the **syslog(3)** call. It offers a
@@ -133,7 +133,7 @@ This must be called only after **stdlog_init()** has been called.
 
 OPTIONS
 =======
-Options modify library behaviour. They can be specified in **stdlog_init()**
+Options modify library behavior. They can be specified in **stdlog_init()**
 and **stdlog_open()** calls. The **stdlog_init()** call is used to set
 default options. These are applied if channels are automatically created or
 the *STDLOG_USE_DFLT_OPTS* option is used in **stdlog_open()**. Otherwise,
@@ -153,7 +153,7 @@ The following options can be given:
 
 FACILITIES
 ==========
-The following facilities are supported. Please note that they are mimiced
+The following facilities are supported. Please note that they are mimicked
 after the traditional syslog facilities, but liblogging-stdlog uses
 different numerical values. This is necessary to provide future enhancements.
 Do **not** use the LOG_xxx #defines from syslog.h but the following
@@ -184,15 +184,15 @@ STDLOG_xxx defines:
    STDLOG_LOCAL7   - reserved for application use
 
 Regular applications should use facilities in the **STDLOG_LOCALx**
-range. Non-priviledged applications may not be able to use
-all of the system-defined facilites. Note that it is also safe to
-refer to applicaton specific facilities via
+range. Non-privileged applications may not be able to use
+all of the system-defined facilities. Note that it is also safe to
+refer to application specific facilities via
 
 ::
 
    STDLOG_LOCAL0 + offset
 
-if offest is in the range of 0 to 7.
+if offset is in the range of 0 to 7.
 
 SEVERITY
 ========
@@ -244,9 +244,9 @@ For **stdlog_log_b()** and **stdlog_vlog_b()** the caller must also ensure
 that the provided formatting
 buffer supports the desired thread- and signal-safeness. For example, if a
 static buffer is used, thread-safeness is not given. For signal-safeness,
-typcially a buffer allocted on the signal handler's stack is needed.
+typically a buffer allocated on the signal handler's stack is needed.
 
-For multithreaded applications, it is **highly recommended** to initialize
+For multi-threaded applications, it is **highly recommended** to initialize
 the library via **stdlog_init()** on the main thread **before** any other
 threads are started.
 
@@ -283,8 +283,8 @@ It has the following restrictions:
   p, c, f** (where **f** is always formatted as "%.2f")
 * only the following control character escapes are supported:
   **\\n, \\r, \\t, \\\\**.
-  Please note that it is **not** advisible to include control characters
-  in log records. Log drivers and log backend systems may remove them.
+  Please note that it is **not** advisable to include control characters
+  in log records. Log drivers and log back-end systems may remove them.
 
 CHANNEL SPECIFICATIONS
 ======================
@@ -304,7 +304,7 @@ environment variable.
 
 Not all output channel drivers are available on all platforms. For example,
 the "journal:" driver is not available on BSD. It is highly suggested that
-application developers **never** hardcode any channel specifiers inside
+application developers **never** hard-code any channel specifiers inside
 their code but rather permit the administrator to configure these. If there
 is no pressing need to select different channel drivers, it is suggested
 to rely on the default channel spec, which always can be set by the
