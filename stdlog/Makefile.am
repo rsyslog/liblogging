@@ -1,4 +1,3 @@
-EXTRA_DIST =
 CLEANFILES =
 
 lib_LTLIBRARIES = liblogging-stdlog.la
@@ -11,6 +10,9 @@ liblogging_stdlog_la_SOURCES = \
 	file.c \
 	formatter.c \
 	timeutils.c
+EXTRA_DIST = stdlog-intern.h \
+	stdlog.rst \
+	stdlogctl.rst
 
 pkginclude_HEADERS = \
 	stdlog.h
