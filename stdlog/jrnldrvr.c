@@ -27,6 +27,7 @@
 #include "config.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdarg.h>
 #include <stdint.h>
 #include <errno.h>
 #include <systemd/sd-journal.h>

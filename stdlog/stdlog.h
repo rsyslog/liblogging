@@ -28,6 +28,8 @@
 #ifndef LIBLOGGING_STDLOG_H_INCLUDED
 #define LIBLOGGING_STDLOG_H_INCLUDED
 #include <stdint.h>
+#include <stdlib.h>
+#include <stdarg.h>
 
 /* options for stdlog_open() call */
 #define STDLOG_SIGSAFE 1	/* enforce signal-safe implementation */
