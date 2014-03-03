@@ -3,6 +3,9 @@ CLEANFILES =
 lib_LTLIBRARIES = liblogging-stdlog.la
 liblogging_stdlog_la_CPPFLAGS =
 liblogging_stdlog_la_LIBADD =  $(SOL_LIBS)
+liblogging_stdlog_la_LDFLAGS = \
+	-version-info 0:0:0 \
+	-export-symbols-regex '(^stdlog_.*)'
 
 liblogging_stdlog_la_SOURCES = \
 	stdlog.c \
