@@ -1,4 +1,9 @@
 ----------------------------------------------------------------------------
+v1.0.3 2014-03-??
+- fix build problem in Ubuntu 10.04
+  Thanks to Assaf Gordon for reporting
+  See: https://github.com/rsyslog/liblogging/issues/11
+----------------------------------------------------------------------------
 v1.0.2 2014-03-03
 - first version of the "real" API of liblogging-stdlog
   It is now feature-complete with multiple channels, signal-safeness, and
