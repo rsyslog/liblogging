@@ -127,8 +127,8 @@ AC_ARG_ENABLE(cached_man_pages,
 )
 if test "x$enable_cached_man_pages" = "xno"; then
 # obtain path for rst2man
-    AC_PATH_PROG([RST2MAN], [rst2man])
-    if test "x${RST2MAN}" == "x"; then
+    AC_PATH_PROGS([RST2MAN], [rst2man rst2man.py], "no")
+    if test "x${RST2MAN}" == "xno"; then
         AC_MSG_FAILURE([rst2man not found in PATH])
     fi
 fi
