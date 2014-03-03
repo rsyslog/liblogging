@@ -3,6 +3,10 @@ v1.0.2 2014-03-03
 - first version of the "real" API of liblogging-stdlog
   It is now feature-complete with multiple channels, signal-safeness, and
   logging drivers for syslog, the systemd journal, unix sockets and files.
+  Note: if the journal driver is to be build (enabled by default), a new
+  dependency libsystemd-journal exists. This is the required to use the
+  journal API. You can turn off building the journal driver via the
+  --disable-journal configure option.
 ----------------------------------------------------------------------------
 v1.0.1 2014-02-10
 - rfc3195 component now 2-clause BSD licensed
