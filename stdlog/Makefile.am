@@ -2,6 +2,7 @@ CLEANFILES =
 
 lib_LTLIBRARIES = liblogging-stdlog.la
 liblogging_stdlog_la_CPPFLAGS =
+liblogging_stdlog_la_CFLAGS = ${AM_CFLAGS}
 liblogging_stdlog_la_LIBADD =  $(SOL_LIBS)
 liblogging_stdlog_la_LDFLAGS = \
 	-version-info 0:0:0 \
@@ -32,6 +33,7 @@ tester_LDADD = liblogging-stdlog.la $(SOL_LIBS)
 bin_PROGRAMS += stdlogctl
 stdlogctl_SOURCES = stdlogctl.c
 stdlogctl_CPPFLAGS =  
+stdlogctl_la_CFLAGS = ${AM_CFLAGS}
 stdlogctl_LDADD = liblogging-stdlog.la $(SOL_LIBS)
 
 man1_MANS = stdlogctl.1

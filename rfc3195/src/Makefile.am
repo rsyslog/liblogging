@@ -1,5 +1,6 @@
 lib_LTLIBRARIES = liblogging-rfc3195.la
 
+liblogging_rfc3195_la_CFLAGS = ${AM_CFLAGS}
 liblogging_rfc3195_la_SOURCES = \
 	beepchannel.c \
 	beepframe.c \
@@ -27,6 +28,7 @@ os_sources = \
 	socketsUnix.c \
 	socketsWin32.c
 
+
 pkginclude_HEADERS = \
 	liblogging.h \
 	srAPI.h \
@@ -53,9 +55,11 @@ noinst_HEADERS = \
 noinst_PROGRAMS = testsrvr testdrvr
 
 testsrvr_SOURCES = testsrvr.c
+testsrvr_la_CFLAGS = ${AM_CFLAGS}
 testsrvr_LDADD = liblogging-rfc3195.la
 
 testdrvr_SOURCES = testdrvr.c
+testdrvr_la_CFLAGS = ${AM_CFLAGS}
 testdrvr_LDADD = liblogging-rfc3195.la
 
 EXTRA_DIST = $(os_sources)
