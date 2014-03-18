@@ -1,11 +1,15 @@
 ----------------------------------------------------------------------------
-v1.0.3 2014-03-??
+v1.0.3 2014-03-18
 - fix build problem in Ubuntu 10.04
   Thanks to Assaf Gordon for reporting
   See: https://github.com/rsyslog/liblogging/issues/11
 - do not override user varibale CFLAGS
   Thanks to Thomas D. for reporting this problem and suggesting a solution.
   closes: https://github.com/rsyslog/liblogging/issues/15
+- make liblogging-rfc3195 not export private symbols
+  Thanks to Michael Biebl for his help in getting this right.
+- explain that stdlog_log() return code usually most not be checked
+  (if same level of reliability like syslog(3) is desired)
 ----------------------------------------------------------------------------
 v1.0.2 2014-03-03
 - first version of the "real" API of liblogging-stdlog
