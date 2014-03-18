@@ -36,6 +36,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include <stdio.h>
 #include <signal.h>
 #ifdef WIN32
@@ -102,7 +103,7 @@ int main(int argc, char* argv[])
 #	endif
 
 	printf("testsrvr test server - just a quick debuging aid and sample....\n");
-	printf("Compiled with liblogging version %d.%d.%d.\n", LIBLOGGING_VERSION_MAJOR, LIBLOGGING_VERSION_MINOR, LIBLOGGING_VERSION_SUBMINOR);
+	printf("Compiled with liblogging version %s\n", VERSION);
 	printf("See http://www.monitorware.com/liblogging/ for updates.\n");
 	printf("Listening for incoming requests....\n");
 

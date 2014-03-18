@@ -36,6 +36,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include <stdio.h>
 #ifdef WIN32
 #include <process.h>
@@ -70,7 +71,7 @@ int main(int argc, char* argv[])
 #	endif
 
 	printf("Liblogging test driver - just a quick debuging aid and sample....\n");
-	printf("Compiled with liblogging version %d.%d.%d.\n", LIBLOGGING_VERSION_MAJOR, LIBLOGGING_VERSION_MINOR, LIBLOGGING_VERSION_SUBMINOR);
+	printf("Compiled with liblogging version %s\n", VERSION);
 	printf("See http://www.monitorware.com/liblogging/ for updates.\n");
 	if((pAPI = srAPIInitLib()) == NULL)
 	{

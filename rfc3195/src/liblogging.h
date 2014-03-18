@@ -45,6 +45,13 @@ extern "C" {
 
 /** Version of this library. Just a plain integer, incremented each time there
  *  is notable change in the API or functionality.
+ *
+ *  NOTE: we leave this at the level of the last revison of liblogging-rfc3195.
+ *        This is to be incremented only when the interface really changes.
+ *
+ *        In general, these macros are deprecated, but given the state of
+ *        liblogging-rfc3195, where no future development is expected, we do
+ *        not try to break the interface just to clean up things.
  */
 #define LIBLOGGING_VERSION_MAJOR 0
 #define LIBLOGGING_VERSION_MINOR 6
