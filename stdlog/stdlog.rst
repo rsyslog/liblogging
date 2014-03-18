@@ -318,6 +318,23 @@ something else otherwise. **stdlog_open()** returns a channel descriptor
 on success and *NULL* otherwise. In case of failure *errno* is set
 appropriately.
 
+Note that the traditional **syslog(3)** API does not return any success
+state, so any failures are silently ignored. In most cases, this works
+sufficiently reliably. If this level of reliability is sufficient, the
+return code of **stdlog_log()** does not need to be checked. This is
+probably the case for most applications.
+
+If finding out about the success
+of the logging operation is vital to the application, the return code
+can be checked. Note that you must not try to find out the exact failure
+cause. If the return is non-zero, something in the log system did not work
+correctly. It is suggested that the logging operation is re-tried in this
+case, and if it fails again it is suggested that the channel is closed and
+re-opened and then the operation re-tried. During failures, partial records
+may be logged. This is the same what could happen with **syslog(3)**. Again,
+in general it should not be necessary to check the return code of
+**stdlog_log()**.
+
 The **stdlog_deinit()** and **stdlog_close()** calls do not return
 any status.
 
@@ -330,9 +347,8 @@ the **stdlog_log()** call:
 
 ::
 
-    status = stdlog_log(NULL, STDLOG_NOTICE,
-                        "New session %d of user %s",
-                        sessid, username);
+    stdlog_log(NULL, STDLOG_NOTICE, "New session %d of user %s",
+               sessid, username);
 
 Being thread- and signal-safe requires a little bit more of setup:
 
@@ -347,9 +363,8 @@ Being thread- and signal-safe requires a little bit more of setup:
 
 
     /* And do this in threads, signal handlers, etc: */
-    status = stdlog_log(NULL, STDLOG_NOTICE,
-                        "New session %d of user %s",
-                        sessid, username);
+    stdlog_log(NULL, STDLOG_NOTICE, "New session %d of user %s",
+               sessid, username);
 
 If you need just a small formatting buffer (or a large one), you can
 provide the memory yourself:
@@ -357,10 +372,8 @@ provide the memory yourself:
 ::
 
     char buf[512];
-    status = stdlog_log_b(NULL, STDLOG_NOTICE,
-                          buf, sizeof(buf),
-                          "New session %d of user %s",
-                          sessid, username);
+    stdlog_log_b(NULL, STDLOG_NOTICE, buf, sizeof(buf),
+                 "New session %d of user %s", sessid, username);
 
 
 SEE ALSO
