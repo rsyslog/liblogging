@@ -139,7 +139,7 @@ void srSLMGDestroy(srSLMGObj *pThis)
  *             the integer parsed.
  * \retval The number parsed.
  */
-int srSLMGParseInt32(unsigned char** ppsz)
+static int _srSLMGParseInt32(unsigned char** ppsz)
 {
 	int i;
 
@@ -170,7 +170,7 @@ static int srSLMGParsePRI(srSLMGObj* pThis, unsigned char** ppszBuf)
 	++(*ppszBuf);
 
 	/* extract PRI */
-	i = srSLMGParseInt32(ppszBuf);
+	i = _srSLMGParseInt32(ppszBuf);
 
 	if(**ppszBuf != '>')
 		return FALSE;
@@ -191,7 +191,7 @@ static int srSLMGParseTIMESTAMP3339(srSLMGObj* pThis, unsigned char* pszTS)
 	srSLMGCHECKVALIDOBJECT(pThis);
 	assert(pszTS != NULL);
 
-	pThis->iTimStampYear = srSLMGParseInt32(&pszTS);
+	pThis->iTimStampYear = _srSLMGParseInt32(&pszTS);
 	if(pThis->iTimStampYear < 2003 || pThis->iTimStampYear > 9999)
 		/* The lib was written in 2003, so any value below that year is suspicious.
 		 * Of course, this prevents replay of data, but if someone really intends
@@ -206,31 +206,31 @@ static int srSLMGParseTIMESTAMP3339(srSLMGObj* pThis, unsigned char* pszTS)
 	 */
 	if(*pszTS++ != '-')
 		return FALSE;
-	pThis->iTimStampMonth = srSLMGParseInt32(&pszTS);
+	pThis->iTimStampMonth = _srSLMGParseInt32(&pszTS);
 	if(pThis->iTimStampMonth < 1 || pThis->iTimStampMonth > 12)
 		return FALSE;
 
 	if(*pszTS++ != '-')
 		return FALSE;
-	pThis->iTimStampDay = srSLMGParseInt32(&pszTS);
+	pThis->iTimStampDay = _srSLMGParseInt32(&pszTS);
 	if(pThis->iTimStampDay < 1 || pThis->iTimStampDay > 31)
 		return FALSE;
 
 	if(*pszTS++ != 'T')
 		return FALSE;
-	pThis->iTimStampHour = srSLMGParseInt32(&pszTS);
+	pThis->iTimStampHour = _srSLMGParseInt32(&pszTS);
 	if(pThis->iTimStampHour < 0 || pThis->iTimStampHour > 23)
 		return FALSE;
 
 	if(*pszTS++ != ':')
 		return FALSE;
-	pThis->iTimStampMinute = srSLMGParseInt32(&pszTS);
+	pThis->iTimStampMinute = _srSLMGParseInt32(&pszTS);
 	if(pThis->iTimStampMinute < 0 || pThis->iTimStampMinute > 59)
 		return FALSE;
 
 	if(*pszTS++ != ':')
 		return FALSE;
-	pThis->iTimStampSecond = srSLMGParseInt32(&pszTS);
+	pThis->iTimStampSecond = _srSLMGParseInt32(&pszTS);
 	if(pThis->iTimStampSecond < 0 || pThis->iTimStampSecond > 60)
 		return FALSE;
 
@@ -238,7 +238,7 @@ static int srSLMGParseTIMESTAMP3339(srSLMGObj* pThis, unsigned char* pszTS)
 	if(*pszTS == '.')
 	{
 		unsigned char *pszStart = ++pszTS;
-		pThis->iTimStampSecFrac = srSLMGParseInt32(&pszTS);
+		pThis->iTimStampSecFrac = _srSLMGParseInt32(&pszTS);
 		pThis->iTimStampSecFracPrecision = (int) (pszTS - pszStart);
 	}
 	else
@@ -259,13 +259,13 @@ static int srSLMGParseTIMESTAMP3339(srSLMGObj* pThis, unsigned char* pszTS)
 		pThis->cTimStampOffsetMode = *pszTS;
 		pszTS++;
 
-		pThis->iTimStampOffsetHour = srSLMGParseInt32(&pszTS);
+		pThis->iTimStampOffsetHour = _srSLMGParseInt32(&pszTS);
 		if(pThis->iTimStampOffsetHour < 0 || pThis->iTimStampOffsetHour > 23)
 			return FALSE;
 
 		if(*pszTS++ != ':')
 			return FALSE;
-		pThis->iTimStampOffsetMinute = srSLMGParseInt32(&pszTS);
+		pThis->iTimStampOffsetMinute = _srSLMGParseInt32(&pszTS);
 		if(pThis->iTimStampOffsetMinute < 0 || pThis->iTimStampOffsetMinute > 59)
 			return FALSE;
 
@@ -401,25 +401,25 @@ static int srSLMGParseTIMESTAMP3164(srSLMGObj* pThis, unsigned char* pszTS)
 	if(*pszTS == ' ')
 		++pszTS;
 
-	pThis->iTimStampDay = srSLMGParseInt32(&pszTS);
+	pThis->iTimStampDay = _srSLMGParseInt32(&pszTS);
 	if(pThis->iTimStampDay < 1 || pThis->iTimStampDay > 31)
 		return FALSE;
 
 	if(*pszTS++ != ' ')
 		return FALSE;
-	pThis->iTimStampHour = srSLMGParseInt32(&pszTS);
+	pThis->iTimStampHour = _srSLMGParseInt32(&pszTS);
 	if(pThis->iTimStampHour < 0 || pThis->iTimStampHour > 23)
 		return FALSE;
 
 	if(*pszTS++ != ':')
 		return FALSE;
-	pThis->iTimStampMinute = srSLMGParseInt32(&pszTS);
+	pThis->iTimStampMinute = _srSLMGParseInt32(&pszTS);
 	if(pThis->iTimStampMinute < 0 || pThis->iTimStampMinute > 59)
 		return FALSE;
 
 	if(*pszTS++ != ':')
 		return FALSE;
-	pThis->iTimStampSecond = srSLMGParseInt32(&pszTS);
+	pThis->iTimStampSecond = _srSLMGParseInt32(&pszTS);
 	if(pThis->iTimStampSecond < 0 || pThis->iTimStampSecond > 60)
 		return FALSE;
 

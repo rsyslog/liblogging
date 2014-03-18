@@ -1,6 +1,9 @@
 lib_LTLIBRARIES = liblogging-rfc3195.la
 
 liblogging_rfc3195_la_CFLAGS = ${AM_CFLAGS}
+liblogging_rfc3195_la_LDFLAGS = \
+	-version-info 0:0:0 \
+	-export-symbols-regex '(^(srAPI|srSLMG).*)'
 liblogging_rfc3195_la_SOURCES = \
 	beepchannel.c \
 	beepframe.c \
