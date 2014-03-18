@@ -786,52 +786,6 @@ srRetVal srSLMGGetRawMSG(srSLMGObj *pThis, unsigned char**ppsz)
 	return SR_RET_OK;
 }
 
-
-/**
- * Provide the caller back with the message timestamp.
- *
- * The timestamp is provided in separate fields.
- *
- * \param ppsz Pointer to Pointer to unsigned char to 
- *             receive the return string.
- */
-srRetVal srSLMGGetTIMESTAMP(srSLMGObj *pThis, int *piYear, int *piMonth, int *piDay, int *piHour, int *piMinute, int *piSecond, int *piSecFrac,
-							int *piSecFracPrecision, int *piOffsetHour, int *piOffsetMinute, char *pcOffsetMode, int *pbHasTZ)
-{
-	srSLMGCHECKVALIDOBJECT_API(pThis);
-	if(piYear == NULL) return SR_RET_NULL_POINTER_PROVIDED;
-	if(piMonth == NULL) return SR_RET_NULL_POINTER_PROVIDED;
-	if(piDay == NULL) return SR_RET_NULL_POINTER_PROVIDED;
-	if(piHour == NULL) return SR_RET_NULL_POINTER_PROVIDED;
-	if(piMinute == NULL) return SR_RET_NULL_POINTER_PROVIDED;
-	if(piSecond == NULL) return SR_RET_NULL_POINTER_PROVIDED;
-	if(piSecFrac == NULL) return SR_RET_NULL_POINTER_PROVIDED;
-	if(piSecFracPrecision == NULL) return SR_RET_NULL_POINTER_PROVIDED;
-	if(piOffsetHour == NULL) return SR_RET_NULL_POINTER_PROVIDED;
-	if(piOffsetMinute == NULL) return SR_RET_NULL_POINTER_PROVIDED;
-	if(pbHasTZ == NULL) return SR_RET_NULL_POINTER_PROVIDED;
-	if(pcOffsetMode == NULL) return SR_RET_NULL_POINTER_PROVIDED;
-
-	if(!((pThis->iFormat == srSLMGFmt_3164WELLFORMED) || (pThis->iFormat == srSLMGFmt_SIGN_12)))
-		return SR_RET_PROPERTY_NOT_AVAILABLE;
-	
-	*piYear = pThis->iTimStampYear;
-	*piMonth = pThis->iTimStampMonth;
-	*piDay = pThis->iTimStampDay;
-	*piHour = pThis->iTimStampHour;
-	*piMinute = pThis->iTimStampMinute;
-	*piSecond = pThis->iTimStampSecond;
-	*piSecFrac = pThis->iTimStampSecFrac;
-	*piSecFracPrecision = pThis->iTimStampSecFracPrecision;
-	*piOffsetHour = pThis->iTimStampOffsetHour;
-	*piOffsetMinute = pThis->iTimStampOffsetMinute;
-	*pbHasTZ = pThis->bTimStampIncludesTZ;
-	*pcOffsetMode = pThis->cTimStampOffsetMode;
-
-	return SR_RET_OK;
-}
-
-
 srRetVal srSLMGSetRemoteHostIP(srSLMGObj *pThis, char *pszRemHostIP, int bCopyRemHost)
 {
 	srSLMGCHECKVALIDOBJECT_API(pThis);
