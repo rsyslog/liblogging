@@ -114,25 +114,38 @@ if test "$enable_journal" = "yes"; then
         AC_DEFINE(ENABLE_JOURNAL, 1, [journal support is integrated.])
 fi
 
-AC_CHECKING([if all man pages already exist])
-have_to_generate_man_pages="no"
-AC_CHECK_FILES(["stdlog/stdlog.3" "stdlog/stdlogctl.1"],
-    [],
-    [have_to_generate_man_pages="yes"]
+# should man pages be provided?
+AC_ARG_ENABLE(man-pages,
+        [AS_HELP_STRING([--enable-man-pages],[man-pages support @<:@default=yes@:>@])],
+        [case "${enableval}" in
+         yes) enable_man_pages="yes" ;;
+          no) enable_man_pages="no" ;;
+           *) AC_MSG_ERROR(bad value ${enableval} for --enable-man-pages) ;;
+         esac],
+        [enable_man_pages="yes"]
 )
-if test "x$have_to_generate_man_pages" = "xyes"; then
-    AC_MSG_RESULT([Some man pages are missing. We need rst2man to generate the missing man pages from source...])
-else
-    AC_MSG_RESULT([All man pages found. We don't need rst2man!])
-fi
+if test "x$enable_man_pages" = "xyes"; then
+	AC_CHECKING([if all man pages already exist])
+	have_to_generate_man_pages="no"
+	AC_CHECK_FILES(["stdlog/stdlog.3" "stdlog/stdlogctl.1"],
+	    [],
+	    [have_to_generate_man_pages="yes"]
+	)
+	if test "x$have_to_generate_man_pages" = "xyes"; then
+	    AC_MSG_RESULT([Some man pages are missing. We need rst2man to generate the missing man pages from source... Alternatively, use --disable-man-pages to build without them.])
+	else
+	    AC_MSG_RESULT([All man pages found. We don't need rst2man!])
+	fi
 
-if test "x$have_to_generate_man_pages" = "xyes"; then
-    # We need rst2man to generate our man pages
-    AC_CHECK_PROGS([RST2MAN], [rst2man rst2man.py], [])
-    if test -z "$RST2MAN"; then
-        AC_MSG_ERROR([rst2man is required to build man pages. You can use the release tarball with pregenerated man pages to avoid this depedency.])
-    fi
+	if test "x$have_to_generate_man_pages" = "xyes"; then
+ 	    # We need rst2man to generate our man pages
+	    AC_CHECK_PROGS([RST2MAN], [rst2man rst2man.py], [])
+	    if test -z "$RST2MAN"; then
+	        AC_MSG_ERROR([rst2man is required to build man pages. You can use the release tarball with pregenerated man pages to avoid this depedency. Alternatively, use --disable-man-pages to build without them.])
+	    fi
+	fi
 fi
+AM_CONDITIONAL(ENABLE_MAN_PAGES, test x$enable_man_pages = xyes)
 
 AC_CONFIG_FILES([Makefile \
                  rfc3195/liblogging-rfc3195.pc \
@@ -149,5 +162,8 @@ echo
 echo "stdlog support enabled:               $enable_stdlog"
 echo "systemd journal support:              $enable_journal"
 echo "rfc3195 support enabled:              $enable_rfc3195"
+echo "enable man pages:                     $enable_man_pages"
+if test "x$enable_man_pages" = "xyes"; then
 echo "have to generate man pages:           $have_to_generate_man_pages"
+fi
 echo "********************************************************"

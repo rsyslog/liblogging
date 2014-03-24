@@ -1,4 +1,10 @@
 ----------------------------------------------------------------------------
+v1.0.4 2014-03-??
+- add --disable-man pages ./configure option
+  This permits to totally turn off man page handling. This is useful for
+  platforms like RHEL/CENTOS 5 where rst2man is hard to get when building
+  from git is desired.
+----------------------------------------------------------------------------
 v1.0.3 2014-03-18
 - fix build problem in Ubuntu 10.04
   Thanks to Assaf Gordon for reporting
