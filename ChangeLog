@@ -4,6 +4,8 @@ v1.0.4 2014-03-??
   This permits to totally turn off man page handling. This is useful for
   platforms like RHEL/CENTOS 5 where rst2man is hard to get when building
   from git is desired.
+- lower build system requirements to autoconf 2.59
+  This permits building on RHEL/CENTOs 5 with stock autotools.
 ----------------------------------------------------------------------------
 v1.0.3 2014-03-18
 - fix build problem in Ubuntu 10.04
