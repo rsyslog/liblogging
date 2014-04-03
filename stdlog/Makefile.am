@@ -36,6 +36,13 @@ stdlogctl_CPPFLAGS =
 stdlogctl_la_CFLAGS = ${AM_CFLAGS}
 stdlogctl_LDADD = liblogging-stdlog.la $(SOL_LIBS)
 
+if ENABLE_JOURNAL
+   liblogging_stdlog_la_LIBADD +=  $(LIBSYSTEMD_JOURNAL_LIBS)
+   liblogging_stdlog_la_SOURCES += jrnldrvr.c
+   # tester_LDADD +=  $(LIBSYSTEMD_JOURNAL_LIBS)
+endif
+
+if ENABLE_MAN_PAGES
 man1_MANS = stdlogctl.1
 CLEANFILES += stdlogctl.1
 EXTRA_DIST += stdlogctl.1
@@ -49,9 +56,4 @@ stdlogctl.1: stdlogctl.rst
 
 stdlog.3: stdlog.rst
 	$(AM_V_GEN) $(RST2MAN) $< $@
-
-if ENABLE_JOURNAL
-   liblogging_stdlog_la_LIBADD +=  $(LIBSYSTEMD_JOURNAL_LIBS)
-   liblogging_stdlog_la_SOURCES += jrnldrvr.c
-   # tester_LDADD +=  $(LIBSYSTEMD_JOURNAL_LIBS)
 endif
