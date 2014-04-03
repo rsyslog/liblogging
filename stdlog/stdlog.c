@@ -152,7 +152,7 @@ stdlog_open(const char *ident, const int option, const int facility, const char 
 	ch->facility = facility;
 
 	/* formatting driver selection */
-	ch->vsnprintf = (ch->options & STDLOG_SIGSAFE)
+	ch->f_vsnprintf = (ch->options & STDLOG_SIGSAFE)
 	                    ? __stdlog_sigsafe_printf : __stdlog_wrapper_vsnprintf;
 
 	/* output driver selection */

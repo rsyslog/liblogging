@@ -45,7 +45,7 @@ jrnl_log(stdlog_channel_t ch, const int severity,
 	char *__restrict__ const wrkbuf, const size_t buflen)
 {
 	int r;
-	ch->vsnprintf(wrkbuf, buflen, fmt, ap);
+	ch->f_vsnprintf(wrkbuf, buflen, fmt, ap);
 	r = sd_journal_send("MESSAGE=%s", wrkbuf,
                 "PRIORITY=%d", severity,
                 NULL);

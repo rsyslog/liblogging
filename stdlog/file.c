@@ -59,7 +59,7 @@ build_file_line(stdlog_channel_t ch,
 	 * will overwrite it with the '\n' below. We don't need 
 	 * a string, just a buffer, so we don't need '\0'!
 	 */
-	i += ch->vsnprintf(linebuf+i, lenline-i, fmt, ap);
+	i += ch->f_vsnprintf(linebuf+i, lenline-i, fmt, ap);
 	linebuf[i++] = '\n'; /* space reserved -- see above */
 	return i;
 }

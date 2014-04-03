@@ -1,4 +1,7 @@
 ----------------------------------------------------------------------------
+v1.0.4 2014-04-02
+- fix build problems on some platforms (namely RHEL/CENTOS 5)
+----------------------------------------------------------------------------
 v1.0.3 2014-03-18
 - fix build problem in Ubuntu 10.04
   Thanks to Assaf Gordon for reporting

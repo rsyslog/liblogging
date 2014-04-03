@@ -37,7 +37,7 @@ struct stdlog_channel {
 	int32_t options;
 	int facility;
 	char *fmtbuf;
-	int (*vsnprintf)(char *str, size_t size, const char *fmt, va_list ap);
+	int (*f_vsnprintf)(char *str, size_t size, const char *fmt, va_list ap);
 	struct {
 		void (*init)(stdlog_channel_t ch); /* initialize driver */
 		void (*open)(stdlog_channel_t ch);
