@@ -127,10 +127,9 @@ AC_ARG_ENABLE(man-pages,
 if test "x$enable_man_pages" = "xyes"; then
 	AC_CHECKING([if all man pages already exist])
 	have_to_generate_man_pages="no"
-	AC_CHECK_FILES(["stdlog/stdlog.3" "stdlog/stdlogctl.1"],
-	    [],
-	    [have_to_generate_man_pages="yes"]
-	)
+	if test ! -r "stdlog/stdlog.3" || test ! -r "stdlog/stdlogctl.1"; then
+		have_to_generate_man_pages="yes"
+	fi
 	if test "x$have_to_generate_man_pages" = "xyes"; then
 	    AC_MSG_RESULT([Some man pages are missing. We need rst2man to generate the missing man pages from source... Alternatively, use --disable-man-pages to build without them.])
 	else
