@@ -70,7 +70,7 @@ developer wants. We want to keep this but improve it to
 * provide an interface for structured logging - but only if there
   is a real demand for it (to be seen based on feedback)
 
-Libloging's goal is also to be a very slim library without any notable memory
+Liblogging's goal is also to be a very slim library without any notable memory
 or performance footprint (and also simple and small code).
 
 Note to packagers
