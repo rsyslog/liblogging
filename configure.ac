@@ -107,7 +107,9 @@ AC_ARG_ENABLE(journal,
         [enable_journal="yes"]
 )
 if test "x$enable_journal" = "xyes"; then
-	PKG_CHECK_MODULES([LIBSYSTEMD_JOURNAL], [libsystemd-journal >= 197])
+	PKG_CHECK_MODULES([LIBSYSTEMD_JOURNAL], [libsystemd >= 209] ,, [
+	    PKG_CHECK_MODULES([LIBSYSTEMD_JOURNAL], [libsystemd-journal >= 197])
+	])
 fi
 AM_CONDITIONAL(ENABLE_JOURNAL, test x$enable_journal = xyes)
 if test "$enable_journal" = "yes"; then
