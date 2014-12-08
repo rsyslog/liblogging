@@ -39,7 +39,8 @@ stdlogctl_LDADD = liblogging-stdlog.la $(SOL_LIBS)
 if ENABLE_JOURNAL
    liblogging_stdlog_la_LIBADD +=  $(LIBSYSTEMD_JOURNAL_LIBS)
    liblogging_stdlog_la_SOURCES += jrnldrvr.c
-   # tester_LDADD +=  $(LIBSYSTEMD_JOURNAL_LIBS)
+   tester_LDADD +=  $(LIBSYSTEMD_JOURNAL_LIBS)
+   stdlogctl_LDADD +=  $(LIBSYSTEMD_JOURNAL_LIBS)
 endif
 
 if ENABLE_MAN_PAGES
