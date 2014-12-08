@@ -50,9 +50,9 @@ __stdlog_formatTimestamp3164(const struct tm *__restrict__ const tm,
 	buf[1] = monthNames[tm->tm_mon][1];
 	buf[2] = monthNames[tm->tm_mon][2];
 	buf[3] = ' ';
-	iDay = (tm->tm_wday / 10) % 10; /* we need to write a space if the first digit is 0 */
+	iDay = (tm->tm_mday / 10) % 10; /* we need to write a space if the first digit is 0 */
 	buf[4] = (iDay > 0) ? iDay + '0' : ' ';
-	buf[5] = tm->tm_wday % 10 + '0';
+	buf[5] = tm->tm_mday % 10 + '0';
 	buf[6] = ' ';
 	buf[7] = (tm->tm_hour / 10) % 10 + '0';
 	buf[8] = tm->tm_hour % 10 + '0';
