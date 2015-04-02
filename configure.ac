@@ -11,6 +11,7 @@ m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 AC_CONFIG_MACRO_DIR([m4])
 
 # Checks for programs.
+PKG_PROG_PKG_CONFIG
 AC_PROG_CC
 AC_PROG_LIBTOOL
 AM_PROG_CC_C_O
@@ -98,14 +99,23 @@ fi
 # journal support to be added
 # if so, this enables the journal driver in liblogging-stdlog
 AC_ARG_ENABLE(journal,
-        [AS_HELP_STRING([--enable-journal],[systemd journal support @<:@default=yes@:>@])],
+        [AS_HELP_STRING([--enable-journal],[systemd journal support (yes/no/auto) @<:@default=auto@:>@])],
         [case "${enableval}" in
+         auto) enable_journal="auto" ;;
          yes) enable_journal="yes" ;;
           no) enable_journal="no" ;;
            *) AC_MSG_ERROR(bad value ${enableval} for --enable-journal) ;;
          esac],
-        [enable_journal="yes"]
+        [enable_journal="auto"]
 )
+if test "x$enable_journal" = "xauto"; then
+    PKG_CHECK_MODULES([LIBSYSTEMD_JOURNAL], [libsystemd >= 209] ,, [
+	    PKG_CHECK_MODULES([LIBSYSTEMD_JOURNAL], [libsystemd-journal >= 197] ,,  [
+	        AC_MSG_RESULT([journal libraries not found, assuming this system is not using systemd journal. Disabling the journal driver.])
+	    	enable_journal="no"
+	    ])
+	])
+fi
 if test "x$enable_journal" = "xyes"; then
 	PKG_CHECK_MODULES([LIBSYSTEMD_JOURNAL], [libsystemd >= 209] ,, [
 	    PKG_CHECK_MODULES([LIBSYSTEMD_JOURNAL], [libsystemd-journal >= 197])

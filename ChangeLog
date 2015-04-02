@@ -1,5 +1,9 @@
 ----------------------------------------------------------------------------
 v1.0.6 2015-??-??
+- build system: auto-detect presence of journal libraries
+  simplifies build for most users. Many complained on mailing list
+  about missing journal dependency. Now by default we disable it if
+  the libs are not found, what usually is the right thing to do.
 ----------------------------------------------------------------------------
 v1.0.5 2014-12-09
 - cleanup for systemd-journal >= 209
