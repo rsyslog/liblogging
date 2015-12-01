@@ -164,11 +164,12 @@ void
 __stdlog_fmt_print_str (char *__restrict__ const buf, const size_t lenbuf,
 	int *__restrict__ const idx, const char *const str)
 {
+	const char *const strornull = str ? str : "(null)";
 	int i = *idx;
 	int j = 0;
 
-	while(i < (int) lenbuf && str[j])
-		buf[i++] = str[j++];
+	while(i < (int) lenbuf && strornull[j])
+		buf[i++] = strornull[j++];
 	*idx = i;
 }
 
