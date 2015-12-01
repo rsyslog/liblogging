@@ -186,7 +186,7 @@ __stdlog_sigsafe_printf(char *buf, size_t lenbuf, const char *fmt, va_list ap)
 	int precision;
 	int i = 0;
 	double dbl;
-	enum {LMOD_LONG, LMOD_LONG_LONG,
+	enum {LMOD_NONE, LMOD_LONG, LMOD_LONG_LONG,
 	      LMOD_SIZE_T, LMOD_SHORT, LMOD_CHAR} length_modifier;
 
 	--lenbuf; /* reserve for terminal \0 */
@@ -235,7 +235,7 @@ __stdlog_sigsafe_printf(char *buf, size_t lenbuf, const char *fmt, va_list ap)
 			}
 		
 			/* length modifiers */
-			length_modifier = 0;
+			length_modifier = LMOD_NONE;
 			switch(*fmt) {
 			case '\0':
 				goto done;
