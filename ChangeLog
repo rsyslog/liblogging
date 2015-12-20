@@ -1,5 +1,10 @@
 ----------------------------------------------------------------------------
 v1.0.6 2015-??-??
+- bugfix: potentialSEGV in the stdlog_sigsafe_string formatter
+  if NULL pointer was passed in
+  Thanks to David A. Bright for the patch
+- bugfix: stdlog_sigsafe_printf mis-handles an int or unsigned int
+  Thanks to David A. Bright for the patch
 - build system: auto-detect presence of journal libraries
   simplifies build for most users. Many complained on mailing list
   about missing journal dependency. Now by default we disable it if
