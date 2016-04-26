@@ -188,7 +188,8 @@ __stdlog_sigsafe_printf(char *buf, size_t lenbuf, const char *fmt, va_list ap)
 	int i = 0;
 	double dbl;
 	enum {LMOD_NONE, LMOD_LONG, LMOD_LONG_LONG,
-	      LMOD_SIZE_T, LMOD_SHORT, LMOD_CHAR} length_modifier;
+	      LMOD_SIZE_T, LMOD_SHORT, LMOD_CHAR,
+	      LMOD_INTMAX_T} length_modifier;
 
 	--lenbuf; /* reserve for terminal \0 */
 	while(*fmt && i < (int) lenbuf) {
@@ -258,6 +259,10 @@ __stdlog_sigsafe_printf(char *buf, size_t lenbuf, const char *fmt, va_list ap)
 					length_modifier = LMOD_SHORT;
 				}
 				break;
+			case 'j':
+				++fmt;
+				length_modifier = LMOD_INTMAX_T;
+				break;
 			case 'z':
 				++fmt;
 				length_modifier = LMOD_SIZE_T;
@@ -281,6 +286,8 @@ __stdlog_sigsafe_printf(char *buf, size_t lenbuf, const char *fmt, va_list ap)
 					d = va_arg(ap, long);
 				else if (length_modifier == LMOD_SIZE_T)
 					d = va_arg(ap, ssize_t);
+				else if (length_modifier == LMOD_INTMAX_T)
+					d = va_arg(ap, intmax_t);
 				else
 					d = va_arg(ap, int);
 				__stdlog_fmt_print_int(buf, lenbuf, &i, d); 
@@ -294,6 +301,8 @@ __stdlog_sigsafe_printf(char *buf, size_t lenbuf, const char *fmt, va_list ap)
 					u = va_arg(ap, unsigned long);
 				else if (length_modifier == LMOD_SIZE_T)
 					u = va_arg(ap, size_t);
+				else if (length_modifier == LMOD_INTMAX_T)
+					u = va_arg(ap, uintmax_t);
 				else
 					u = va_arg(ap, unsigned);
 				if(*fmt == 'u')
