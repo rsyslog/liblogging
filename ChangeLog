@@ -1,5 +1,7 @@
 ----------------------------------------------------------------------------
 v1.0.6 2015-??-??
+- enhancement:  sigsafe_printf now recognizes the "j" length modifier
+  Thanks to David A. Bright for implementing this
 - bugfix: potentialSEGV in the stdlog_sigsafe_string formatter
   if NULL pointer was passed in
   Thanks to David A. Bright for the patch
