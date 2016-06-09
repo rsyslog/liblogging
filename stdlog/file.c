@@ -53,6 +53,11 @@ build_file_line(stdlog_channel_t ch,
 	i += __stdlog_formatTimestamp3164(&tm, linebuf+i);
 	__STDLOG_STRBUILD_ADD_CHAR(linebuf, lenline, i, ' ');
 	__stdlog_fmt_print_str(linebuf, lenline-i, &i, ch->ident);
+	if (ch->options & STDLOG_PID) {
+		__STDLOG_STRBUILD_ADD_CHAR(linebuf, lenline, i, '[');
+		__stdlog_fmt_print_int(linebuf, lenline, &i, getpid());
+		__STDLOG_STRBUILD_ADD_CHAR(linebuf, lenline, i, ']');
+	}
 	__STDLOG_STRBUILD_ADD_CHAR(linebuf, lenline, i, ':');
 	__STDLOG_STRBUILD_ADD_CHAR(linebuf, lenline, i, ' ');
 	/* note: we do not need to reserve space for '\0', as we

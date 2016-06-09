@@ -61,6 +61,11 @@ build_syslog_frame(stdlog_channel_t ch,
 	i += __stdlog_formatTimestamp3164(&tm, frame+i);
 	__STDLOG_STRBUILD_ADD_CHAR(frame, lenframe, i, ' ');
 	__stdlog_fmt_print_str(frame, lenframe-i, &i, ch->ident);
+	if (ch->options & STDLOG_PID) {
+		__STDLOG_STRBUILD_ADD_CHAR(frame, lenframe, i, '[');
+		__stdlog_fmt_print_int(frame, lenframe, &i, getpid());
+		__STDLOG_STRBUILD_ADD_CHAR(frame, lenframe, i, ']');
+	}
 	__STDLOG_STRBUILD_ADD_CHAR(frame, lenframe, i, ':');
 	__STDLOG_STRBUILD_ADD_CHAR(frame, lenframe, i, ' ');
 	i += ch->f_vsnprintf(frame+i, lenframe-i, fmt, ap);

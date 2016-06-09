@@ -33,6 +33,7 @@
 
 /* options for stdlog_open() call */
 #define STDLOG_SIGSAFE 1	/* enforce signal-safe implementation */
+#define STDLOG_PID     2	/* log the PID with each message */
 #define STDLOG_USE_DFLT_OPTS ((int)0x80000000)	/* use default options */
 
 /* traditional syslog facility codes */
