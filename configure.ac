@@ -146,9 +146,6 @@ if test "$enable_journal" = "yes"; then
         AC_DEFINE(ENABLE_JOURNAL, 1, [journal support is integrated.])
 fi
 
-if test "$unamestr" = "AIX"; then
-	enable_man_pages="no"
-fi
 # should man pages be provided?
 AC_ARG_ENABLE(man-pages,
         [AS_HELP_STRING([--enable-man-pages],[man-pages support @<:@default=yes@:>@])],
