@@ -53,8 +53,8 @@ CLEANFILES += stdlog.3
 EXTRA_DIST += stdlog.3
 
 stdlogctl.1: stdlogctl.rst
-	$(AM_V_GEN) $(RST2MAN) $< $@
+	$(AM_V_GEN) $(RST2MAN) stdlogctl.rst $@
 
 stdlog.3: stdlog.rst
-	$(AM_V_GEN) $(RST2MAN) $< $@
+	$(AM_V_GEN) $(RST2MAN) stdlog.rst $@
 endif
