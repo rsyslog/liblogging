@@ -4,6 +4,21 @@
 AC_PREREQ(2.61)
 AC_INIT([liblogging], [1.0.6.master], [rgerhards@hq.adiscon.com])
 AM_INIT_AUTOMAKE
+# AIXPORT START: Detect the underlying OS
+unamestr=$(uname)
+AM_CONDITIONAL([AIX], [test x$unamestr = xAIX])
+# AIXPORT : Set the required variables for AIX config script
+if test "$unamestr" = "AIX"; then
+	export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:/usr/lib/pkgconfig"
+	CC=xlc
+	CFLAGS="-qcpluscmt"
+	CPPFLAGS="-D_AIX -D_BSD=43 -D_THREAD_SAFE"
+	LIBS="-lbsd "
+	LDFLAGS="-brtl -bexpall"
+	AC_PREFIX_DEFAULT(/usr)
+	export ac_cv_func_malloc_0_nonnull=yes
+fi
+# AIXPORT End
 AC_CONFIG_SRCDIR([rfc3195/src/beepchannel.c])
 AC_CONFIG_HEADER([config.h])
 
@@ -13,6 +28,11 @@ AC_CONFIG_MACRO_DIR([m4])
 # Checks for programs.
 PKG_PROG_PKG_CONFIG
 AC_PROG_CC
+# AIXPORT START: enable dlopen
+if test "$unamestr" = "AIX"; then
+	AC_LIBTOOL_DLOPEN
+fi
+# AIXPORT end
 AC_PROG_LIBTOOL
 AM_PROG_CC_C_O
 if test "$GCC" = "yes"
