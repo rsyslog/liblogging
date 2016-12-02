@@ -151,6 +151,9 @@ The following options can be given:
    specified library calls are signal-safe. Some restrictions apply
    in signal-safe mode. See description below for details.
 
+:STDLOG_PID: log the process identifier (PID) of the originator with each
+   message.
+
 FACILITIES
 ==========
 The following facilities are supported. Please note that they are mimicked
