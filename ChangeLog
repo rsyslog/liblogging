@@ -3,6 +3,10 @@ v1.0.6 2015-??-??
 - fix BSD build
 - enhancement:  sigsafe_printf now recognizes the "j" length modifier
   Thanks to David A. Bright for implementing this
+- Implement a STDLOG_PID option
+  ... to specify that each log message should be tagged with the process
+  identifier as well as the ident.
+  Thanks to David A. Bright for implementing this
 - bugfix: potentialSEGV in the stdlog_sigsafe_string formatter
   if NULL pointer was passed in
   Thanks to David A. Bright for the patch
