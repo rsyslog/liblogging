@@ -3,6 +3,13 @@ v1.0.6 2015-??-??
 - fix BSD build
 - enhancement:  sigsafe_printf now recognizes the "j" length modifier
   Thanks to David A. Bright for implementing this
+- fix: build_file_line and build_syslog_frame call the __stdlog_print_*
+  functions incorrectly
+  Change these functions so that they call the __stdlog_print_* functions
+  with the correct buffer size.
+  see also: https://github.com/rsyslog/liblogging/issues/33
+  Thanks to David A. Bright for the patch.
+dbright <David_A_Bright@DELL.com>
 - Implement a STDLOG_PID option
   ... to specify that each log message should be tagged with the process
   identifier as well as the ident.
