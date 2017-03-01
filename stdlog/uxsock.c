@@ -56,11 +56,11 @@ build_syslog_frame(stdlog_channel_t ch,
 	pri = (ch->facility << 3) | (severity & 0x07);
 	__stdlog_timesub(&t, 0, &tm);
 	__STDLOG_STRBUILD_ADD_CHAR(frame, lenframe, i, '<');
-	__stdlog_fmt_print_int(frame, lenframe-i, &i, pri); 
+	__stdlog_fmt_print_int(frame, lenframe, &i, pri);
 	__STDLOG_STRBUILD_ADD_CHAR(frame, lenframe, i, '>');
 	i += __stdlog_formatTimestamp3164(&tm, frame+i);
 	__STDLOG_STRBUILD_ADD_CHAR(frame, lenframe, i, ' ');
-	__stdlog_fmt_print_str(frame, lenframe-i, &i, ch->ident);
+	__stdlog_fmt_print_str(frame, lenframe, &i, ch->ident);
 	if (ch->options & STDLOG_PID) {
 		__STDLOG_STRBUILD_ADD_CHAR(frame, lenframe, i, '[');
 		__stdlog_fmt_print_int(frame, lenframe, &i, getpid());

@@ -52,7 +52,7 @@ build_file_line(stdlog_channel_t ch,
 	__stdlog_timesub(&t, 0, &tm);
 	i += __stdlog_formatTimestamp3164(&tm, linebuf+i);
 	__STDLOG_STRBUILD_ADD_CHAR(linebuf, lenline, i, ' ');
-	__stdlog_fmt_print_str(linebuf, lenline-i, &i, ch->ident);
+	__stdlog_fmt_print_str(linebuf, lenline, &i, ch->ident);
 	if (ch->options & STDLOG_PID) {
 		__STDLOG_STRBUILD_ADD_CHAR(linebuf, lenline, i, '[');
 		__stdlog_fmt_print_int(linebuf, lenline, &i, getpid());
