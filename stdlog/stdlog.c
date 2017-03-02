@@ -174,6 +174,8 @@ done:
 void
 stdlog_close(stdlog_channel_t ch)
 {
+	free((void*)ch->spec);
+	free((void*)ch->ident);
 	ch->drvr.close(ch);
 	free(ch);
 }
