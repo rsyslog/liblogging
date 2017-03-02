@@ -1,7 +1,7 @@
 /* The stdlog unix socket driver. Syslog protocol is spoken on
  * all unix sockets.
  *
- * Copyright (C) 2014 Adiscon GmbH
+ * Copyright (C) 2014-2017 Adiscon GmbH
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -103,10 +103,13 @@ static void
 uxs_close(stdlog_channel_t ch)
 {
 	if (ch->d.uxs.sock >= 0) {
-		free(ch->d.uxs.sockname);
 		close(ch->d.uxs.sock);
 		ch->d.uxs.sock = -1;
 	}
+	/* we need to free buffers no matter if the socket was ever
+	 * opened or not.
+	 */
+	free(ch->d.uxs.sockname);
 }
 
 

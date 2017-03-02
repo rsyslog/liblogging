@@ -1,5 +1,9 @@
 ----------------------------------------------------------------------------
 v1.0.6 2015-??-??
+- fix small memory leaks in libstdlog
+  each open/close leaked a couple of bytes; this was no problem, except if
+  they were called very often. However, it was a problem when using memory
+  debuggers, which rightfully complained.
 - fix BSD build
 - enhancement:  sigsafe_printf now recognizes the "j" length modifier
   Thanks to David A. Bright for implementing this
