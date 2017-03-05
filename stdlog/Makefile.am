@@ -5,7 +5,7 @@ liblogging_stdlog_la_CPPFLAGS =
 liblogging_stdlog_la_CFLAGS = ${AM_CFLAGS}
 liblogging_stdlog_la_LIBADD =  $(SOL_LIBS)
 liblogging_stdlog_la_LDFLAGS = \
-	-version-info 0:0:0 \
+	-version-info 1:0:1 \
 	-export-symbols-regex '(^stdlog_.*)'
 # For instructions on how to increment --version-info see:
 # http://www.gnu.org/software/libtool/manual/html_node/Updating-version-info.html

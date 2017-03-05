@@ -1,5 +1,5 @@
 ----------------------------------------------------------------------------
-v1.0.6 2015-??-??
+v1.0.6 2017-03-06
 - fix small memory leaks in libstdlog
   each open/close leaked a couple of bytes; this was no problem, except if
   they were called very often. However, it was a problem when using memory
@@ -13,7 +13,6 @@ v1.0.6 2015-??-??
   with the correct buffer size.
   see also: https://github.com/rsyslog/liblogging/issues/33
   Thanks to David A. Bright for the patch.
-dbright <David_A_Bright@DELL.com>
 - Implement a STDLOG_PID option
   ... to specify that each log message should be tagged with the process
   identifier as well as the ident.
