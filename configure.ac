@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.61)
-AC_INIT([liblogging], [1.0.6], [rgerhards@hq.adiscon.com])
+AC_INIT([liblogging], [1.0.7.master], [rgerhards@hq.adiscon.com])
 AM_INIT_AUTOMAKE
 # AIXPORT START: Detect the underlying OS
 unamestr=$(uname)

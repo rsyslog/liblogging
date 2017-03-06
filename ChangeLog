@@ -1,4 +1,6 @@
 ----------------------------------------------------------------------------
+v1.0.7 2017-??-??
+----------------------------------------------------------------------------
 v1.0.6 2017-03-06
 - fix small memory leaks in libstdlog
   each open/close leaked a couple of bytes; this was no problem, except if
