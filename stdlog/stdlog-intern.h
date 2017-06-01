@@ -28,6 +28,14 @@
 #include <sys/un.h>
 #include "stdlog.h"
 
+#ifndef O_CLOEXEC
+#define O_CLOEXEC 0
+#endif
+
+#ifndef SOCK_CLOEXEC
+#define SOCK_CLOEXEC 0
+#endif
+
 #define __STDLOG_MSGBUF_SIZE 4096
 #ifndef STDLOG_INTERN_H_INCLUDED
 #define STDLOG_INTERN_H_INCLUDED
