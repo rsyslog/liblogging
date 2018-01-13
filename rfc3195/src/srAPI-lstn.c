@@ -132,14 +132,14 @@ srRetVal srAPISetupListener(srAPIObj* pThis, void(*NewHandler)(srAPIObj*, srSLMG
 			return iRet;
 		}
 
-		if((iRet = sbProfSetEventHandler(pProf, sbPROFEVENT_ONCHANCREAT, (void*) psrrOnChanCreate)) != SR_RET_OK)
+		if((iRet = sbProfSetEventHandler(pProf, sbPROFEVENT_ONCHANCREAT, (srRetVal(*)()) psrrOnChanCreate)) != SR_RET_OK)
 		{
 			sbLstnDestroy(pThis->pLstn);
 			sbProfDestroy(pProf);
 			return iRet;
 		}
 
-		if((iRet = sbProfSetEventHandler(pProf, sbPROFEVENT_ONMESGRECV, (void*) psrrOnMesgRecv)) != SR_RET_OK)
+		if((iRet = sbProfSetEventHandler(pProf, sbPROFEVENT_ONMESGRECV, (srRetVal(*)()) psrrOnMesgRecv)) != SR_RET_OK)
 		{
 			sbLstnDestroy(pThis->pLstn);
 			sbProfDestroy(pProf);
@@ -174,14 +174,14 @@ srRetVal srAPISetupListener(srAPIObj* pThis, void(*NewHandler)(srAPIObj*, srSLMG
 			return iRet;
 		}
 
-		if((iRet = sbProfSetEventHandler(pProf, sbPROFEVENT_ONCHANCREAT, (void*) psrcOnChanCreate)) != SR_RET_OK)
+		if((iRet = sbProfSetEventHandler(pProf, sbPROFEVENT_ONCHANCREAT, (srRetVal(*)()) psrcOnChanCreate)) != SR_RET_OK)
 		{
 			sbLstnDestroy(pThis->pLstn);
 			sbProfDestroy(pProf);
 			return iRet;
 		}
 
-		if((iRet = sbProfSetEventHandler(pProf, sbPROFEVENT_ONMESGRECV, (void*) psrcOnMesgRecv)) != SR_RET_OK)
+		if((iRet = sbProfSetEventHandler(pProf, sbPROFEVENT_ONMESGRECV, (srRetVal(*)()) psrcOnMesgRecv)) != SR_RET_OK)
 		{
 			sbLstnDestroy(pThis->pLstn);
 			sbProfDestroy(pProf);

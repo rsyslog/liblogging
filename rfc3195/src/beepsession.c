@@ -318,7 +318,7 @@ srRetVal sbSessDoReceive(sbSessObj *pThis, int bMustRcvPayloadFrame)
 			if((pEntry = sbNVTAddEntry(pThis->pRXQue)) == NULL)
 				return SR_RET_OUT_OF_MEMORY;
 
-			if((iRet = sbNVTESetUsrPtr(pEntry, pFram, (void*) sbFramDestroy)) != SR_RET_OK)
+			if((iRet = sbNVTESetUsrPtr(pEntry, pFram, (void(*)(void*)) sbFramDestroy)) != SR_RET_OK)
 				return iRet;
 		}
 	}

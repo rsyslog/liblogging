@@ -96,7 +96,7 @@ srRetVal sbChanSetChanno(sbChanObj *pThis, int iChanno)
 		return SR_RET_ERR;
 
 	sbNVTESetKeyU(pEntry, iChanno);
-	sbNVTESetUsrPtr(pEntry, pThis, (void*) sbChanTeardown);
+	sbNVTESetUsrPtr(pEntry, pThis, (void(*)(void*))sbChanTeardown);
 
 	return iRet;
 }

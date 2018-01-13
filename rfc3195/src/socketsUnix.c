@@ -52,8 +52,11 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
+#ifdef _AIX
+#include <fcntl.h>
+#else
 #include <sys/fcntl.h>
+#endif
 #include <sys/types.h>
 #include <sys/time.h>
 #include <sys/stat.h>
@@ -279,7 +282,7 @@ srRetVal sbSockAccept(sbSockObj*pThis, sbSockObj* pNew, struct sockaddr *sa, int
 	sbSockCHECKVALIDOBJECT(pThis);
 	sbSockCHECKVALIDOBJECT(pNew);
 
-	if((pNew->sock = accept(pThis->sock, sa, iSizeSA)) == INVALID_SOCKET)
+	if((pNew->sock = accept(pThis->sock, sa, (socklen_t*)iSizeSA)) == INVALID_SOCKET)
 		return sbSockSetSockErrState(pThis);
 
 	return SR_RET_OK;
@@ -423,11 +426,13 @@ static srRetVal sbSock_getsockname(sbSockObj* pThis, struct sockaddr_in *pName, 
 	assert(pName != NULL);
 	assert(piNameLen != NULL);
 	assert(pThis->sock != INVALID_SOCKET);
+	socklen_t len = *piNameLen;
 
-	if(getsockname(pThis->sock, (struct sockaddr*) pName, piNameLen) != 0)
-		return sbSockSetLastSockError(pThis);
+	int result = getsockname(pThis->sock, (struct sockaddr*) pName, &len);
 
-	return SR_RET_OK;
+	*piNameLen = (int)len;
+	
+	return (result != 0) ? sbSockSetLastSockError(pThis) : SR_RET_OK;
 }
 
 /**
@@ -441,8 +446,13 @@ static int sbSock_recvfrom(sbSockObj *pThis, char* buf, int len, int flags, stru
 	assert(len > 0);
 	assert(from != NULL);
 	assert(*fromlen > 0);
+	socklen_t _fromlen = *fromlen;
+	
+	int result = recvfrom(pThis->sock, buf, len, flags, from, &_fromlen);
 
-	return recvfrom(pThis->sock, buf, len, flags, from, fromlen);
+	*fromlen = (int)_fromlen;
+
+	return result;
 }
 
 #if FEATURE_UNIX_DOMAIN_SOCKETS == 1

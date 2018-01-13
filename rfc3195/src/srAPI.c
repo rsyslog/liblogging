@@ -105,7 +105,7 @@ static srRetVal srAPIAddProfile(srAPIObj *pThis, sbProfObj *pProf)
 	if((pEntry = sbNVTAddEntry(pThis->pProfsSupported)) == NULL)
 		return SR_RET_OUT_OF_MEMORY;
 	sbNVTESetKeySZ(pEntry, pProf->pszProfileURI, TRUE);
-	sbNVTESetUsrPtr(pEntry, pProf, (void*) sbProfDestroy);
+	sbNVTESetUsrPtr(pEntry, pProf, (void(*)(void*)) sbProfDestroy);
 	
 	return SR_RET_OK;
 }

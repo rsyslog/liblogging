@@ -243,10 +243,10 @@ srRetVal sbProfSetEventHandler(sbProfObj* pThis, sbProfEvent iEvent, srRetVal (*
 	switch(iEvent)
 	{
 	case sbPROFEVENT_ONCHANCREAT:
-		pThis->OnChanCreate = (void*) handler;
+		pThis->OnChanCreate = handler;
 		break;
 	case sbPROFEVENT_ONMESGRECV:
-		pThis->OnMesgRecv = (void*) handler;
+		pThis->OnMesgRecv = handler;
 		break;
 	default:
 		return SR_RET_ERR;
