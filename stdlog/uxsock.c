@@ -90,7 +90,7 @@ static void
 uxs_open(stdlog_channel_t ch)
 {
 	if (ch->d.uxs.sock == -1) {
-		if((ch->d.uxs.sock = socket(AF_UNIX, SOCK_DGRAM, 0)) < 0)
+		if((ch->d.uxs.sock = socket(AF_UNIX, SOCK_DGRAM|SOCK_CLOEXEC, 0)) < 0)
 			return;
 		memset(&ch->d.uxs.addr, 0, sizeof(ch->d.uxs.addr));
 		ch->d.uxs.addr.sun_family = AF_UNIX;

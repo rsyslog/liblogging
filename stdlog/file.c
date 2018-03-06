@@ -80,7 +80,7 @@ static void
 file_open(stdlog_channel_t ch)
 {
 	if (ch->d.file.fd == -1) {
-		if((ch->d.file.fd = open(ch->d.file.name, O_WRONLY|O_CREAT|O_APPEND, 0660)) < 0)
+		if((ch->d.file.fd = open(ch->d.file.name, O_WRONLY|O_CREAT|O_APPEND|O_CLOEXEC, 0660)) < 0)
 			return;
 	}
 }
