@@ -92,7 +92,7 @@ static srRetVal sbSessLstnSendFram(sbSessObj *pThis, sbFramObj *pFram, sbChanObj
 	if((pEntry = sbNVTAddEntry(pThis->pSendQue)) == NULL)
 		return SR_RET_OUT_OF_MEMORY;
 
-	if((iRet = 	sbNVTESetUsrPtr(pEntry, pFram, (void*) sbSessLstnLinkedListFreeFram)) != SR_RET_OK)
+	if((iRet = 	sbNVTESetUsrPtr(pEntry, pFram, (void(*)(void*)) sbSessLstnLinkedListFreeFram)) != SR_RET_OK)
 		return iRet;
 
 	return SR_RET_OK;
@@ -544,7 +544,7 @@ srRetVal sbSessRemoteOpen(sbSessObj **pThis, sbSockObj *pSock, sbNVTRObj *pProfS
 	}
 	pProf->bDestroyOnChanClose = TRUE;
 
-	if((iRet = sbProfSetEventHandler(pProf, sbPROFEVENT_ONMESGRECV, (void*) sbSessChan0OnRecvMesg)) != SR_RET_OK)
+	if((iRet = sbProfSetEventHandler(pProf, sbPROFEVENT_ONMESGRECV, (srRetVal(*)()) sbSessChan0OnRecvMesg)) != SR_RET_OK)
 	{
 		sbSessDestroy(*pThis); /* best we can do */
 		*pThis = NULL;

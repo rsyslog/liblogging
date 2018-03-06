@@ -581,7 +581,7 @@ srRetVal sbSessAddActiveSession(sbLstnObj* pThis, sbSessObj *pSess)
 	if((pEntry = sbNVTAddEntry(pThis->pRootSessions)) == NULL)
 		return SR_RET_OUT_OF_MEMORY;
 
-	sbNVTESetUsrPtr(pEntry, pSess, (void*) sbLstnSessFreeLinkedListDummy);
+	sbNVTESetUsrPtr(pEntry, pSess, (void(*)(void*))sbLstnSessFreeLinkedListDummy);
 	
 	return SR_RET_OK;
 }

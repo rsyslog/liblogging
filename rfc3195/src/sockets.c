@@ -60,7 +60,7 @@
  * members that follow later in this file (no way
  * around this...).
  */
-static int sbSockSetSockErrState(struct sbSockObject *pThis);
+static srRetVal sbSockSetSockErrState(struct sbSockObject *pThis);
 
 #ifdef SROS_WIN32
 #	include "socketsWin32.c"
