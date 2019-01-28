@@ -12,5 +12,6 @@ addons:
     - python-docutils
 
 script:
+  - CI/check_codestyle.sh
   - export CFLAGS="-Wall"
   - autoreconf -fvi && ./configure && make distcheck
