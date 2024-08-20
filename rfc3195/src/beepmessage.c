@@ -4,7 +4,7 @@
  * \author  Rainer Gerhards <rgerhards@adiscon.com>
  * \date    2003-08-04
  *
- * Copyright 2002-2014 
+ * Copyright 2002-2024 
  *     Rainer Gerhards and Adiscon GmbH. All Rights Reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -122,7 +122,7 @@ sbMesgObj* sbMesgConstruct(char* pszMIMEHdr, char *pszPayload)
 	}
 	else
 	{ /* \0 terminator must be written in this case! */
-		pszMsgBuf = '\0';
+		*pszMsgBuf = '\0';
 	}
 	/* finish initialization */
 	pThis->szActualPayload = pThis->szRawBuf + iHdrSize + 2;
@@ -137,7 +137,6 @@ sbMesgObj* sbMesgConstruct(char* pszMIMEHdr, char *pszPayload)
 
 srRetVal sbMIMEExtract(char *pszInBuf, int iInBufLen, char **pszMIMEHdr, char** pszPayload)
 {
-	char* pHdr;
 	char* pPayload = NULL;
 	char* psz;
 	int iCurrCol = 0;
@@ -178,7 +177,6 @@ srRetVal sbMIMEExtract(char *pszInBuf, int iInBufLen, char **pszMIMEHdr, char** 
 		 * MIME header (not even an empty one), we assume there was an
 		 * empty one.
 		 */
-		pHdr = NULL;
 		pPayload = pszInBuf;
 		iHdrLen = 0;
 		iPayloadLen = iInBufLen + 1 /* '\0' */;

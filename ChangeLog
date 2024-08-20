@@ -1,6 +1,8 @@
 ----------------------------------------------------------------------------
-v1.0.7 2017-??-??
+v1.0.7 2024-08-20
 - builds again on Solaris
+- some code cleanup, which prevented build with newer compilers
+  ... especially with strict settings.
 ----------------------------------------------------------------------------
 v1.0.6 2017-03-06
 - fix small memory leaks in libstdlog

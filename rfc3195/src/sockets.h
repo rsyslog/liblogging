@@ -332,6 +332,10 @@ srRetVal sbSockGetIPusedForSending(sbSockObj* pThis, char**ppsz);
  */
 srRetVal sbSockRecvFrom(sbSockObj *pThis, char* pRecvBuf, int *piBufLen, char** ppFrom);
 
+#if FEATURE_UNIX_DOMAIN_SOCKETS == 1
+srRetVal sbSock_InitUXDOMSOCK(sbSockObj **ppThis, char *pszSockName, int iSockType);
+#endif
+
 
 #ifdef SROS_WIN32
 #	define SBSOCK_EWOULDBLOCK WSAEWOULDBLOCK

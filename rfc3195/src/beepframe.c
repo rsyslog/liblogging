@@ -4,7 +4,7 @@
  * \author  Rainer Gerhards <rgerhards@adiscon.com>
  * \date    2003-08-04
  *
- * Copyright 2002-2014 
+ * Copyright 2002-2024 
  *     Rainer Gerhards and Adiscon GmbH. All Rights Reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -167,7 +167,7 @@ srRetVal sbFramActualRecvFramCommonHdr(sbFramObj* pThis,sbChanObj *pChan)
  *                       The channel object is updated, e.g. with a
  *                       new seqno.
  */
-sbFramActualRecvFramCommonBody(sbFramObj* pThis,sbChanObj *pChan)
+srRetVal sbFramActualRecvFramCommonBody(sbFramObj* pThis,sbChanObj *pChan)
 {
 	unsigned iToRcv;
 	char szTrailer[6];

@@ -19,7 +19,7 @@
  *          all supported protocols. This allows us to keep all
  *          listeners on a single thread.
  *
- * Copyright 2002-2014 
+ * Copyright 2002-2024
  *     Rainer Gerhards and Adiscon GmbH. All Rights Reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -561,8 +561,6 @@ srRetVal sbLstnDoIncomingData(sbLstnObj* pThis, sbSessObj* pSess)
  */
 static void sbLstnSessFreeLinkedListDummy(sbSessObj *pSess)
 {
-	int bShouldNeverBeCalled = 0;
-
 	sbSessCHECKVALIDOBJECT(pSess);
 	sbSessAbort(pSess);
 }
@@ -696,7 +694,7 @@ srRetVal sbLstnSendFram(sbLstnObj* pThis, sbSessObj *pSess)
 	pFram->uBytesSend += iBytesSent;
 
 	/* now check if all is send and we can remove the frame */
-	if((pFram->uBytesSend == pFram->iFrameLen))
+	if(pFram->uBytesSend == pFram->iFrameLen)
 	{
 		pFram->iState = sbFRAMSTATE_SENT;
 		/** \todo again, referencing the channel object as done below
@@ -740,7 +738,6 @@ srRetVal sbLstnServerLoop(sbLstnObj* pThis)
 	srSock_fd_set fdsetRD;	/* for select() */
 	srSock_fd_set fdsetWR;	/* for select() */
 	sbNVTEObj *pEntrySess;	/* active session from session linked list */
-	sbNVTEObj *pEntrySessToDel;
 	sbSessObj *pSess;
 	sbFramObj *pFram;
 #	ifndef SROS_WIN32
@@ -814,9 +811,7 @@ srRetVal sbLstnServerLoop(sbLstnObj* pThis)
 					*        we may think about either doubly linking the list or having
 					*        the previous element at hand (e.g. in the linked list object...).
 					*/
-				pEntrySessToDel = pEntrySess;
 				pEntrySess = sbNVTSearchKeySZ(pThis->pRootSessions, pEntrySess, NULL);
-				/* debug: printf("shutdown session %8.8x, pUsr %8.8x\n", pEntrySessToDel, pSess); */
 				sbNVTRRemovEntryWithpUsr(pThis->pRootSessions, pSess);
 			}
 			else
