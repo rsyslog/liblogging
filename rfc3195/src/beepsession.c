@@ -257,7 +257,7 @@ srRetVal sbSessDoSEQ(sbSessObj* pThis, sbFramObj* pFram)
 	int uConsumed;
 
 	sbSessCHECKVALIDOBJECT(pThis);
-	assert(pFram->idHdr = BEEPHDR_SEQ);
+	assert(pFram->idHdr == BEEPHDR_SEQ);
 
 	if((pChan = sbSessRetrChanObj(pThis, pFram->uChannel)) == NULL)
 		return SR_RET_OK; /* see above for an explanation */
