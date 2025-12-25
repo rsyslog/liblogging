@@ -1,0 +1,10 @@
+prefix=/usr
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: liblogging-rfc3195
+Description: RFC 3195 logging library
+Version: 1.0.8
+Libs: -L${libdir} -llogging-rfc3195
+Cflags: -I${includedir}
