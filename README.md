@@ -3,7 +3,7 @@ What?
 Liblogging is an easy to use library for logging. It offers an enhanced
 replacement for the syslog() call, but retains its ease of use.
 
-If you dig deeper, liblogging actually has three components, which address
+If you dig deeper, liblogging actually has two components, which address
 different needs.
 
 stdlog
@@ -41,14 +41,6 @@ want to make it as easy, simple and unintrusive as syslog() was.
 An interesting side-effect of that approach is that an application developer
 can write code that natively logs to the journal on platforms that support
 it but uses different methods on platforms that do not.
-
-journalemu
-----------
-This component (not yet committed) emulates the most important logging
-calls of systemd journal. This permits applications to be written to this
-spec, even though the journal is not available on all platforms. Of course,
-we recommend writing directly to libstdlog, as this solves the problem
-more cleanly.
 
 rfc3195
 -------
