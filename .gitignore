@@ -23,3 +23,9 @@ stamp-h1
 testdrvr
 testsrvr
 *~
+m4/*.m4
+compile
+*.pc
+stdlog/stdlogctl
+stdlog/tester
+INSTALL
